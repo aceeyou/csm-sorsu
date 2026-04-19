@@ -1,5 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form"
-import { Form } from "react-router"
+import { Form, useNavigate } from "react-router"
+import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import LeftPanel from "~/features/csmform/left-panel"
 import RightPanel from "~/features/csmform/right-panel"
@@ -8,8 +9,58 @@ export default function CSMForm() {
   const methods = useForm()
 
   const onSubmit = (data: any) => {
-    console.log(data)
+    // Checks if services is empty
+    if (
+      methods.getValues("services") === undefined ||
+      methods.getValues("services").length === 0
+    ) {
+      toast.error("Must select at least 1 service to record the CSM response", {
+        position: "top-right",
+      })
+      return
+    }
+
+    // Check if CC or SQD has a response from the client
+    if (
+      methods.getValues("sqd").length === 0 ||
+      methods.getValues("cc").length === 0
+    ) {
+      toast.error(
+        "Must answer at least 1 SQD and CC to record the CSM response",
+        {
+          position: "top-right",
+        }
+      )
+      return
+    }
+
+    try {
+      console.log(data)
+      toast.success("Form Submitted", { position: "top-right" })
+
+      // Reset Fields
+      handleResetOfFields()
+    } catch (error) {
+      toast.error("Form failed to submit. Please try again", {
+        position: "top-right",
+      })
+    }
   }
+
+  function handleResetOfFields() {
+    // Reset Fields
+    methods.resetField("clientType")
+    methods.resetField("clientSex")
+    methods.resetField("clientAge")
+    methods.resetField("cc")
+    methods.resetField("sqd")
+    methods.resetField("dissatisfactionReason")
+    methods.resetField("feedbackSuggestions")
+
+    console.log("after reset: ", methods.getValues())
+    //
+  }
+
   return (
     <div className="">
       <FormProvider {...methods}>

@@ -1,6 +1,5 @@
 import {
   Building2,
-  ChevronDown,
   Eraser,
   Landmark,
   Mars,
@@ -10,27 +9,7 @@ import {
 import { useEffect, useState } from "react"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-  FieldTitle,
-} from "~/components/ui/field"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "~/components/ui/input-group"
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
+import { Field, FieldGroup, FieldLabel } from "~/components/ui/field"
 import {
   Select,
   SelectContent,
@@ -46,6 +25,8 @@ import RadioAge from "./components/radio-age"
 import RadioCC from "./components/radio-cc"
 import { Textarea } from "~/components/ui/textarea"
 import { useFormContext } from "react-hook-form"
+import { Separator } from "~/components/ui/separator"
+import CitizensCharter from "./components/citizens-charter"
 
 const campuses = [
   "Bulan Campus",
@@ -54,77 +35,50 @@ const campuses = [
   "Sorsogon City Campus",
 ]
 
-const sorsogonOffices = [
-  "University/Graduate Registrar",
-  "Cashier",
-  "Guidance and Counceling Office",
-  "Student Affairs and Services Office",
+const ccOffices = [
+  "Admissoin Services Unit",
+  "Office of the University Registrar",
+  "Scholarship and Financial Assistance Unit",
+  "Guidance and Counceling",
+  "Library Services Unit",
+  "Health Services Unit",
+  "Safety and Security Services Unit",
+  "Student Council Affairs",
+  "National Service Training Program Office",
+  "Graduate School",
   "Accounting Office",
-  "UniversityLibrary",
-  "ICT/MIS Office",
-  "Office of the President",
-  "OVPAA",
-  "OVPAF",
-  "OVPRET",
-  "Planning and Development",
-  "HRMDO",
-  "Records and Archives",
-  "Safety and Security",
-  "Health Services Unit",
-  "COHAS Registrar",
-  "CBM Registrar",
-  "COT Registrar",
-  "ILDO",
   "Budget Office",
-  "Supply and Property",
-  "Other (specify)",
-]
-
-const magallanesOffices = [
-  "Magallanes Registrar",
-  "Cashier",
-  "Supply and Prperty",
-  "Budget Office",
-  "Library",
-  "Safety and Security",
-  "Health Services Unit",
-  "Other (specify)",
-]
-
-const castillaOffices = [
-  "Castilla Registrar",
-  "Cashier",
-  "Supply and Prperty",
-  "Budget Office",
-  "Library",
-  "Safety and Security",
-  "Health Services Unit",
-  "Other (specify)",
-]
-
-const bulanOffices = [
-  "Bulan Registrar",
-  "Cashier",
-  "Supply and Prperty",
-  "Budget Office",
-  "Library",
-  "Safety and Security",
-  "Health Services Unit",
-  "Other (specify)",
+  "Cashier's Office",
+  "Human Resource Management and Development Office",
+  "ICT / MIS Office",
+  "Records Office",
+  "Supply and Property Office",
 ]
 
 export default function LeftPanel() {
-  const { register, setValue } = useFormContext()
+  const {
+    resetField,
+    register,
+    setValue,
+    formState: { isSubmitSuccessful },
+  } = useFormContext()
 
   const [campus, setCampus] = useState("")
   const [office, setOffice] = useState("")
-  const [listOfOffices, setListOfOffices] = useState<string[]>([])
+  const [listOfOffices, setListOfOffices] = useState<string[]>([...ccOffices])
   const [citizenType, setCitizenType] = useState("")
   const [clientSex, setClientSex] = useState("")
   const [clientAge, setClientAge] = useState("")
-  const [cc1, setCC1] = useState("")
-  const [cc2, setCC2] = useState("")
-  const [cc3, setCC3] = useState("")
+  const [cc, setCC] = useState<string[]>([])
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      setCitizenType("")
+      setClientSex("")
+      setClientAge("")
+      setCC([])
+    }
+  }, [isSubmitSuccessful])
 
   useEffect(() => {
     setValue("campus", campus)
@@ -135,25 +89,8 @@ export default function LeftPanel() {
   }, [office])
 
   useEffect(() => {
-    register("campus", { value: campus })
-
-    switch (campus) {
-      case "Sorsogon City Campus":
-        setListOfOffices(sorsogonOffices)
-        break
-      case "Magallanes Campus":
-        setListOfOffices(magallanesOffices)
-        break
-      case "Castilla Campus":
-        setListOfOffices(castillaOffices)
-        break
-      case "Bulan Campus":
-        setListOfOffices(bulanOffices)
-        break
-      default:
-        setListOfOffices(["Select campus first to load offices..."])
-    }
-  }, [campus])
+    setValue("cc", cc)
+  }, [cc])
 
   return (
     <div className="">
@@ -168,10 +105,11 @@ export default function LeftPanel() {
               <label className="text-xs" htmlFor="campus">
                 Campus CSM Collected
               </label>
+
               <Select
                 onValueChange={(selectedCampus) => setCampus(selectedCampus)}
               >
-                <SelectTrigger className="w-full font-bold">
+                <SelectTrigger className="w-full text-lg font-medium">
                   <SelectValue placeholder="Select campus..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -192,7 +130,7 @@ export default function LeftPanel() {
               <Select
                 onValueChange={(selectedOffice) => setOffice(selectedOffice)}
               >
-                <SelectTrigger className="w-full font-bold">
+                <SelectTrigger className="w-full text-lg font-medium">
                   <SelectValue placeholder="Select office..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -206,13 +144,13 @@ export default function LeftPanel() {
             </div>
           </div>
 
-          {/* row */}
+          {/* Availed Service/s from the visited office */}
           <AvailedServices office={office} />
         </Section>
 
         <Section sectionName="Demographic Information">
           {/* row */}
-          <div className="grid grid-cols-[60fr_40fr] gap-5">
+          <div className="grid grid-cols-[59fr_0.2fr_40fr] gap-5">
             <div>
               <label htmlFor="client_type" className="text-xs">
                 Client Type
@@ -238,7 +176,7 @@ export default function LeftPanel() {
                 />
               </div>
             </div>
-
+            <Separator orientation="vertical" color="red" />
             <div>
               <label htmlFor="sex" className="text-xs">
                 Sex
@@ -299,61 +237,7 @@ export default function LeftPanel() {
 
         {/* Citizen's Charter */}
         <Section>
-          <div className="mt-4">
-            <h2 className="font-medium">Citizen's Charter</h2>
-
-            <div className="mt-2 grid grid-cols-3 gap-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>CC1</CardTitle>
-                    <RadioCC
-                      disabled
-                      item="cc1"
-                      label={"0"}
-                      cc={cc1}
-                      setCC={setCC1}
-                    />
-                  </div>
-                </CardHeader>
-                <CardContent className="grid h-full grid-cols-4 items-end gap-1">
-                  <RadioCC label={"1"} item={"cc1"} cc={cc1} setCC={setCC1} />
-                  <RadioCC label={"2"} item={"cc1"} cc={cc1} setCC={setCC1} />
-                  <RadioCC label={"3"} item={"cc1"} cc={cc1} setCC={setCC1} />
-                  <RadioCC label={"4"} item={"cc1"} cc={cc1} setCC={setCC1} />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>CC2</CardTitle>
-                    <RadioCC label={"0"} item={"cc2"} cc={cc2} setCC={setCC2} />
-                  </div>
-                </CardHeader>
-                <CardContent className="grid grid-cols-4 gap-1">
-                  <RadioCC label={"1"} item={"cc2"} cc={cc2} setCC={setCC2} />
-                  <RadioCC label={"2"} item={"cc2"} cc={cc2} setCC={setCC2} />
-                  <RadioCC label={"3"} item={"cc2"} cc={cc2} setCC={setCC2} />
-                  <RadioCC label={"4"} item={"cc2"} cc={cc2} setCC={setCC2} />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>CC3</CardTitle>
-                    <RadioCC label={"0"} item={"cc3"} cc={cc3} setCC={setCC3} />
-                  </div>
-                </CardHeader>
-                <CardContent className="grid grid-cols-3 gap-1">
-                  <RadioCC label={"1"} item={"cc3"} cc={cc3} setCC={setCC3} />
-                  <RadioCC label={"2"} item={"cc3"} cc={cc3} setCC={setCC3} />
-                  <RadioCC label={"3"} item={"cc3"} cc={cc3} setCC={setCC3} />
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+          <CitizensCharter cc={cc} setCC={setCC} />
         </Section>
 
         {/* Feedback */}
@@ -368,7 +252,13 @@ export default function LeftPanel() {
                   >
                     Reason/s of dissatisfaction
                   </FieldLabel>
-                  <Button variant={"outline"} size={"icon"} className="">
+                  <Button
+                    type="button"
+                    onClick={() => resetField("dissatisfactionReason")}
+                    variant={"outline"}
+                    size={"icon"}
+                    className=""
+                  >
                     <Eraser size={16} />
                   </Button>
                 </div>
@@ -389,7 +279,13 @@ export default function LeftPanel() {
                   >
                     Feedback and Suggestions
                   </FieldLabel>
-                  <Button variant={"outline"} size={"icon"} className="">
+                  <Button
+                    type="button"
+                    onClick={() => resetField("feedbackSuggestions")}
+                    variant={"outline"}
+                    size={"icon"}
+                    className=""
+                  >
                     <Eraser size={16} />
                   </Button>
                 </div>

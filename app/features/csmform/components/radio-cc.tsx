@@ -11,18 +11,18 @@ export default function RadioCC({
   disabled?: true | false
   label: string
   item: string
-  cc: string
-  setCC: (value: string) => void
+  cc: string[]
+  setCC: (value: string[]) => void
 }) {
-  const { register } = useFormContext()
-  const isActive = cc === label
+  const isActive = cc[parseInt(item)] === label
 
   function handleClick() {
     if (disabled) return
 
-    const newValue = isActive ? "" : label
-    setCC(newValue)
-    register(item, { value: newValue })
+    let tempCC = [...cc]
+    tempCC[parseInt(item)] = isActive ? "" : label
+
+    setCC(tempCC)
   }
 
   return (

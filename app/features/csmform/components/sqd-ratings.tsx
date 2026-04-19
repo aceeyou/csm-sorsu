@@ -7,46 +7,84 @@ import {
   Smile,
   type LucideIcon,
 } from "lucide-react"
-import { useFormContext } from "react-hook-form"
 
 export default function SQDRatingsItem({
   label,
+  item,
   sqd,
   setSQD,
 }: {
   label: string
-  sqd: string
-  setSQD: (value: string) => void
+  item: string
+  sqd: string[]
+  setSQD: (value: string[]) => void
 }) {
   return (
     <div className="grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2">
       <p className="text-sm">{label}</p>
-      <SQDRating Icon={Angry} value={"1"} sqd={sqd} setSQD={setSQD} />
-      <SQDRating Icon={Frown} value={"2"} sqd={sqd} setSQD={setSQD} />
-      <SQDRating Icon={Meh} value={"3"} sqd={sqd} setSQD={setSQD} />
-      <SQDRating Icon={Smile} value={"4"} sqd={sqd} setSQD={setSQD} />
-      <SQDRating Icon={Laugh} value={"5"} sqd={sqd} setSQD={setSQD} />
-      <SQDRating Icon={CircleOff} value={"0"} sqd={sqd} setSQD={setSQD} />
+      <SQDRating
+        item={item}
+        Icon={Angry}
+        value={"1"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
+      <SQDRating
+        item={item}
+        Icon={Frown}
+        value={"2"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
+      <SQDRating item={item} Icon={Meh} value={"3"} sqd={sqd} setSQD={setSQD} />
+      <SQDRating
+        item={item}
+        Icon={Smile}
+        value={"4"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
+      <SQDRating
+        item={item}
+        Icon={Laugh}
+        value={"5"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
+      <SQDRating
+        item={item}
+        Icon={CircleOff}
+        value={"0"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
     </div>
   )
 }
 
 function SQDRating({
+  item,
   Icon,
   value,
   sqd,
   setSQD,
 }: {
+  item: string
   Icon: LucideIcon
   value: string
-  sqd: string
-  setSQD: (value: string) => void
+  sqd: string[]
+  setSQD: (value: string[]) => void
 }) {
-  const isActive = value === sqd
+  const isActive = value === sqd[parseInt(item)]
 
   function handleClick() {
-    if (isActive) setSQD("")
-    else setSQD(value)
+    let tempSQD = [...sqd]
+    tempSQD[parseInt(item)] = isActive ? "" : value
+
+    setSQD([...tempSQD])
+    console.log(tempSQD)
+    // if (isActive) setSQD("")
+    // else setSQD(value)
   }
 
   return (
