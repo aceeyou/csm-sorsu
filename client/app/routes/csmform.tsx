@@ -61,7 +61,7 @@ export default function CSMForm() {
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
       try {
         console.log("before cleanup -> ", data)
-        await fetch("http://127.0.0.1:1337/postcsmresponse", {
+        await fetch("https://csm-sorsu-server.vercel.app/postcsmresponse", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
