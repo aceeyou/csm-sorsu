@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form"
 export default function RightPanel() {
   const {
     setValue,
+    resetField,
     formState: { isSubmitSuccessful },
   } = useFormContext()
   const [sqd, setSQD] = useState<(string | boolean)[]>([])

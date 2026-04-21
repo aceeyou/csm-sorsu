@@ -130,8 +130,9 @@ export default function AvailedServices({ office }: { office: string }) {
   const [currentInputValue, setCurrentInputValue] = useState("")
 
   useEffect(() => {
-    // Empties the services list whenever the user changes the office visited
+    // Empties the services list and user input whenever the user changes the office visited
     setServices([])
+    setCurrentInputValue("")
 
     // Changes the officeServices list/state based on the selected office
     switch (office) {
@@ -251,6 +252,7 @@ export default function AvailedServices({ office }: { office: string }) {
                 }}
                 key={index}
                 variant={"default"}
+                className="max-w-60 justify-start text-start"
               >
                 {service}
               </Button>

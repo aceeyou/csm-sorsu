@@ -25,6 +25,7 @@ import { Textarea } from "~/components/ui/textarea"
 import { useFormContext } from "react-hook-form"
 import { Separator } from "~/components/ui/separator"
 import CitizensCharter from "./components/citizens-charter"
+import { useNavigate } from "react-router"
 
 const campuses = [
   "Bulan Campus",
@@ -76,7 +77,7 @@ export default function LeftPanel() {
       setClientAge("")
       setCC([])
     }
-  }, [isSubmitSuccessful])
+  }, [isSubmitSuccessful, resetField])
 
   useEffect(() => {
     setValue("campus", campus)

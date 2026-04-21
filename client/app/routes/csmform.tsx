@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Form } from "react-router"
 import { toast } from "sonner"
@@ -7,6 +8,23 @@ import RightPanel from "~/features/csmform/right-panel"
 
 export default function CSMForm() {
   const methods = useForm()
+
+  useEffect(() => {
+    if (methods.formState.isSubmitSuccessful) {
+      // 1. retain the campus, office, and services values
+      const campus = methods.getValues("campus")
+      const office = methods.getValues("office")
+      const services = methods.getValues("services")
+
+      // 2. reset all state from formcontext
+      methods.reset()
+
+      // 3. reassign the retained values to the respective states
+      methods.setValue("campus", campus)
+      methods.setValue("office", office)
+      methods.setValue("services", services)
+    }
+  }, [methods.formState.isSubmitSuccessful])
 
   const onSubmit = async (data: any) => {
     // Checks if services is empty
@@ -20,7 +38,7 @@ export default function CSMForm() {
       return
     }
 
-    // Check if CC or SQD has a response from the client
+    // Checks if CC or SQD has a response from the client
     if (
       methods.getValues("sqd").length === 0 ||
       methods.getValues("cc").length === 0
@@ -42,14 +60,14 @@ export default function CSMForm() {
     // traverse through the service/s availed by the client
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
       try {
-        console.log(data)
+        console.log("before cleanup -> ", data)
         await fetch("http://127.0.0.1:1337/postcsmresponse", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            // DO N0T MOVE. IT IS IN EXACT ORDER
+            //!!! DO N0T MOVE. IT IS IN EXACT ORDER
             campus: methods.getValues("campus") || "",
             office: methods.getValues("office") || "",
             service: listOfServicesAvailed[index] || "",
@@ -71,56 +89,42 @@ export default function CSMForm() {
             dissastifactionReason:
               methods.getValues("dissatisfactionReason") || "",
             feedbackSuggestions: methods.getValues("feedbackSuggestions") || "",
-            controlNumber: "000",
+            // TODO: create a system that assigns document control number
+            controlNumber: "SorSUOffice-Campus-000",
           }),
         })
           .then((res) => res.json())
-          .then(() => {
-            toast.success("Form Submitted", { position: "top-right" })
+          .then((res) => {
+            toast.success(res.message)
           })
-
-        // Reset Fields
       } catch (error) {
-        toast.error("Form failed to submit. Please try again", {
-          position: "top-right",
-        })
+        toast.error("Form failed to submit. Please try again")
       }
     }
-    handleResetOfFields()
-  }
-
-  function handleResetOfFields() {
-    // Reset Fields
-    methods.resetField("clientType")
-    methods.resetField("clientSex")
-    methods.resetField("clientAge")
-    methods.resetField("cc")
-    methods.resetField("sqd")
-    methods.resetField("dissatisfactionReason")
-    methods.resetField("feedbackSuggestions")
   }
 
   return (
-    <div className="">
+    <div>
       <FormProvider {...methods}>
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
             <h1 className="mt-2 mb-3 text-xl font-bold">
               CSM Questionnaire Form
             </h1>
-            <Button type="submit" className="h-8 w-30 text-sm">
-              Submit
+            <Button type="submit" className="h-10 w-40 cursor-pointer text-sm">
+              SUBMIT
             </Button>
           </div>
           <div className="grid grid-cols-2 gap-7">
             <LeftPanel />
             <RightPanel />
           </div>
+
           {/* Submit Button */}
           <div>
             <Button
               type="submit"
-              className="mt-2 h-10 w-full cursor-pointer text-lg font-bold"
+              className="mt-2 h-13 w-full cursor-pointer text-lg font-bold"
             >
               SUBMIT
             </Button>
