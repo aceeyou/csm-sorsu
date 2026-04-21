@@ -14,6 +14,10 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: "v4", auth });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to CART Tallying System for the CSM Questionnaire Form");
+});
+
 app.post("/postcsmresponse", async (req, res) => {
   const row = Object.values(req.body);
 
