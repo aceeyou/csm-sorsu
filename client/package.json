@@ -15,6 +15,7 @@
     "@fontsource-variable/outfit": "^5.2.8",
     "@react-router/node": "7.13.1",
     "@react-router/serve": "7.13.1",
+    "@vercel/react-router": "^1.2.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "isbot": "^5.1.36",
