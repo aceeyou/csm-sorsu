@@ -25,13 +25,14 @@ import { Textarea } from "~/components/ui/textarea"
 import { useFormContext } from "react-hook-form"
 import { Separator } from "~/components/ui/separator"
 import CitizensCharter from "./components/citizens-charter"
-import { useNavigate } from "react-router"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
+import { Input } from "~/components/ui/input"
 
 const campuses = [
-  "Bulan Campus",
-  "Castilla Campus",
-  "Magallanes Campus",
-  "Sorsogon City Campus",
+  { name: "Bulan Campus", code: "BC" },
+  { name: "Castilla Campus", code: "CC" },
+  { name: "Magallanes Campus", code: "MC" },
+  { name: "Sorsogon City Campus", code: "SC" },
 ]
 
 const ccOffices = [
@@ -52,6 +53,28 @@ const ccOffices = [
   "ICT / MIS Office",
   "Records Office",
   "Supply and Property Office",
+  "Other",
+]
+
+const officesWithOfficeCode = [
+  { name: "Admission Services Unit", code: "ADSU" },
+  { name: "Office of the University Registrar", code: "UNIREG" },
+  { name: "Scholarship and Financial Assistance Unit", code: "SFASU" },
+  { name: "Guidance and Counceling", code: "GUIDANCE" },
+  { name: "Library Services Unit", code: "LIB" },
+  { name: "Health Services Unit", code: "HSU" },
+  { name: "Safety and Security Services Unit", code: "SAFETY" },
+  { name: "Student Council Affairs", code: "STUDENTCOUNCIL" },
+  { name: "National Service Training Program Office", code: "NSTPO" },
+  { name: "Graduate School", code: "GS" },
+  { name: "Accounting Office", code: "ACCOUNTING" },
+  { name: "Budget Office", code: "BUDGET" },
+  { name: "Cashier's Office", code: "CASHIER" },
+  { name: "Human Resource Management and Development Office", code: "HRMDO" },
+  { name: "ICT / MIS Office", code: "ICTMIS" },
+  { name: "Records Office", code: "RECORDS" },
+  { name: "Supply and Property Office", code: "SUPPLY" },
+  { name: "Other", code: "OTHER" },
 ]
 
 export default function LeftPanel() {
@@ -64,7 +87,9 @@ export default function LeftPanel() {
 
   const [campus, setCampus] = useState("")
   const [office, setOffice] = useState("")
-  const [listOfOffices, setListOfOffices] = useState<string[]>([...ccOffices])
+  const [listOfOffices, setListOfOffices] = useState<
+    { name: string; code: string }[]
+  >([...officesWithOfficeCode])
   const [citizenType, setCitizenType] = useState("")
   const [clientSex, setClientSex] = useState("")
   const [clientAge, setClientAge] = useState("")
@@ -81,11 +106,22 @@ export default function LeftPanel() {
 
   useEffect(() => {
     setValue("campus", campus)
+    for (let index = 0; index < campuses.length; index++) {
+      if (campuses[index].name === campus)
+        setValue("campusCode", campuses[index].code)
+    }
   }, [campus])
 
   useEffect(() => {
+    console.log(office)
     setValue("office", office)
     resetField("services")
+
+    //!!! OPTIMIZE
+    for (let index = 0; index < officesWithOfficeCode.length; index++) {
+      if (officesWithOfficeCode[index].name === office)
+        setValue("officeCode", officesWithOfficeCode[index].code)
+    }
   }, [office])
 
   useEffect(() => {
@@ -114,8 +150,12 @@ export default function LeftPanel() {
                 </SelectTrigger>
                 <SelectContent>
                   {campuses.map((campus) => (
-                    <SelectItem key={campus} value={campus} className="w-full">
-                      {campus}
+                    <SelectItem
+                      key={campus.code}
+                      value={campus.name}
+                      className="w-full"
+                    >
+                      {campus.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -127,16 +167,18 @@ export default function LeftPanel() {
               <label htmlFor="office" className="mb-1 text-xs">
                 Office Visited
               </label>
-              <Select
-                onValueChange={(selectedOffice) => setOffice(selectedOffice)}
-              >
+              <Select onValueChange={(officeObj) => setOffice(officeObj)}>
                 <SelectTrigger className="w-full text-lg font-medium">
                   <SelectValue placeholder="Select office..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {listOfOffices.map((office) => (
-                    <SelectItem key={office} value={office} className="w-full">
-                      {office}
+                  {listOfOffices.map((officeItem) => (
+                    <SelectItem
+                      key={officeItem.code}
+                      value={officeItem.name}
+                      className="w-full"
+                    >
+                      {officeItem.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -144,8 +186,30 @@ export default function LeftPanel() {
             </div>
           </div>
 
+          {/* other office */}
+          {office === "Other" && (
+            <Card className="my-5">
+              <CardHeader>
+                <CardTitle>Other Office...</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Input
+                  type="text"
+                  {...register("otherOffice")}
+                  placeholder="Enter office visited..."
+                />
+              </CardContent>
+            </Card>
+          )}
+
           {/* Availed Service/s from the visited office */}
           <AvailedServices office={office} />
+        </Section>
+
+        <Section sectionName="Date Collected">
+          <div className="py-2">
+            <Input type="date" {...register("dateCollected")} />
+          </div>
         </Section>
 
         <Section sectionName="Demographic Information">

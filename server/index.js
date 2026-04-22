@@ -21,7 +21,9 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: "v4", auth });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to CART Tallying System for the CSM Questionnaire Form");
+  res.send(
+    "Welcome to CART Tallying System Server for the CSM Questionnaire Form",
+  );
 });
 
 app.post("/postcsmresponse", async (req, res) => {
@@ -30,7 +32,7 @@ app.post("/postcsmresponse", async (req, res) => {
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SPREADSHEET_ID,
-      range: "Encoded Data!A2:T",
+      range: "Encoded Data!B2:V",
       insertDataOption: "INSERT_ROWS",
       valueInputOption: "RAW",
       requestBody: { values: [row] },

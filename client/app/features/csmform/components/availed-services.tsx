@@ -15,14 +15,15 @@ import {
 } from "~/components/ui/input-group"
 
 const defaultServices = [
+  "Enrollment",
+  "Receive Document/s",
+  "Document Request",
+  "Release of Document/s",
+  "Admission for Incoming Student",
+  "Scholarship Application",
+  "Service Records",
   "Medical",
   "Vehicle Pass Sticker",
-  "Enrollment",
-  "Scholarship Application",
-  "Document Request",
-  "Admission for Incoming Students",
-  "Service Records",
-  "Request of Documents",
   "Nurse Intervention",
   "Internet access",
 ]
