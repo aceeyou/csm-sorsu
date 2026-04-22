@@ -47,11 +47,11 @@ export default function CSMForm() {
 
     // Checks if CC or SQD has a response from the client
     if (
-      methods.getValues("sqd").length === 0 ||
+      methods.getValues("sqd").length === 0 &&
       methods.getValues("cc").length === 0
     ) {
       toast.error(
-        "Must answer at least 1 SQD and CC to record the CSM response",
+        "Must answer at least 1 SQD or CC to record the CSM response",
         {
           position: "top-right",
         }
