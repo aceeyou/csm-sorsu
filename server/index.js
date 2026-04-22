@@ -32,7 +32,7 @@ app.post("/postcsmresponse", async (req, res) => {
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SPREADSHEET_ID,
-      range: "Encoded Data!B2:W",
+      range: "Encoded Data!A2:V",
       insertDataOption: "INSERT_ROWS",
       valueInputOption: "RAW",
       requestBody: { values: [row] },
