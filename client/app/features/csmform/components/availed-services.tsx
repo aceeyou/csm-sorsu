@@ -114,12 +114,10 @@ const ict = [
 ]
 
 const recordsOffice = [
-  "Receiving, Recording, and Routing Communications",
-  "Request for Authentication of Documents",
-  "Request for Copies of Documents",
-  "Online Dissemination of Issuance & Communications",
-  "Process of Archiving Documents",
-  "Process of Disposal of Non-Current & In-Active Records",
+  "Receiving of Documents",
+  "Relese of Documents",
+  "Authentication of Documents",
+  "Retrieval/Request for copy of documents",
 ]
 
 const supplyProperty = ["Procurement Process", "Preparation of Funding Request"]
