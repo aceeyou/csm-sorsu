@@ -25,36 +25,42 @@ export default function SQDRatingsItem({
       <SQDRating
         item={item}
         Icon={Angry}
-        value={"1"}
+        value={"SD"}
         sqd={sqd}
         setSQD={setSQD}
       />
       <SQDRating
         item={item}
         Icon={Frown}
-        value={"2"}
+        value={"D"}
         sqd={sqd}
         setSQD={setSQD}
       />
-      <SQDRating item={item} Icon={Meh} value={"3"} sqd={sqd} setSQD={setSQD} />
+      <SQDRating
+        item={item}
+        Icon={Meh}
+        value={"NDA"}
+        sqd={sqd}
+        setSQD={setSQD}
+      />
       <SQDRating
         item={item}
         Icon={Smile}
-        value={"4"}
+        value={"A"}
         sqd={sqd}
         setSQD={setSQD}
       />
       <SQDRating
         item={item}
         Icon={Laugh}
-        value={"5"}
+        value={"SA"}
         sqd={sqd}
         setSQD={setSQD}
       />
       <SQDRating
         item={item}
         Icon={CircleOff}
-        value={"0"}
+        value={"N/A"}
         sqd={sqd}
         setSQD={setSQD}
       />

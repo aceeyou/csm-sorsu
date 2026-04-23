@@ -20,7 +20,7 @@ export default function CitizensCharter({
                 <CardTitle>CC{index + 1}</CardTitle>
                 <RadioCC
                   disabled={index === 0}
-                  label={"0"}
+                  label={"N/A"}
                   item={index.toString()}
                   cc={cc}
                   setCC={setCC}

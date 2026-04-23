@@ -315,7 +315,7 @@ export default function LeftPanel() {
             </label>
             <div className="grid grid-cols-5 gap-3">
               <RadioAge
-                label="19 - younger"
+                label="19 - Younger"
                 clientAge={clientAge}
                 setClientAge={setClientAge}
               />
@@ -335,7 +335,7 @@ export default function LeftPanel() {
                 setClientAge={setClientAge}
               />
               <RadioAge
-                label="65 - older"
+                label="65 - Older"
                 clientAge={clientAge}
                 setClientAge={setClientAge}
               />

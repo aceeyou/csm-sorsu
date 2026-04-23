@@ -76,7 +76,7 @@ export default function CSMForm() {
           },
           body: JSON.stringify({
             //!!! DO N0T MOVE. IT IS IN EXACT ORDER
-            timestamp: new Date(),
+            timestamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
             campus: methods.getValues("campus") || "",
             office: office || "",
             service: listOfServicesAvailed[index] || "",
