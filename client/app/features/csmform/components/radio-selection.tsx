@@ -30,7 +30,7 @@ export default function RadioSelection({
       <span
         className={`text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
       >
-        {label}
+        {label === "Government" ? "Govt" : label}
       </span>
     </div>
   )

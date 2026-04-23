@@ -8,11 +8,11 @@ app.use(express.json(), cors());
 dotenv.config();
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./credentials.json",
+  // keyFile: "./credentials.json",
   credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
     // Replace literal escaped \n with real newlines for Vercel/Node compatibility
     private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
   },
   projectId: process.env.GOOGLE_PROJECT_ID,
   scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -32,7 +32,7 @@ app.post("/postcsmresponse", async (req, res) => {
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SPREADSHEET_ID,
-      range: "Encoded Data!A2:V",
+      range: "Encoded Data!A2:W",
       insertDataOption: "INSERT_ROWS",
       valueInputOption: "RAW",
       requestBody: { values: [row] },

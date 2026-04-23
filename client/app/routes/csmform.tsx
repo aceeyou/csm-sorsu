@@ -12,26 +12,30 @@ export default function CSMForm() {
 
   useEffect(() => {
     if (methods.formState.isSubmitSuccessful) {
-      // 1. retain the campus, office, and services values
-      const campus = methods.getValues("campus")
-      const office = methods.getValues("office")
-      const services = methods.getValues("services")
-      const otherOffice = methods.getValues("otherOffice")
-      const officeCode = methods.getValues("officeCode")
-      const campusCode = methods.getValues("campusCode")
-
-      // 2. reset all state from formcontext
-      methods.reset()
-
-      // 3. reassign the retained values to the respective states
-      if (otherOffice) methods.setValue("otherOffice", otherOffice)
-      methods.setValue("campus", campus)
-      methods.setValue("office", office)
-      methods.setValue("services", services)
-      methods.setValue("officeCode", officeCode)
-      methods.setValue("campusCode", campusCode)
+      formStateResetter()
     }
   }, [methods.formState.isSubmitSuccessful])
+
+  function formStateResetter() {
+    // 1. retain the campus, office, and services values
+    const campus = methods.getValues("campus")
+    const office = methods.getValues("office")
+    const services = methods.getValues("services")
+    const otherOffice = methods.getValues("otherOffice")
+    const officeCode = methods.getValues("officeCode")
+    const campusCode = methods.getValues("campusCode")
+
+    // 2. reset all state from formcontext
+    methods.reset()
+
+    // 3. reassign the retained values to the respective states
+    if (otherOffice) methods.setValue("otherOffice", otherOffice)
+    methods.setValue("campus", campus)
+    methods.setValue("office", office)
+    methods.setValue("services", services)
+    methods.setValue("officeCode", officeCode)
+    methods.setValue("campusCode", campusCode)
+  }
 
   const onSubmit = async (data: any) => {
     // Checks if services is empty
@@ -39,9 +43,7 @@ export default function CSMForm() {
       methods.getValues("services") === undefined ||
       methods.getValues("services").length === 0
     ) {
-      toast.error("Must select at least 1 service to record the CSM response", {
-        position: "top-right",
-      })
+      toast.error("Must select at least 1 service to record the CSM response")
       return
     }
 
@@ -50,17 +52,11 @@ export default function CSMForm() {
       methods.getValues("sqd").length === 0 &&
       methods.getValues("cc").length === 0
     ) {
-      toast.error(
-        "Must answer at least 1 SQD or CC to record the CSM response",
-        {
-          position: "top-right",
-        }
-      )
+      toast.error("Must answer at least 1 SQD or CC to record the CSM response")
       return
     }
 
     // get the arrays from the form
-    const date = new Date()
     const listOfServicesAvailed = methods.getValues("services")
     const cc = methods.getValues("cc")
     const sqd = methods.getValues("sqd")
@@ -80,13 +76,13 @@ export default function CSMForm() {
           },
           body: JSON.stringify({
             //!!! DO N0T MOVE. IT IS IN EXACT ORDER
+            timestamp: new Date(),
             campus: methods.getValues("campus") || "",
             office: office || "",
             service: listOfServicesAvailed[index] || "",
-            date:
-              new Date(
-                methods.getValues("dateCollected")
-              ).toLocaleDateString() || "",
+            date: new Date(
+              methods.getValues("dateCollected") || new Date()
+            ).toLocaleDateString(),
             citizenType: methods.getValues("citizenType") || "",
             clientAge: methods.getValues("clientAge") || "",
             clientSex: methods.getValues("clientSex") || "",
@@ -106,7 +102,7 @@ export default function CSMForm() {
               methods.getValues("dissatisfactionReason") || "",
             feedbackSuggestions: methods.getValues("feedbackSuggestions") || "",
             // TODO: create a system that assigns document control number
-            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-000`,
+            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-0000`,
           }),
         })
           .then((res) => res.json())

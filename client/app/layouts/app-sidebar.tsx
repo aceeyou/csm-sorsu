@@ -50,9 +50,33 @@ export default function AppSidebar() {
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <div className="w-full p-4">
+        <div className="h-svh w-full p-4">
           <SidebarTrigger size={"lg"} />
           <Outlet />
+
+          {/* Footer */}
+          <div className="mt-30 grid grid-cols-4 gap-10 bg-gray-100 px-10 py-15 text-gray-400">
+            <div>
+              <p className="mb-1 text-sm">developed by</p>
+              <h1
+                // to="https://acelogronio.vercel.app"
+                className="cursor-pointer font-medium text-gray-400 transition duration-150 hover:underline"
+              >
+                Ace Arwin Logronio
+              </h1>
+              <p className="-mt-1 text-sm">Admin Aide VI</p>
+            </div>
+            <div></div>
+            <div></div>
+            <div>
+              <Link
+                to="https://sorsu.edu.ph"
+                className="font-medium hover:underline"
+              >
+                SorSU Official Website
+              </Link>
+            </div>
+          </div>
         </div>
       </SidebarProvider>
     </>

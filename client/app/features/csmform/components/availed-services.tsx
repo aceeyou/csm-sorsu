@@ -141,7 +141,11 @@ export default function AvailedServices({ office }: { office: string }) {
         setOfficeServices(adsuServices)
         break
 
-      case "Office of the University Registrar":
+      case "University Registrar":
+        setOfficeServices(uniReg)
+        break
+
+      case "Registrar":
         setOfficeServices(uniReg)
         break
 
@@ -197,7 +201,7 @@ export default function AvailedServices({ office }: { office: string }) {
         setOfficeServices(ict)
         break
 
-      case "Records Office":
+      case "Records and Archives Office":
         setOfficeServices(recordsOffice)
         break
 

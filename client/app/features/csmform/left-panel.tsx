@@ -56,25 +56,66 @@ const ccOffices = [
   "Other",
 ]
 
+// TODO maybe add an "origin office" property
 const officesWithOfficeCode = [
-  { name: "Admission Services Unit", code: "ADSU" },
-  { name: "Office of the University Registrar", code: "UNIREG" },
-  { name: "Scholarship and Financial Assistance Unit", code: "SFASU" },
-  { name: "Guidance and Counceling", code: "GUIDANCE" },
-  { name: "Library Services Unit", code: "LIB" },
-  { name: "Health Services Unit", code: "HSU" },
-  { name: "Safety and Security Services Unit", code: "SAFETY" },
-  { name: "Student Council Affairs", code: "STUDENTCOUNCIL" },
-  { name: "National Service Training Program Office", code: "NSTPO" },
-  { name: "Graduate School", code: "GS" },
+  { name: "Other", code: "OTHER" },
+  { name: "Office of the President", code: "OP" },
   { name: "Accounting Office", code: "ACCOUNTING" },
+  { name: "Admission Services Unit", code: "ADSU" },
   { name: "Budget Office", code: "BUDGET" },
+  { name: "Business Affairs", code: "BUSINESS" },
+  { name: "Campus Director's", code: "CD" },
   { name: "Cashier's Office", code: "CASHIER" },
+  { name: "Dean's Office", code: "DEAN" },
+  { name: "Dean's Office - Agriculture", code: "DEAN-CA" },
+  { name: "Dean's Office - CBM", code: "DEAN-CBM" },
+  { name: "Dean's Office - CBME", code: "DEAN-CBME" },
+  { name: "Dean's Office - CICT", code: "DEAN-CICT" },
+  { name: "Dean's Office - COEA", code: "DEAN-COEA" },
+  { name: "Dean's Office - COHAS", code: "DEAN-COHAS" },
+  { name: "Dean's Office - COT", code: "DEAN-COT" },
+  { name: "Dean's Office - COTED", code: "DEAN-COTED" },
+  { name: "Department Head - Lab High", code: "LABHIGH" },
+  { name: "DRRM/CC", code: "DRRMCC" },
+  { name: "Fabrication Laboratory", code: "FABLAB" },
+  { name: "General Services and Maintenance", code: "GSM" },
+  { name: "Graduate School", code: "GS" },
+  { name: "Guidance and Counceling", code: "GUIDANCE" },
+  { name: "Health Services Unit", code: "HSU" },
+  { name: "Health Services Unit - Baribag", code: "HSU-BARIBAG" },
+  { name: "Housing and Food Services", code: "HFS" },
   { name: "Human Resource Management and Development Office", code: "HRMDO" },
   { name: "ICT / MIS Office", code: "ICTMIS" },
-  { name: "Records Office", code: "RECORDS" },
+  { name: "ILDO", code: "ILDO" },
+  { name: "Internal Relation Office", code: "IRO" },
+  { name: "Legal Office", code: "LEGAL" },
+  { name: "Library Services Unit", code: "LIB" },
+  { name: "Library Services Unit - Baribag", code: "LIB-BARIBAG" },
+  { name: "Motorpool Services", code: "MOTORPOOL" },
+  { name: "National Service Training Program Office", code: "NSTPO" },
+  { name: "Planning Management Office", code: "PLANNING" },
+  { name: "Project Management Office", code: "PMO" },
+  { name: "Public Information Office", code: "PIO" },
+  { name: "Quality Assurance Office", code: "QA" },
+  { name: "Research Centers", code: "RCENTER" },
+  { name: "University Registrar", code: "UNIREG" },
+  { name: "Registrar", code: "REG" },
+  { name: "Registrar - COTED", code: "REG-COTED" },
+  { name: "Registrar - CBM", code: "REG-CBM" },
+  { name: "Registrar - COT", code: "REG-COT" },
+  { name: "Registrar - COEA", code: "REG-COEA" },
+  { name: "Registrar - COHAS", code: "REG-COHAS" },
+  { name: "Records and Archives Office", code: "RECORDS" },
+  { name: "Safety and Security Services Unit", code: "SAFETY" },
+  { name: "Scholarship and Financial Assistance Unit", code: "SFASU" },
+  { name: "Sentro ng Wika at Kultura", code: "SWK" },
+  { name: "Sports, Culture and Arts", code: "SCA" },
+  { name: "Student Council Affairs", code: "STUDENTCOUNCIL" },
+  { name: "Student Development and Services Office", code: "SDS" },
   { name: "Supply and Property Office", code: "SUPPLY" },
-  { name: "Other", code: "OTHER" },
+  { name: "VP for Academic Affairs", code: "VPAA" },
+  { name: "VP for Administration and Finance", code: "VPAF" },
+  { name: "VP for Research, Extension and Training", code: "VPRET" },
 ]
 
 export default function LeftPanel() {
@@ -205,13 +246,11 @@ export default function LeftPanel() {
           {/* Availed Service/s from the visited office */}
           <AvailedServices office={office} />
         </Section>
-
         <Section sectionName="Date Collected">
           <div className="py-2">
             <Input type="date" {...register("dateCollected")} />
           </div>
         </Section>
-
         <Section sectionName="Demographic Information">
           {/* row */}
           <div className="grid grid-cols-[59fr_0.2fr_40fr] gap-5">
@@ -234,7 +273,7 @@ export default function LeftPanel() {
                 />
                 <RadioSelection
                   Icon={Landmark}
-                  label="Govt"
+                  label="Government"
                   citizenType={citizenType}
                   setCitizenType={setCitizenType}
                 />
@@ -298,13 +337,10 @@ export default function LeftPanel() {
             </div>
           </div>
         </Section>
-
         {/* Citizen's Charter */}
         <Section>
           <CitizensCharter cc={cc} setCC={setCC} />
         </Section>
-
-        {/* Feedback */}
         <Section sectionName="Feedback and Suggestions">
           <div className="mt-2 grid grid-cols-2 gap-5">
             <FieldGroup className="rounded-lg border border-gray-200 p-4">
@@ -364,6 +400,38 @@ export default function LeftPanel() {
           </div>
         </Section>
       </div>
+
+      {/* <Section sectionName="Reason of Dissatisfaction">
+        <div>
+          <FieldGroup className="rounded-lg border border-gray-200 p-4">
+            <Field>
+              <div className="flex items-center justify-between">
+                <FieldLabel
+                  className="text-xs font-medium"
+                  htmlFor="dissatisfactionReason"
+                >
+                  Reason/s of dissatisfaction
+                </FieldLabel>
+                <Button
+                  type="button"
+                  onClick={() => resetField("dissatisfactionReason")}
+                  variant={"outline"}
+                  size={"icon"}
+                  className=""
+                >
+                  <Eraser size={16} />
+                </Button>
+              </div>
+              <Textarea
+                id="dissatisfactionReason"
+                placeholder="Enter client input..."
+                className="resize-zone"
+                {...register("dissatisfactionReason")}
+              />
+            </Field>
+          </FieldGroup>
+        </div>
+      </Section> */}
     </div>
   )
 }
