@@ -245,10 +245,15 @@ export default function LeftPanel() {
 
           {/* Availed Service/s from the visited office */}
           <AvailedServices office={office} />
-        </Section>
-        <Section sectionName="Date Collected">
-          <div className="py-2">
-            <Input type="date" {...register("dateCollected")} />
+          <div className="">
+            <label htmlFor="dateCollected" className="mb-1 text-xs">
+              Date Collected
+            </label>
+            <Input
+              type="date"
+              {...register("dateCollected")}
+              className="py-5"
+            />
           </div>
         </Section>
         <Section sectionName="Demographic Information">
