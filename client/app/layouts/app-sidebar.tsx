@@ -64,7 +64,6 @@ export default function AppSidebar() {
               >
                 Ace Arwin Logronio
               </h1>
-              <p className="-mt-1 text-sm">Admin Aide VI</p>
             </div>
             <div></div>
             <div></div>
