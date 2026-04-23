@@ -64,7 +64,7 @@ const officesWithOfficeCode = [
   { name: "Admission Services Unit", code: "ADSU" },
   { name: "Budget Office", code: "BUDGET" },
   { name: "Business Affairs", code: "BUSINESS" },
-  { name: "Campus Director's", code: "CD" },
+  { name: "Campus Director", code: "CD" },
   { name: "Cashier's Office", code: "CASHIER" },
   { name: "Dean's Office", code: "DEAN" },
   { name: "Dean's Office - Agriculture", code: "DEAN-CA" },
