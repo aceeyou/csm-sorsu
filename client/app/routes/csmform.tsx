@@ -3,6 +3,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { Form } from "react-router"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
+import { SidebarTrigger } from "~/components/ui/sidebar"
 import { Spinner } from "~/components/ui/spinner"
 import LeftPanel from "~/features/csmform/left-panel"
 import RightPanel from "~/features/csmform/right-panel"
@@ -61,9 +62,10 @@ export default function CSMForm() {
     const cc = methods.getValues("cc")
     const sqd = methods.getValues("sqd")
 
-    const office = methods.getValues("office") === 'Other'
-      ? methods.getValues("otherOffice")
-      : methods.getValues("office")
+    const office =
+      methods.getValues("office") === "Other"
+        ? methods.getValues("otherOffice")
+        : methods.getValues("office")
 
     // traverse through the service/s availed by the client
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
@@ -120,9 +122,12 @@ export default function CSMForm() {
       <FormProvider {...methods}>
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
-            <h1 className="mt-2 mb-3 text-xl font-bold">
-              CSM Questionnaire Form
-            </h1>
+            <div className="flex items-center gap-3">
+              <SidebarTrigger size={"lg"} className="-mt-1" />
+              <h1 className="mt-2 mb-3 text-xl font-bold">
+                CSM Questionnaire Form
+              </h1>
+            </div>
             <Button
               disabled={methods.formState.isSubmitting}
               type="submit"

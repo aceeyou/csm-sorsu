@@ -245,6 +245,8 @@ export default function LeftPanel() {
 
           {/* Availed Service/s from the visited office */}
           <AvailedServices office={office} />
+
+          {/* Date Collected */}
           <div className="">
             <label htmlFor="dateCollected" className="mb-1 text-xs">
               Date Collected

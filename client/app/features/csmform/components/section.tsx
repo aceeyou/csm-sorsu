@@ -6,7 +6,7 @@ export default function Section({
   children: any
 }) {
   return (
-    <section className="my-4 w-full">
+    <section className="my-1 w-full">
       <h2 className="font-medium">{sectionName}</h2>
       {children}
     </section>

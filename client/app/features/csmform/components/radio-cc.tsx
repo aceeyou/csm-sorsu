@@ -27,7 +27,7 @@ export default function RadioCC({
   return (
     <div
       onClick={handleClick}
-      className={`flex ${disabled ? "cursor-not-allowed" : "cursor-pointer"} flex-col items-center justify-center gap-2 rounded-sm border border-gray-200 ${label === "0" ? "p-1" : "p-2.5"} ${isActive ? "bg-green-600" : ""}`}
+      className={`flex ${disabled ? "cursor-not-allowed" : "cursor-pointer"} flex-col items-center justify-center gap-2 rounded-sm border border-gray-200 ${label === "N/A" ? "p-1" : "p-2.5"} ${isActive ? "bg-green-600" : ""}`}
     >
       {label === "N/A" ? (
         <CircleOff

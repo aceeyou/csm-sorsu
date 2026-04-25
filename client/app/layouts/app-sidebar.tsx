@@ -51,7 +51,6 @@ export default function AppSidebar() {
           </SidebarContent>
         </Sidebar>
         <div className="h-svh w-full p-4">
-          <SidebarTrigger size={"lg"} />
           <Outlet />
 
           {/* Footer */}

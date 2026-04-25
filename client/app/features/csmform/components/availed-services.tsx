@@ -115,7 +115,7 @@ const ict = [
 
 const recordsOffice = [
   "Receiving of Documents",
-  "Relese of Documents",
+  "Release of Documents",
   "Authentication of Documents",
   "Retrieval/Request for copy of documents",
 ]

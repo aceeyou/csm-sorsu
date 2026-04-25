@@ -31,7 +31,16 @@ export default function RightPanel() {
     <div>
       <div className="mt-4 h-min w-full rounded-lg border border-gray-200 p-4">
         <h1 className="text-lg font-bold">Service Quality Dimensions</h1>
-        <div className="grid grid-cols-1 gap-2">
+        <div className="mt-2 grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-7 gap-2">
+            <p className="text-center text-xs text-gray-400">SQD Rating</p>
+            <p className="text-center text-xs text-gray-400">SD</p>
+            <p className="text-center text-xs text-gray-400">D</p>
+            <p className="text-center text-xs text-gray-400">NDA</p>
+            <p className="text-center text-xs text-gray-400">A</p>
+            <p className="text-center text-xs text-gray-400">SA</p>
+            <p className="text-center text-xs text-gray-400">N/A</p>
+          </div>
           {Array.from({ length: 9 }, (_, index) => (
             <SQDRatingsItem
               key={index}
