@@ -61,7 +61,7 @@ export default function CSMForm() {
     const cc = methods.getValues("cc")
     const sqd = methods.getValues("sqd")
 
-    const office = methods.getValues("otherOffice")
+    const office = methods.getValues("office") === 'Other'
       ? methods.getValues("otherOffice")
       : methods.getValues("office")
 
