@@ -39,6 +39,12 @@ export default function CitizensCharter({
       <div className="flex items-center justify-between gap-5">
         <h2 className="font-medium">Citizen's Charter</h2>
         <div className="flex items-center gap-2">
+          <Label
+            htmlFor="toggle-cc-values"
+            className={`text-[0.7rem] font-normal ${switchCCValues === "on" ? "text-violet-500" : "text-gray-400"}`}
+          >
+            Retain Values
+          </Label>
           <Switch
             defaultValue={switchCCValues}
             onCheckedChange={(prev) =>
@@ -47,12 +53,6 @@ export default function CitizensCharter({
             id="toggle-cc-values"
             color="orange"
           />
-          <Label
-            htmlFor="toggle-cc-values"
-            className={`text-[0.7rem] font-normal ${switchCCValues === "on" ? "text-violet-500" : "text-gray-400"}`}
-          >
-            Retain Values
-          </Label>
         </div>
       </div>
 

@@ -34,7 +34,13 @@ export default function RightPanel() {
           <h1 className="text-sm font-bold md:text-lg">
             Service Quality Dimensions
           </h1>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
+            <Label
+              htmlFor="toggle-sqd-values"
+              className={`w-20 text-[0.7rem] font-normal ${switchSQDValues === "on" ? "text-violet-500" : "text-gray-400"}`}
+            >
+              Retain Values
+            </Label>
             <Switch
               defaultValue={switchSQDValues}
               id="toggle-sqd-values"
@@ -42,12 +48,6 @@ export default function RightPanel() {
                 cur ? setSwitchSQDValues("on") : setSwitchSQDValues("off")
               }
             />
-            <Label
-              htmlFor="toggle-sqd-values"
-              className={`w-20 text-[0.7rem] font-normal ${switchSQDValues === "on" ? "text-violet-500" : "text-gray-400"}`}
-            >
-              Retain Values
-            </Label>
           </div>
         </div>
         <div className="mt-2 grid grid-cols-1 gap-2">
