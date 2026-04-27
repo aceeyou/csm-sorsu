@@ -245,7 +245,7 @@ export default function LeftPanel() {
           <AvailedServices office={office} />
 
           {/* Date Collected */}
-          <div className="">
+          <div className="w-50 md:w-full">
             <label htmlFor="dateCollected" className="mb-1 text-xs">
               Date Collected
             </label>
