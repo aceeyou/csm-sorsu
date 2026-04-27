@@ -138,9 +138,9 @@ export default function CSMForm() {
       <FormProvider {...methods}>
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <SidebarTrigger size={"lg"} className="-mt-1" type="button" />
-              <h1 className="mt-2 mb-3 text-xl font-bold">
+              <h1 className="text:sm mt-2 mb-3 font-semibold md:text-xl md:font-bold">
                 CSM Questionnaire Form
               </h1>
             </div>
@@ -148,7 +148,7 @@ export default function CSMForm() {
               <Button
                 disabled={methods.formState.isSubmitting}
                 type="submit"
-                className="h-10 w-40 cursor-pointer text-sm"
+                className="h-8 w-30 cursor-pointer text-xs md:h-10 md:w-40 md:text-sm"
               >
                 {methods.formState.isSubmitting && <Spinner />}
                 SUBMIT
@@ -165,7 +165,7 @@ export default function CSMForm() {
             <Button
               disabled={methods.formState.isSubmitting}
               type="submit"
-              className="mt-2 h-13 w-full cursor-pointer text-lg font-bold"
+              className="mt-8 h-13 w-full cursor-pointer text-lg font-bold md:mt-5"
             >
               {methods.formState.isSubmitting && <Spinner />}
               SUBMIT

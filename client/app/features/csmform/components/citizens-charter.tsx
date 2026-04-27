@@ -56,11 +56,11 @@ export default function CitizensCharter({
         </div>
       </div>
 
-      <div className="mt-2 grid grid-cols-3 gap-4">
+      <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-3">
         {Array.from({ length: 3 }, (_, index) => (
-          <Card key={index}>
+          <Card key={index} className="">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pt-2">
                 <CardTitle>CC{index + 1}</CardTitle>
                 <RadioCC
                   disabled={index === 0}
@@ -73,7 +73,7 @@ export default function CitizensCharter({
               </div>
             </CardHeader>
             <CardContent
-              className={`grid h-full ${index !== 2 ? "grid-cols-4" : "grid-cols-3"} items-end gap-1`}
+              className={`grid h-full pb-2 md:pb-0 ${index !== 2 ? "grid-cols-4" : "grid-cols-3"} items-end gap-1`}
             >
               <RadioCC
                 label={"1"}

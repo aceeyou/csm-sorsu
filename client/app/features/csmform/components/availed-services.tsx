@@ -273,7 +273,7 @@ export default function AvailedServices({ office }: { office: string }) {
               <Button
                 type="button"
                 variant={"outline"}
-                className="w-50 justify-between"
+                className="w-35 justify-between md:w-50"
               >
                 <span>Select service...</span> <ChevronDown />
               </Button>

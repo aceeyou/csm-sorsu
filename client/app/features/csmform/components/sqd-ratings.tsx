@@ -23,7 +23,7 @@ export default function SQDRatingsItem({
     <div
       className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2`}
     >
-      <p className="text-sm">{label}</p>
+      <p className="text-xs md:text-sm">{label}</p>
       <SQDRating
         item={item}
         Icon={Angry}
@@ -101,7 +101,7 @@ function SQDRating({
       onClick={handleClick}
       className={`${isActive && "bg-slate-600"} w-full cursor-pointer place-items-center rounded-md border border-gray-200 p-3`}
     >
-      <Icon color={isActive ? "white" : "black"} />
+      <Icon size={18} color={isActive ? "white" : "black"} />
     </div>
   )
 }

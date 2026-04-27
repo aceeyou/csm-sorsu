@@ -258,7 +258,7 @@ export default function LeftPanel() {
         </Section>
         <Section sectionName="Demographic Information">
           {/* row */}
-          <div className="grid grid-cols-[59fr_0.2fr_40fr] gap-5">
+          <div className="grid grid-cols-1 gap-1 md:grid-cols-[59fr_0.2fr_40fr] md:gap-5">
             <div>
               <label htmlFor="client_type" className="text-xs">
                 Client Type
@@ -309,11 +309,11 @@ export default function LeftPanel() {
           {/* row */}
 
           {/* row */}
-          <div className="my-4">
+          <div className="my-2 md:my-4">
             <label htmlFor="age" className="text-xs">
               Age
             </label>
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-3 gap-3 md:grid-cols-5">
               <RadioAge
                 label="19 - Younger"
                 clientAge={clientAge}
