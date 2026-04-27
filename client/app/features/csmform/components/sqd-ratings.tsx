@@ -20,7 +20,9 @@ export default function SQDRatingsItem({
   setSQD: (value: (string | boolean)[]) => void
 }) {
   return (
-    <div className="grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2">
+    <div
+      className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2`}
+    >
       <p className="text-sm">{label}</p>
       <SQDRating
         item={item}
@@ -92,9 +94,6 @@ function SQDRating({
     }
 
     setSQD([...tempSQD])
-    console.log(tempSQD)
-    // if (isActive) setSQD("")
-    // else setSQD(value)
   }
 
   return (

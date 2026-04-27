@@ -1,25 +1,32 @@
 import { CircleOff } from "lucide-react"
+import { useFormContext } from "react-hook-form"
 
 export default function RadioCC({
   disabled = false,
   label,
   item,
+  value,
   cc,
   setCC,
 }: {
   disabled?: true | false
   label: string
-  item: string
+  item: number
+  value: string
   cc: string[]
   setCC: (value: string[]) => void
 }) {
-  const isActive = cc[parseInt(item)] === label
+  // const { getValues } = useFormContext()
+  const isActive = cc[item] === label
+
+  // console.log(getValues("cc"))
+  // console.log(isActive)
 
   function handleClick() {
     if (disabled) return
 
     let tempCC = [...cc]
-    tempCC[parseInt(item)] = isActive ? "" : label
+    tempCC[item] = isActive ? "" : label
 
     setCC(tempCC)
   }

@@ -35,28 +35,29 @@ const campuses = [
   { name: "Sorsogon City Campus", code: "SC" },
 ]
 
-const ccOffices = [
-  "Admission Services Unit",
-  "Office of the University Registrar",
-  "Scholarship and Financial Assistance Unit",
-  "Guidance and Counceling",
-  "Library Services Unit",
-  "Health Services Unit",
-  "Safety and Security Services Unit",
-  "Student Council Affairs",
-  "National Service Training Program Office",
-  "Graduate School",
-  "Accounting Office",
-  "Budget Office",
-  "Cashier's Office",
-  "Human Resource Management and Development Office",
-  "ICT / MIS Office",
-  "Records Office",
-  "Supply and Property Office",
-  "Other",
-]
+// const ccOffices = [
+//   "Admission Services Unit",
+//   "Office of the University Registrar",
+//   "Scholarship and Financial Assistance Unit",
+//   "Guidance and Counceling",
+//   "Library Services Unit",
+//   "Health Services Unit",
+//   "Safety and Security Services Unit",
+//   "Student Council Affairs",
+//   "National Service Training Program Office",
+//   "Graduate School",
+//   "Accounting Office",
+//   "Budget Office",
+//   "Cashier's Office",
+//   "Human Resource Management and Development Office",
+//   "ICT / MIS Office",
+//   "Records Office",
+//   "Supply and Property Office",
+//   "Other",
+// ]
 
 // TODO maybe add an "origin office" property
+
 const officesWithOfficeCode = [
   { name: "Other", code: "OTHER" },
   { name: "Office of the President", code: "OP" },
@@ -128,9 +129,6 @@ export default function LeftPanel() {
 
   const [campus, setCampus] = useState("")
   const [office, setOffice] = useState("")
-  const [listOfOffices, setListOfOffices] = useState<
-    { name: string; code: string }[]
-  >([...officesWithOfficeCode])
   const [citizenType, setCitizenType] = useState("")
   const [clientSex, setClientSex] = useState("")
   const [clientAge, setClientAge] = useState("")
@@ -154,11 +152,11 @@ export default function LeftPanel() {
   }, [campus])
 
   useEffect(() => {
-    console.log(office)
     setValue("office", office)
     resetField("services")
 
     //!!! OPTIMIZE
+    // finds the office code based on the selected office from the officesWithOfficeCode list
     for (let index = 0; index < officesWithOfficeCode.length; index++) {
       if (officesWithOfficeCode[index].name === office)
         setValue("officeCode", officesWithOfficeCode[index].code)
@@ -176,7 +174,7 @@ export default function LeftPanel() {
       <div className="">
         <Section sectionName="Visit Details">
           {/* row */}
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-5">
             {/* Campus */}
             <div>
               <label className="text-xs" htmlFor="campus">
@@ -186,7 +184,7 @@ export default function LeftPanel() {
               <Select
                 onValueChange={(selectedCampus) => setCampus(selectedCampus)}
               >
-                <SelectTrigger className="w-full text-lg font-medium">
+                <SelectTrigger className="w-full py-4 text-lg font-medium">
                   <SelectValue placeholder="Select campus..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -209,11 +207,11 @@ export default function LeftPanel() {
                 Office Visited
               </label>
               <Select onValueChange={(officeObj) => setOffice(officeObj)}>
-                <SelectTrigger className="w-full text-lg font-medium">
+                <SelectTrigger className="w-full py-4 text-lg font-medium">
                   <SelectValue placeholder="Select office..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {listOfOffices.map((officeItem) => (
+                  {officesWithOfficeCode.map((officeItem) => (
                     <SelectItem
                       key={officeItem.code}
                       value={officeItem.name}
@@ -349,7 +347,7 @@ export default function LeftPanel() {
           <CitizensCharter cc={cc} setCC={setCC} />
         </Section>
         <Section sectionName="Feedback and Suggestions">
-          <div className="mt-2 grid grid-cols-2 gap-5">
+          <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
             <FieldGroup className="rounded-lg border border-gray-200 p-4">
               <Field>
                 <div className="flex items-center justify-between">

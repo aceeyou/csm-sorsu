@@ -66,6 +66,8 @@ const uniLibrary = [
   "Internet Access",
   "Online Reference Assistance",
   "Library Circulation",
+  "Signing of Clearance",
+  "Visiting Researchers",
 ]
 
 const healthServices = [
@@ -101,11 +103,12 @@ const budgetOffice = [
 const cashier = ["Cash and Check Disbursement", "Collection"]
 
 const hrmdo = [
-  "Request of Personnel Documents/Records",
-  "Application for Employment",
-  "Conduct of Assessment of Qualified Applicants",
-  "Issuance of Appointment",
-  "Processing of Application for Leave of Absence",
+  "Request of Documents",
+  "Placement/Selection",
+  "Certificate of Appearance",
+  "Service Record",
+  "Application for Leave",
+  "Travel Order",
 ]
 
 const ict = [

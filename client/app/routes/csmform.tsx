@@ -25,9 +25,21 @@ export default function CSMForm() {
     const otherOffice = methods.getValues("otherOffice")
     const officeCode = methods.getValues("officeCode")
     const campusCode = methods.getValues("campusCode")
+    const sqdToggleValue = methods.getValues("toggle-sqd-values")
+    const ccToggleValue = methods.getValues("toggle-cc-values")
+    const sqd =
+      methods.getValues("toggle-sqd-values") === "on"
+        ? methods.getValues("sqd")
+        : []
+    const cc =
+      methods.getValues("toggle-cc-values") === "on"
+        ? methods.getValues("cc")
+        : []
 
+    console.log("sqd toggle : ", methods.getValues("toggle-sqd-values"))
+    console.log(cc)
     // 2. reset all state from formcontext
-    methods.reset()
+    methods.reset(undefined, { keepDirty: true })
 
     // 3. reassign the retained values to the respective states
     if (otherOffice) methods.setValue("otherOffice", otherOffice)
@@ -36,6 +48,10 @@ export default function CSMForm() {
     methods.setValue("services", services)
     methods.setValue("officeCode", officeCode)
     methods.setValue("campusCode", campusCode)
+    methods.setValue("sqd", sqd)
+    methods.setValue("cc", cc)
+    methods.setValue("toggle-sqd-values", sqdToggleValue)
+    methods.setValue("toggle-cc-values", ccToggleValue)
   }
 
   const onSubmit = async (data: any) => {
@@ -123,21 +139,23 @@ export default function CSMForm() {
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <SidebarTrigger size={"lg"} className="-mt-1" />
+              <SidebarTrigger size={"lg"} className="-mt-1" type="button" />
               <h1 className="mt-2 mb-3 text-xl font-bold">
                 CSM Questionnaire Form
               </h1>
             </div>
-            <Button
-              disabled={methods.formState.isSubmitting}
-              type="submit"
-              className="h-10 w-40 cursor-pointer text-sm"
-            >
-              {methods.formState.isSubmitting && <Spinner />}
-              SUBMIT
-            </Button>
+            <div>
+              <Button
+                disabled={methods.formState.isSubmitting}
+                type="submit"
+                className="h-10 w-40 cursor-pointer text-sm"
+              >
+                {methods.formState.isSubmitting && <Spinner />}
+                SUBMIT
+              </Button>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-7">
             <LeftPanel />
             <RightPanel />
           </div>
