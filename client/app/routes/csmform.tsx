@@ -148,7 +148,7 @@ export default function CSMForm() {
               <Button
                 disabled={methods.formState.isSubmitting}
                 type="submit"
-                className="h-8 w-30 cursor-pointer text-xs md:h-10 md:w-40 md:text-sm"
+                className="h-8 w-20 cursor-pointer text-xs md:h-10 md:w-40 md:text-sm"
               >
                 {methods.formState.isSubmitting && <Spinner />}
                 SUBMIT

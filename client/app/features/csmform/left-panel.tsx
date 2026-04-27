@@ -252,7 +252,7 @@ export default function LeftPanel() {
             <Input
               type="date"
               {...register("dateCollected")}
-              className="py-5"
+              className="w-full py-5"
             />
           </div>
         </Section>
