@@ -1,6 +1,7 @@
-import { useEffect } from "react"
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Form } from "react-router"
+import { Form, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import { SidebarTrigger } from "~/components/ui/sidebar"
@@ -10,6 +11,39 @@ import RightPanel from "~/features/csmform/right-panel"
 
 export default function CSMForm() {
   const methods = useForm()
+  const [error, setError] = useState("")
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+  })
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    const handleGetUserData = async () => {
+      try {
+        const res = await axios.get("http://localhost:1337/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        console.log(res)
+
+        if (res.status === 200) {
+          setUser({
+            name: res.data.name,
+            email: res.data.email,
+          })
+        }
+      } catch (error) {
+        setError("Session expired. Please log in again.")
+        navigate("/login")
+      }
+    }
+
+    handleGetUserData()
+  }, [])
 
   useEffect(() => {
     if (methods.formState.isSubmitSuccessful) {
@@ -121,6 +155,8 @@ export default function CSMForm() {
             feedbackSuggestions: methods.getValues("feedbackSuggestions") || "",
             // TODO: create a system that assigns document control number
             controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-0000`,
+            secretariat: user.name,
+            secretariatEmail: user.email,
           }),
         })
           .then((res) => res.json())
