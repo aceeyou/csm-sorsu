@@ -1,16 +1,20 @@
-import { Cog, File, House, User } from "lucide-react"
+import { Cog, CogIcon, File, House, LogIn, User } from "lucide-react"
 import { Link, NavLink, Outlet } from "react-router"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
 } from "~/components/ui/sidebar"
 
 export default function AppSidebar() {
+  const handleLogOut = () => {
+    localStorage.removeItem("token")
+  }
+
   return (
     <>
       <SidebarProvider className="">
@@ -25,30 +29,60 @@ export default function AppSidebar() {
           </SidebarHeader>
           <SidebarContent className="bg-white">
             <SidebarMenu>
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  isActive ? "rounded-md bg-gray-200" : ""
-                }
-              >
-                <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
-                  <House size={18} />
-                  <span className="ml-2 text-sm">Home</span>
-                </SidebarMenuItem>
-              </NavLink>
-              <NavLink
-                to="/csmform"
-                className={({ isActive }) =>
-                  isActive ? "rounded-md bg-gray-200" : ""
-                }
-              >
-                <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
-                  <File size={18} />
-                  <span className="ml-2 text-sm">CSM Form</span>
-                </SidebarMenuItem>
-              </NavLink>
+              <div className="h-full">
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? "rounded-md bg-gray-200" : ""
+                  }
+                >
+                  <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
+                    <House size={18} />
+                    <span className="ml-2 text-sm">Home</span>
+                  </SidebarMenuItem>
+                </NavLink>
+                <NavLink
+                  to="/csmform"
+                  className={({ isActive }) =>
+                    isActive ? "rounded-md bg-gray-200" : ""
+                  }
+                >
+                  <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
+                    <File size={18} />
+                    <span className="ml-2 text-sm">CSM Form</span>
+                  </SidebarMenuItem>
+                </NavLink>
+              </div>
+              <div className="mt-auto"></div>
             </SidebarMenu>
           </SidebarContent>
+          <SidebarFooter className="bg-white">
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                isActive ? "rounded-md bg-gray-100" : ""
+              }
+            >
+              <SidebarMenuItem className="mt-auto flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
+                <CogIcon size={18} />
+                <span className="ml-2 text-sm">Settings</span>
+              </SidebarMenuItem>
+            </NavLink>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive ? "rounded-md bg-gray-200" : ""
+              }
+            >
+              <SidebarMenuItem
+                onClick={handleLogOut}
+                className="mt-auto flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200"
+              >
+                <LogIn size={18} />
+                <span className="ml-2 text-sm">Log out</span>
+              </SidebarMenuItem>
+            </NavLink>
+          </SidebarFooter>
         </Sidebar>
         <div className="h-svh w-full p-4">
           <Outlet />
