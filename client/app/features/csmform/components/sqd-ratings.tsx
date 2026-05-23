@@ -99,7 +99,7 @@ function SQDRating({
   return (
     <div
       onClick={handleClick}
-      className={`${isActive && "bg-slate-600"} flex w-full cursor-pointer place-items-center items-center justify-center rounded-md border border-gray-200 py-2 md:p-3`}
+      className={`${isActive && "bg-slate-600"} w-full cursor-pointer place-items-center rounded-md border border-gray-200 p-1 py-2 md:p-3 items-center`}
     >
       <Icon size={18} color={isActive ? "white" : "black"} />
     </div>
