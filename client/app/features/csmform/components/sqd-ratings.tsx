@@ -21,7 +21,7 @@ export default function SQDRatingsItem({
 }) {
   return (
     <div
-      className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2`}
+      className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2 odd:bg-[#F9F9F9]`}
     >
       <p className="text-xs md:text-sm">{label}</p>
       <SQDRating
@@ -99,7 +99,7 @@ function SQDRating({
   return (
     <div
       onClick={handleClick}
-      className={`${isActive && "bg-slate-600"} flex w-full cursor-pointer place-items-center items-center justify-center rounded-md border border-gray-200 py-2 md:p-3`}
+      className={`${isActive ? "bg-slate-600" : "hover:bg-gray-200"} flex w-full cursor-pointer place-items-center items-center justify-center rounded-md border border-gray-200 py-2 md:p-3`}
     >
       <Icon size={18} color={isActive ? "white" : "black"} />
     </div>

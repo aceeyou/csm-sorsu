@@ -13,4 +13,12 @@ export default defineConfig({
     devtoolsJson(),
     vercelPreset(),
   ],
+  server: {
+    proxy: {
+      // Change to 'csm-sorsu-server.vercel.app' before deployment
+      "/api": {
+        target: "http://127.0.0.1:1337",
+      },
+    },
+  },
 })

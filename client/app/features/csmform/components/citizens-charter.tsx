@@ -18,6 +18,7 @@ export default function CitizensCharter({
     formState: { isSubmitSuccessful },
   } = useFormContext()
   const [switchCCValues, setSwitchCCValues] = useState("off")
+  const [isCC1Answered4, setIsCC1Answered4] = useState(false)
 
   useEffect(() => {
     // console.log(getValues("cc"))
@@ -68,42 +69,17 @@ export default function CitizensCharter({
                   item={index}
                   cc={cc}
                   setCC={setCC}
-                  value={cc[index]}
                 />
               </div>
             </CardHeader>
             <CardContent
               className={`grid h-full pb-2 md:pb-0 ${index !== 2 ? "grid-cols-4" : "grid-cols-3"} items-end gap-1`}
             >
-              <RadioCC
-                label={"1"}
-                item={index}
-                cc={cc}
-                setCC={setCC}
-                value={cc[index]}
-              />
-              <RadioCC
-                label={"2"}
-                item={index}
-                cc={cc}
-                setCC={setCC}
-                value={cc[index]}
-              />
-              <RadioCC
-                label={"3"}
-                item={index}
-                cc={cc}
-                setCC={setCC}
-                value={cc[index]}
-              />
+              <RadioCC label={"1"} item={index} cc={cc} setCC={setCC} />
+              <RadioCC label={"2"} item={index} cc={cc} setCC={setCC} />
+              <RadioCC label={"3"} item={index} cc={cc} setCC={setCC} />
               {index !== 2 && (
-                <RadioCC
-                  label={"4"}
-                  item={index}
-                  cc={cc}
-                  setCC={setCC}
-                  value={cc[index]}
-                />
+                <RadioCC label={"4"} item={index} cc={cc} setCC={setCC} />
               )}
             </CardContent>
           </Card>

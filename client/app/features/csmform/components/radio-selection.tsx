@@ -24,13 +24,13 @@ export default function RadioSelection({
   return (
     <div
       onClick={handleClick}
-      className={`flex cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${isActive ? "bg-amber-600" : ""}`}
+      className={`flex cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${isActive ? "bg-amber-600" : "hover:bg-gray-100"}`}
     >
       <Icon size={20} color={isActive ? "white" : "black"} />
       <span
         className={`text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
       >
-        {label === "Government" ? "Govt" : label}
+        {label === "Government" ? "Gov't" : label}
       </span>
     </div>
   )

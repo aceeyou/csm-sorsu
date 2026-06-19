@@ -1,116 +1,233 @@
-import { Cog, CogIcon, File, House, LogIn, User } from "lucide-react"
+import {
+  Briefcase,
+  Building2,
+  CogIcon,
+  File,
+  GraduationCap,
+  House,
+} from "lucide-react"
+import { useState } from "react"
 import { Link, NavLink, Outlet } from "react-router"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
+  useSidebar,
 } from "~/components/ui/sidebar"
 
 export default function AppSidebar() {
-  const handleLogOut = () => {
-    localStorage.removeItem("token")
-  }
-
+  const { state } = useSidebar()
+  const [isCollapsed, setIsCollapsed] = useState(state === "collapsed")
   return (
     <>
-      <SidebarProvider className="">
-        <Sidebar
-          // collapsible="icon"
-          className="p-4"
-        >
-          <SidebarHeader className="bg-white">
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold">SorSU CART</h1>
-            </div>
-          </SidebarHeader>
-          <SidebarContent className="bg-white">
-            <SidebarMenu>
-              <div className="h-full">
+      <Sidebar collapsible="icon" className="bg-white p-2">
+        <SidebarHeader className="-p-2 bg-white">
+          <SidebarMenu className="">
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <GraduationCap size={20} />
+                <span className="text-sm font-bold">SorSU CART</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent className="bg-white pt-4">
+          <SidebarMenu>
+            <SidebarMenuItem
+              className={`flex flex-row items-center rounded-md ${state === "collapsed" ? "hover:bg-red-500" : "hover:bg-gray-200"} `}
+            >
+              <SidebarMenuButton asChild className="p-0">
+                <NavLink to="/" end className={``}>
+                  {({ isActive }) => (
+                    <div
+                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
+                    >
+                      <House
+                        size={18}
+                        color={
+                          state === "collapsed" && isActive
+                            ? "maroon"
+                            : isActive
+                              ? "white"
+                              : "gray"
+                        }
+                      />
+                      <span
+                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                      >
+                        Home
+                      </span>
+                    </div>
+                  )}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem
+              className={`flex flex-row items-center rounded-md hover:bg-gray-200`}
+            >
+              <SidebarMenuButton asChild className="p-0">
+                <NavLink to="/csmform" end>
+                  {({ isActive }) => (
+                    <div
+                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
+                    >
+                      <File
+                        size={18}
+                        color={
+                          state === "collapsed" && isActive
+                            ? "maroon"
+                            : isActive
+                              ? "white"
+                              : "gray"
+                        }
+                      />
+                      <span
+                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                      >
+                        CSM Form
+                      </span>
+                    </div>
+                  )}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
+              <SidebarMenuButton asChild className="p-0">
                 <NavLink
-                  to="/"
+                  to="/offices"
+                  end
                   className={({ isActive }) =>
-                    isActive ? "rounded-md bg-gray-200" : ""
+                    `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
                   }
                 >
-                  <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
-                    <House size={18} />
-                    <span className="ml-2 text-sm">Home</span>
-                  </SidebarMenuItem>
+                  {({ isActive }) => (
+                    <div
+                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
+                    >
+                      <Building2
+                        size={18}
+                        color={
+                          state === "collapsed" && isActive
+                            ? "maroon"
+                            : isActive
+                              ? "white"
+                              : "gray"
+                        }
+                      />
+                      <span
+                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                      >
+                        Offices
+                      </span>
+                    </div>
+                  )}
                 </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
+              <SidebarMenuButton asChild className="p-0">
                 <NavLink
-                  to="/csmform"
+                  to="/services"
+                  end
                   className={({ isActive }) =>
-                    isActive ? "rounded-md bg-gray-200" : ""
+                    `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
                   }
                 >
-                  <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
-                    <File size={18} />
-                    <span className="ml-2 text-sm">CSM Form</span>
-                  </SidebarMenuItem>
+                  {({ isActive }) => (
+                    <div
+                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
+                    >
+                      <Briefcase
+                        size={18}
+                        color={
+                          state === "collapsed" && isActive
+                            ? "maroon"
+                            : isActive
+                              ? "white"
+                              : "gray"
+                        }
+                      />
+                      <span
+                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                      >
+                        Services
+                      </span>
+                    </div>
+                  )}
                 </NavLink>
-              </div>
-              <div className="mt-auto"></div>
-            </SidebarMenu>
-          </SidebarContent>
-          <SidebarFooter className="bg-white">
-            <NavLink
-              to="/settings"
-              className={({ isActive }) =>
-                isActive ? "rounded-md bg-gray-100" : ""
-              }
-            >
-              <SidebarMenuItem className="mt-auto flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200">
-                <CogIcon size={18} />
-                <span className="ml-2 text-sm">Settings</span>
-              </SidebarMenuItem>
-            </NavLink>
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                isActive ? "rounded-md bg-gray-200" : ""
-              }
-            >
-              <SidebarMenuItem
-                onClick={handleLogOut}
-                className="mt-auto flex flex-row items-center gap-2 rounded-md p-2 hover:bg-gray-200"
-              >
-                <LogIn size={18} />
-                <span className="ml-2 text-sm">Log out</span>
-              </SidebarMenuItem>
-            </NavLink>
-          </SidebarFooter>
-        </Sidebar>
-        <div className="h-svh w-full p-4">
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter className="-p-2 bg-white pb-4">
+          <SidebarMenu>
+            <SidebarMenuItem className="flex flex-row items-center gap-2 rounded-md hover:bg-gray-200">
+              <SidebarMenuButton asChild className="p-0">
+                <NavLink
+                  to="/settings"
+                  className={({ isActive }) =>
+                    `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
+                  }
+                >
+                  {({ isActive }) => (
+                    <div
+                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
+                    >
+                      <CogIcon
+                        size={18}
+                        color={
+                          state === "collapsed" && isActive
+                            ? "maroon"
+                            : isActive
+                              ? "white"
+                              : "gray"
+                        }
+                      />
+                      <span
+                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                      >
+                        Settings
+                      </span>
+                    </div>
+                  )}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+      <div className="w-full p-4">
+        <SidebarInset className="h-full">
           <Outlet />
+        </SidebarInset>
 
-          {/* Footer */}
-          <div className="mt-30 grid grid-cols-1 gap-10 bg-gray-100 px-10 py-15 text-gray-400 md:grid-cols-4">
-            <div>
-              <p className="mb-1 text-xs md:text-sm">developed by</p>
-              <h1
-                // to="https://acelogronio.vercel.app"
-                className="cursor-pointer text-sm font-medium text-gray-400 transition duration-150 hover:underline md:text-xl"
-              >
-                Ace Arwin Logronio
-              </h1>
-            </div>
-            <div></div>
-            <div></div>
-            <div>
-              <Link
-                to="https://sorsu.edu.ph"
-                className="font-medium hover:underline"
-              >
-                SorSU Official Website
-              </Link>
-            </div>
+        {/* Footer */}
+        <div className="mt-20 grid grid-cols-1 gap-10 bg-gray-100 px-10 py-15 text-gray-400 md:grid-cols-3">
+          <div>
+            <p className="mb-1 text-xs md:text-sm">developed by</p>
+            <h1
+              // to="https://acelogronio.vercel.app"
+              className="md:text-md cursor-pointer text-sm font-medium text-gray-400 transition duration-150 hover:underline"
+            >
+              Ace Arwin Logronio
+            </h1>
+          </div>
+          <div></div>
+          <div>
+            <Link
+              to="https://sorsu.edu.ph"
+              className="font-medium hover:underline"
+            >
+              SorSU Official Website
+            </Link>
           </div>
         </div>
-      </SidebarProvider>
+      </div>
     </>
   )
 }

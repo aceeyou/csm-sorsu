@@ -1,9 +1,12 @@
 import AllowedEmail from "../models/AllowedEmail.js";
+import User from "../models/User.js";
 
 export async function GetAllowedEmail(req, res) {
   try {
     // Get the list of allowed email
-    const listOfEmails = await AllowedEmail.find().select("_id allowed email");
+    const listOfEmails = await AllowedEmail.find().select(
+      "_id email authorized",
+    );
     return res.status(200).json({ emails: [...listOfEmails] });
   } catch (error) {
     console.log(error);
@@ -17,50 +20,139 @@ export async function AddAllowedEmail(req, res) {
     // Checks is the system sent the email address to be verified
     if (!email)
       return res.status(400).json({
-        message: "Please provide a valid email to add onto the allowed list",
+        message:
+          "Please provide a valid email address to add to the allowlist.",
       });
 
     // Checks if the email already exists on the allowed email list and is active
     const emailExists = await AllowedEmail.findOne({ email });
-    if (emailExists && !emailExists.allowed)
+    if (emailExists && !emailExists.authorized)
       return res.status(400).json({
         message:
-          "Email is on the list but is inactive. Change the active state of the email to continue",
+          "The email is on the list but currently is not allowed to access the system. Change the permission of the email to continue",
       });
-    if (emailExists && emailExists.allowed)
-      return res.status(400).json({ message: "Email is on the list already" });
+    if (emailExists && emailExists.authorized)
+      return res
+        .status(400)
+        .json({ message: "This email is already on the allowed list." });
 
     // Adds the email to the allowed list
-    await AllowedEmail.create({ email, allowed: true });
-    return res.status(201).json({ message: "Successfully added the email!" });
+    const newAllowedEmail = await AllowedEmail.create({
+      email,
+      authorized: true,
+    });
+    console.log("new allowed email: ", newAllowedEmail);
+    return res.status(201).json({
+      id: newAllowedEmail._id,
+      email: newAllowedEmail.email,
+      authorized: newAllowedEmail.authorized,
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
 export async function ToggleEmailPrivelages(req, res) {
-  const { email } = req.body;
+  const { id, email } = req.body;
 
   try {
-    if (!email)
+    if (email === req.user.email) {
+      return res.status(400).json({
+        message:
+          "You cannot change your own email privileges. Please contact another admin to change your email privileges",
+      });
+    }
+
+    if (!id)
       return res
         .status(400)
         .json({ message: "Please provide the email address" });
 
-    const allowedEmail = await AllowedEmail.findOne({ email });
+    const allowedEmail = await AllowedEmail.findOne({ _id: id });
     if (!allowedEmail)
       return res.status(400).json({
         message: "Email does not exist the on system. Please try again",
       });
 
-    AllowedEmail.updateOne(
+    const currentPrivelages = allowedEmail.authorized ? true : false;
+
+    await AllowedEmail.updateOne(
       { _id: allowedEmail._id },
-      { ...allowedEmail, allowed: !allowedEmail.allowed },
+      { $set: { authorized: !currentPrivelages } },
     );
-    return res
-      .statue(201)
-      .json({ message: `Successfully updated the privelages of ${email}` });
+
+    const userInfo = await User.findOne({ email });
+    if (!userInfo) {
+      console.log("Can't find user with email ", email);
+      return res.status(400).json({ message: "Account does not exist" });
+    }
+
+    // Once the allowed status is updated, the role of the user associated with the email address is also updated.
+    // If the email is updated to be not allowed, then the role of
+    // the user will lose the "admin" privilage and become a "user"
+    // userInfo.active = !currentPrivelages;
+    // userInfo.save();
+    await User.updateOne(
+      { email },
+      {
+        $set: {
+          role: !currentPrivelages ? "user" : req.user.role,
+          active: !currentPrivelages,
+        },
+      },
+    );
+
+    return res.status(201).json({
+      message: `Successfully updated the privelages of ${allowedEmail.email}`,
+    });
   } catch (error) {
     console.log(error);
+  }
+}
+
+export async function UpdateEmailAddress(req, res) {
+  const { id, newEmail } = req.body;
+
+  try {
+    if (!id || !newEmail)
+      return res.status(400).json({
+        message: "Please provide the email address and the new email address",
+      });
+
+    const allowedEmail = await AllowedEmail.findOne({ _id: id });
+    if (!allowedEmail)
+      return res.status(400).json({
+        message: "Email does not exist the on system. Please try again",
+      });
+    const oldEmail = allowedEmail.email;
+    await AllowedEmail.updateOne(
+      { _id: allowedEmail._id },
+      { $set: { email: newEmail } },
+    );
+
+    return res.status(201).json({
+      message: `Successfully updated the email address of ${oldEmail} to ${newEmail}`,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function EmailAvailability(req, res) {
+  const { email } = req.body;
+
+  try {
+    if (!email)
+      return res.status(400).json({
+        message: "Please provide the email address to check its availability",
+      });
+
+    const isAvailable = await AllowedEmail.findOne({ email });
+    return res.status(200).json({ available: !isAvailable });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error: " + error.message,
+    });
   }
 }

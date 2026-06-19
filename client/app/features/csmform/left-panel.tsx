@@ -184,7 +184,7 @@ export default function LeftPanel() {
               <Select
                 onValueChange={(selectedCampus) => setCampus(selectedCampus)}
               >
-                <SelectTrigger className="w-full py-4 text-lg font-medium">
+                <SelectTrigger className="w-full cursor-pointer py-4 text-lg font-medium">
                   <SelectValue placeholder="Select campus..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -207,7 +207,7 @@ export default function LeftPanel() {
                 Office Visited
               </label>
               <Select onValueChange={(officeObj) => setOffice(officeObj)}>
-                <SelectTrigger className="w-full py-4 text-lg font-medium">
+                <SelectTrigger className="w-full cursor-pointer py-4 text-lg font-medium">
                   <SelectValue placeholder="Select office..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -247,12 +247,12 @@ export default function LeftPanel() {
           {/* Date Collected */}
           <div className="w-50 md:w-full">
             <label htmlFor="dateCollected" className="mb-1 text-xs">
-              Date Collected
+              Date Visited
             </label>
             <Input
               type="date"
               {...register("dateCollected")}
-              className="w-full py-5"
+              className="w-full cursor-pointer py-5"
             />
           </div>
         </Section>
@@ -353,33 +353,6 @@ export default function LeftPanel() {
                 <div className="flex items-center justify-between">
                   <FieldLabel
                     className="text-xs font-medium"
-                    htmlFor="dissatisfactionReason"
-                  >
-                    Reason/s of dissatisfaction
-                  </FieldLabel>
-                  <Button
-                    type="button"
-                    onClick={() => resetField("dissatisfactionReason")}
-                    variant={"outline"}
-                    size={"icon"}
-                    className=""
-                  >
-                    <Eraser size={16} />
-                  </Button>
-                </div>
-                <Textarea
-                  id="dissatisfactionReason"
-                  placeholder="Enter client input..."
-                  className="resize-zone"
-                  {...register("dissatisfactionReason")}
-                />
-              </Field>
-            </FieldGroup>
-            <FieldGroup className="rounded-lg border border-gray-200 p-4">
-              <Field>
-                <div className="flex items-center justify-between">
-                  <FieldLabel
-                    className="text-xs font-medium"
                     htmlFor="feedbackSuggestions"
                   >
                     Feedback and Suggestions
@@ -399,6 +372,33 @@ export default function LeftPanel() {
                   placeholder="Enter client input..."
                   className="resize-zone"
                   {...register("feedbackSuggestions")}
+                />
+              </Field>
+            </FieldGroup>
+            <FieldGroup className="rounded-lg border border-gray-200 p-4">
+              <Field>
+                <div className="flex items-center justify-between">
+                  <FieldLabel
+                    className="text-xs font-medium"
+                    htmlFor="dissatisfactionReason"
+                  >
+                    Reason/s of dissatisfaction
+                  </FieldLabel>
+                  <Button
+                    type="button"
+                    onClick={() => resetField("dissatisfactionReason")}
+                    variant={"outline"}
+                    size={"icon"}
+                    className=""
+                  >
+                    <Eraser size={16} />
+                  </Button>
+                </div>
+                <Textarea
+                  id="dissatisfactionReason"
+                  placeholder="Enter client input..."
+                  className="resize-zone"
+                  {...register("dissatisfactionReason")}
                 />
               </Field>
             </FieldGroup>

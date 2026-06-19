@@ -3,10 +3,11 @@ import cors from "cors";
 import {
   SpreadsheetController,
   FetchCampusesController,
+  DownloadSpreadSheetController,
 } from "../controllers/Spreadsheet.controller.js";
 
-const router = express.Router();
+const spreadSheetRouter = express.Router();
 
-router.get("/campuses", FetchCampusesController);
+spreadSheetRouter.get("/download", DownloadSpreadSheetController);
 
-export default router;
+export default spreadSheetRouter;

@@ -55,7 +55,7 @@ export default function RightPanel() {
             <p className="text-center text-xs text-gray-400">SQD</p>
             <p className="text-center text-xs text-gray-400">SD</p>
             <p className="text-center text-xs text-gray-400">D</p>
-            <p className="text-center text-xs text-gray-400">NDA</p>
+            <p className="text-center text-xs text-gray-400">NAND</p>
             <p className="text-center text-xs text-gray-400">A</p>
             <p className="text-center text-xs text-gray-400">SA</p>
             <p className="text-center text-xs text-gray-400">N/A</p>
