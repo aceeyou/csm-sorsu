@@ -54,7 +54,11 @@ function AuthForm() {
     setSubmitting(true)
 
     try {
-      const res = await axios.post("/api/auth/login", formData)
+      const res = await axios.post("/api/auth/login", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       // console.log(res)
 
       if (res.status === 400) {
