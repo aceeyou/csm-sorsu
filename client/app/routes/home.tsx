@@ -1,9 +1,9 @@
 import { Link } from "react-router"
 import { useFetchUser } from "~/hooks/use-fetchUser"
 import { Skeleton } from "~/components/ui/skeleton"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import CustomSidebar from "~/components/custom-sidebar"
 import { toast } from "sonner"
+// import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 
 export default function Home() {
   const { data, error } = useFetchUser()
@@ -27,11 +27,10 @@ export default function Home() {
 
         <div className="mt-10 min-w-125">
           <div className="grid h-30 w-full grid-cols-3 gap-4 gap-y-4 rounded-lg">
-            <Card>
+            {/* <Card>
               <CardContent className="grid h-full grid-cols-[2fr_2.2fr] items-center justify-between text-center">
                 <p className="text-md font-medium">
-                  CSM Questionnaire Forms Total Collections accross all campuses
-                  of the University (unofficial data)
+                  CSM Questionnaire Forms Total Collections (unofficial data)
                 </p>
 
                 <p className="pl-4 text-4xl font-semibold">1234</p>
@@ -40,8 +39,7 @@ export default function Home() {
             <Card>
               <CardContent className="grid h-full grid-cols-[2fr_2.2fr] items-center justify-between text-center">
                 <p className="text-md font-medium">
-                  Out of the total collections... says they are satisfied with
-                  SorSU's services (unofficial data)
+                  SorSU's Satisfaction Rate (unofficial data)
                 </p>
 
                 <p className="pl-4 text-4xl font-semibold">
@@ -49,7 +47,9 @@ export default function Home() {
                   <span className="text-sm text-gray-400">1000 / 1234</span>
                 </p>
               </CardContent>
-            </Card>
+            </Card> */}
+            <Skeleton className="rounded-md bg-gray-200" />
+            <Skeleton className="rounded-md bg-gray-200" />
             <Skeleton className="rounded-md bg-gray-200" />
           </div>
           <div className="mt-5 grid w-full grid-cols-2 gap-4">

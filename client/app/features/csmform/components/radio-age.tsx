@@ -22,11 +22,11 @@ export default function RadioAge({
   return (
     <div
       onClick={handleClick}
-      className={`flex cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${isActive ? "bg-purple-600" : "hover:bg-gray-100"}`}
+      className={`flex w-full cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${isActive ? "bg-purple-600" : "hover:bg-gray-100"}`}
     >
       <ContactRound size={20} color={isActive ? "white" : "black"} />
       <span
-        className={`text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
+        className={`truncate text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
       >
         {label}
       </span>

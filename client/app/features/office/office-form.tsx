@@ -1,4 +1,3 @@
-import { useState } from "react"
 import FieldRequired from "~/components/field-required"
 import { FieldGroup } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
@@ -21,12 +20,6 @@ interface OfficeType {
 }
 
 function OfficeForm({ office, fields, setFields }: OfficeType) {
-  //   const [fields, setFields] = useState({
-  //     office: "",
-  //     alias: "",
-  //     campus: office.campus || [""],
-  //     type: office.type || "",
-  //   })
   return (
     <form>
       <FieldGroup className="">

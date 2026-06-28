@@ -24,11 +24,11 @@ export default function RadioSex({
   return (
     <div
       onClick={handleClick}
-      className={`flex cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${label === "Male" && isActive && "bg-blue-600"} ${label === "Female" && isActive && "bg-red-600"} ${!isActive && "hover:bg-gray-100"}`}
+      className={`flex w-full cursor-pointer flex-col gap-2 rounded-sm border border-gray-200 p-2.5 ${label === "Male" && isActive && "bg-blue-600"} ${label === "Female" && isActive && "bg-red-600"} ${!isActive && "hover:bg-gray-100"}`}
     >
       <Icon size={20} color={isActive ? "white" : "black"} />
       <span
-        className={`text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
+        className={`truncate text-xs text-gray-500 ${isActive && "font-bold text-white"}`}
       >
         {label}
       </span>

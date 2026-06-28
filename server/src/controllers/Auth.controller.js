@@ -80,6 +80,12 @@ export async function LoginUser(req, res) {
     if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ message: "Invalid password" });
 
+    if (!user.active)
+      return res.status(401).json({
+        message:
+          "You are not allowed to login with this email. Please contact the admin to continue.",
+      });
+
     const token = await generateToken(user._id);
     // If credentials are valid, return the user data
     return res.status(200).json({

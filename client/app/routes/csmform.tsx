@@ -1,4 +1,5 @@
 import axios from "axios"
+import { Check } from "lucide-react"
 import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Form, useNavigate } from "react-router"
@@ -12,7 +13,7 @@ import RightPanel from "~/features/csmform/right-panel"
 export default function CSMForm() {
   const methods = useForm()
   const [error, setError] = useState("")
-  const [downloading, setDownloading] = useState(false)
+  // const [downloading, setDownloading] = useState(false)
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -44,6 +45,13 @@ export default function CSMForm() {
   }, [])
 
   useEffect(() => {
+    if (
+      methods.getValues("services") === undefined ||
+      methods.getValues("services").length === 0
+    ) {
+      return
+    }
+
     if (methods.formState.isSubmitSuccessful) {
       formStateResetter()
     }
@@ -68,8 +76,6 @@ export default function CSMForm() {
         ? methods.getValues("cc")
         : []
 
-    // console.log("sqd toggle : ", methods.getValues("toggle-sqd-values"))
-    // console.log(cc)
     // 2. reset all state from formcontext
     methods.reset(undefined, { keepDirty: true })
 
@@ -115,10 +121,13 @@ export default function CSMForm() {
         ? methods.getValues("otherOffice")
         : methods.getValues("office")
 
+    // Console log what is being sent to the database/spreadsheet
+    // console.log(methods.getValues())
+    // return
+
     // traverse through the service/s availed by the client
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
       try {
-        // console.log("before cleanup -> ", data)
         await fetch("https://csm-sorsu-server.vercel.app/postcsmresponse", {
           method: "POST",
           headers: {
@@ -152,8 +161,8 @@ export default function CSMForm() {
             dissastifactionReason:
               methods.getValues("dissatisfactionReason") || "",
             feedbackSuggestions: methods.getValues("feedbackSuggestions") || "",
-            // TODO: create a system that assigns document control number
-            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-0000`,
+            // TODO : Determine if the last three properties are necessary in recording the CSM Responses
+            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-${Date.now()}${Math.random().toString(36).slice(2, 9)}`,
             secretariat: user.name,
             secretariatEmail: user.email,
           }),
@@ -168,28 +177,28 @@ export default function CSMForm() {
     }
   }
 
-  const handleDownloadSpreadSheet = async () => {
-    setDownloading(true)
-    try {
-      const token = localStorage.getItem("token")
-      const res = await axios.get("/api/spreadsheet/download", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: "blob", // Important for handling binary data
-      })
-      if (res.status === 200) {
-        toast.success(
-          "Spreadsheet downloaded successfully. Check your downloads folder"
-        )
-      }
-      setDownloading(false)
-    } catch (error) {
-      console.log("download error: ", error)
-      toast.error("Failed to download spreadsheet. Please try again.")
-      setDownloading(false)
-    }
-  }
+  // const handleDownloadSpreadSheet = async () => {
+  //   setDownloading(true)
+  //   try {
+  //     const token = localStorage.getItem("token")
+  //     const res = await axios.get("/api/spreadsheet/download", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       responseType: "blob", // Important for handling binary data
+  //     })
+  //     if (res.status === 200) {
+  //       toast.success(
+  //         "Spreadsheet downloaded successfully. Check your downloads folder"
+  //       )
+  //     }
+  //     setDownloading(false)
+  //   } catch (error) {
+  //     console.log("download error: ", error)
+  //     toast.error("Failed to download spreadsheet. Please try again.")
+  //     setDownloading(false)
+  //   }
+  // }
 
   return (
     <div>
@@ -198,11 +207,14 @@ export default function CSMForm() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
               <CustomSidebar />
-              <h1 className="text:sm mt-2 mb-3 font-semibold md:text-xl md:font-bold">
+              <h1 className="text:sm mt-2 mb-3 font-semibold md:text-lg md:font-bold">
                 CSM Questionnaire Form
               </h1>
             </div>
             <div className="hidden items-center gap-2 md:flex md:gap-3">
+              {/* ! SAVE FOR LATER ! */}
+
+              {/* DOWNLOAD SPREADSHEET BUTTON */}
               {/* <Button
                 className="h-8 cursor-pointer text-xs md:h-10"
                 variant="outline"
@@ -223,7 +235,7 @@ export default function CSMForm() {
               <Button
                 disabled={methods.formState.isSubmitting}
                 type="submit"
-                className="h-8 w-20 cursor-pointer text-xs md:h-10 md:w-40 md:text-sm"
+                className="flex h-8 w-20 cursor-pointer gap-3 text-xs md:h-10 md:w-40 md:text-sm"
               >
                 {methods.formState.isSubmitting && <Spinner />}
                 SUBMIT
@@ -231,6 +243,7 @@ export default function CSMForm() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:mt-4 md:grid-cols-2 md:gap-7">
+            {/* ACTUAL FORM */}
             <LeftPanel />
             <RightPanel />
           </div>

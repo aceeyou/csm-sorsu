@@ -177,7 +177,7 @@ function Offices() {
   async function handleSubmitNewOffice() {
     const token = localStorage.getItem("token")
     setSubmitting(true)
-    console.log("client fields: ", fields)
+    // console.log("client fields: ", fields)
     try {
       const res = await axios.post(
         "/api/offices/addoffice",
@@ -313,6 +313,12 @@ function Offices() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {listOfCampuses.length === 0 && (
+              <div>
+                <Spinner />
+                Loading...
+              </div>
+            )}
             {listOfOffices &&
               listOfOffices.map((office) => (
                 <TableRow key={office._id} className="align-top">

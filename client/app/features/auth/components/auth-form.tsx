@@ -35,9 +35,9 @@ function AuthForm() {
       setError({ title: "Login Failed", message: location.state.message })
     }
 
+    location.state = null
     return () => {
       setError({ title: "", message: "" })
-      location.state = null
     }
   }, [location])
 
@@ -93,14 +93,16 @@ function AuthForm() {
             </FieldLabel>
             <FieldDescription className="">
               Welcome back, CART Member! Please login
+              {error.message && (
+                <>
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertCircleIcon />
+                    <AlertTitle>{error.title}</AlertTitle>
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
+                </>
+              )}
             </FieldDescription>
-            {error.message ? (
-              <Alert variant="destructive">
-                <AlertCircleIcon />
-                <AlertTitle>{error.title}</AlertTitle>
-                <AlertDescription>{error.message}</AlertDescription>
-              </Alert>
-            ) : null}
             <FieldGroup className="">
               <FieldLabel htmlFor="email" className="-mb-2">
                 Email <FieldRequired />

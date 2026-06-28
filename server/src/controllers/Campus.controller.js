@@ -2,11 +2,10 @@ import Campus from "../models/Campus.js";
 
 export async function GetCampuses(req, res) {
   try {
-    const campuses = await Campus.find().select("campus -_id");
+    const campuses = await Campus.find().select("campus -_id code");
     // console.log("campus: ", campuses);
-    const list = campuses.map((campus) => campus.campus);
-
-    res.status(200).json({ listOfCampuses: [...list] });
+    // const list = campuses.map((campus) => campus.campus);
+    if (campuses) return res.status(200).json({ listOfCampuses: campuses });
   } catch (error) {
     console.log(error);
   }
@@ -35,6 +34,7 @@ export async function AddCampus(req, res) {
       return res.status(201).json({ message: "Successfully added a campus" });
     }
   } catch (error) {
+    res.status(400).json({ message: "Campus already added to the database" });
     console.log(error);
   }
 }

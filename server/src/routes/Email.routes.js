@@ -10,7 +10,12 @@ import { authorize, verification } from "../middleware/auth.js";
 
 const emailRouter = express.Router();
 
-emailRouter.get("/allowedemail", authorize(["admin"]), GetAllowedEmail);
+emailRouter.get(
+  "/allowedemail",
+  verification,
+  authorize(["admin"]),
+  GetAllowedEmail,
+);
 emailRouter.post(
   "/addemail",
   verification,

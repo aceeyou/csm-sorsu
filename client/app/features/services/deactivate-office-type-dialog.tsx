@@ -1,6 +1,6 @@
 import axios from "axios"
 import { Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import {
@@ -15,52 +15,71 @@ import {
 } from "~/components/ui/dialog"
 import { Spinner } from "~/components/ui/spinner"
 
-type DeleteOfficeType = {
-  office: {
+type DeleteOfficeTypeProps = {
+  officeType: {
     _id: string
     type: string
-    office: string
-    alias: string
-    campus: string[]
   }
-  numCampuses: number
-  fetchAllOffices: () => void
+  fetchAllOfficeTypes: () => void
 }
 
-function DeleteOfficeDialog({
-  office,
-  numCampuses,
-  fetchAllOffices,
-}: DeleteOfficeType) {
+function DeactivateOfficeTypeDialog({
+  officeType,
+  fetchAllOfficeTypes,
+}: DeleteOfficeTypeProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [services, setServices] = useState<string[]>([])
+
+  const handleFetchServicesOfType = async () => {
+    const token = localStorage.getItem("token")
+    try {
+      const res = await axios.get(`/api/services/${officeType.type}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      // console.log("delete:", res.data.services.services)
+      if (res.status === 200) setServices(res.data.services.services)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleConfirmDeleteOffice = async () => {
     const token = localStorage.getItem("token")
     setLoading(true)
     try {
-      const res = await axios.delete(`/api/offices/delete/${office._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const res = await axios.patch(
+        `/api/officetype/deactivate/${officeType._id}`,
+        { type: officeType.type },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
 
       if (res.status === 200) {
         toast.success(res.data.message)
-        fetchAllOffices()
-        setOpen(false)
+        fetchAllOfficeTypes()
       }
     } catch (error) {
       console.log(error)
-      toast.error("Failed deleting the office. Please try again. 😢")
+      toast.error("Failed removing the office type. Please try again. 😢")
     } finally {
       setLoading(false)
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" variant={"outline"} className="w-8">
+        <Button
+          onClick={handleFetchServicesOfType}
+          type="button"
+          variant={"outline"}
+          className="h-8 w-8 duration-150 hover:border-red-800"
+        >
           <Trash2 color="maroon" />
         </Button>
       </DialogTrigger>
@@ -71,44 +90,39 @@ function DeleteOfficeDialog({
               <div className="rounded-sm bg-gray-100 p-1.5">
                 <Trash2 size={16} />
               </div>
-              Delete Office?
+              Delete Office Type?
             </div>
           </DialogTitle>
           <DialogDescription>
             Deleting this will not affect the recorded CSM feedback. But, this
-            will be removed from the list of office seen from the selection on
-            the CSM Form page.
+            will be removed from the list of office types seen from the
+            selection on the CSM Form page.
           </DialogDescription>
         </DialogHeader>
 
         <div className="my-3 rounded-md border p-3">
           <div className="flex items-center justify-between">
-            <span className="text-[0.6rem] text-gray-400">Office Name</span>
             <span className="text-[0.6rem] text-gray-400">Office Type</span>
           </div>
-          <div className="flex items-center justify-between">
-            <p className="w-50 truncate font-semibold">{office.office}</p>
-            <span className="text-[0.7rem]">{office.type}</span>
+          <div className="mt-1 flex items-center justify-between">
+            <p className="w-50 truncate font-semibold">
+              {officeType.type.toLocaleUpperCase()}
+            </p>
           </div>
-          <div className="mt-2 mb-1 flex items-center justify-between">
-            <span className="text-[0.6rem] text-gray-400">Campus Located</span>
-            {office.campus.length === numCampuses && (
-              <span className="text-[0.7rem]">All Campuses</span>
-            )}
+          <div>
+            <span className="text-[0.6rem] text-gray-400">Services</span>
           </div>
-          {office.campus.length !== numCampuses && (
-            <div className="flex flex-wrap items-center gap-1">
-              {office.campus &&
-                office.campus.map((campus) => (
-                  <span
-                    key={campus}
-                    className="rounded-full bg-gray-200 px-3 py-1 text-[0.6rem]"
-                  >
-                    {campus}
-                  </span>
-                ))}
-            </div>
-          )}
+          <div className="mt-1 flex flex-wrap items-center gap-1">
+            {services &&
+              services.map((service) => (
+                <span
+                  key={service}
+                  className="cursor-default rounded-lg bg-gray-200 px-3 py-1"
+                >
+                  {service}
+                </span>
+              ))}
+          </div>
         </div>
 
         <DialogFooter className="mt-3">
@@ -119,11 +133,11 @@ function DeleteOfficeDialog({
           </DialogClose>
           <Button
             onClick={handleConfirmDeleteOffice}
-            className="flex h-10 w-30 gap-2 font-bold"
+            className="flex h-10 w-40 gap-2 font-bold"
             variant={"destructive"}
           >
             {loading && <Spinner />}
-            DELETE
+            DELETE OFFICE TYPE
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -131,4 +145,4 @@ function DeleteOfficeDialog({
   )
 }
 
-export default DeleteOfficeDialog
+export default DeactivateOfficeTypeDialog

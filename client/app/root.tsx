@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useNavigate,
 } from "react-router"
 
 import type { Route } from "./+types/root"
@@ -12,12 +13,19 @@ import "./app.css"
 import { TooltipProvider } from "./components/ui/tooltip"
 import { Toaster } from "./components/ui/sonner"
 import { SidebarProvider } from "./components/ui/sidebar"
+import { useFetchUser } from "./hooks/use-fetchUser"
+import { useEffect } from "react"
 
 export function links() {
   return [{ rel: "icon", href: "/csm.png", type: "image/png" }]
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { data } = useFetchUser()
+  const navigate = useNavigate()
+  useEffect(() => {
+    !data && navigate("/login")
+  }, [data])
   return (
     <html lang="en">
       <head>

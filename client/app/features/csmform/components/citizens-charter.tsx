@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import RadioCC from "./radio-cc"
 import { Switch } from "~/components/ui/switch"
 import { Label } from "~/components/ui/label"
-import { set, useFormContext } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { useEffect, useState } from "react"
 
 export default function CitizensCharter({
@@ -21,7 +21,6 @@ export default function CitizensCharter({
   const [isCC1Answered4, setIsCC1Answered4] = useState(false)
 
   useEffect(() => {
-    // console.log(getValues("cc"))
     setCC(getValues("cc") || [])
   }, [isSubmitSuccessful])
 
@@ -73,7 +72,7 @@ export default function CitizensCharter({
               </div>
             </CardHeader>
             <CardContent
-              className={`grid h-full pb-2 md:pb-0 ${index !== 2 ? "grid-cols-4" : "grid-cols-3"} items-end gap-1`}
+              className={`grid h-full pb-2 md:grid-cols-2 md:pb-0 lg:grid-cols-4 ${index !== 2 ? "grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-3"} items-end gap-1`}
             >
               <RadioCC label={"1"} item={index} cc={cc} setCC={setCC} />
               <RadioCC label={"2"} item={index} cc={cc} setCC={setCC} />

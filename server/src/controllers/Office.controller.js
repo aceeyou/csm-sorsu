@@ -17,6 +17,23 @@ export async function GetOffices(req, res) {
   }
 }
 
+export async function GetOfficesOfSelectedCampus(req, res) {
+  const { campus } = req.params;
+  try {
+    const offices = await Office.find({ campus })
+      .select("_id office alias type")
+      .sort({ office: 1 });
+    // console.log(offices);
+    if (offices) {
+      return await res.status(200).json({
+        offices: [...offices],
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function LookForOffice(req, res) {
   const { query } = req.body;
 
@@ -33,8 +50,6 @@ export async function LookForOffice(req, res) {
 
 export async function AddOffice(req, res) {
   const { office, alias, campus, type } = req.body;
-
-  console.log(req.body);
 
   try {
     if (!office || !alias || !campus || !type) {
@@ -56,7 +71,6 @@ export async function AddOffice(req, res) {
     // Checks if the campus exists
     if (campus) {
       for (let index = 0; index < campus.length; index++) {
-        console.log(campus[index]);
         const campusAvailable = await Campus.findOne({ campus: campus[index] });
         if (!campusAvailable)
           return res.status(400).json({

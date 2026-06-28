@@ -30,7 +30,9 @@ interface PropType {
 
 function CampusSelect({ campuses, setFields }: PropType) {
   const [openPopover, setOpenPopover] = useState(false)
-  const [listOfCampuses, setListOfCampuses] = useState([""])
+  const [listOfCampuses, setListOfCampuses] = useState([
+    { campus: "", code: "" },
+  ])
 
   useEffect(() => {
     fetchCampuses()
@@ -93,7 +95,7 @@ function CampusSelect({ campuses, setFields }: PropType) {
               {listOfCampuses &&
                 listOfCampuses.map((campus) => (
                   <CommandItem
-                    key={campus}
+                    key={campus.campus}
                     onSelect={(currentValue) => {
                       let campusToAssign
                       if (campuses.includes(currentValue))
@@ -109,7 +111,7 @@ function CampusSelect({ campuses, setFields }: PropType) {
                       setOpenPopover(false)
                     }}
                   >
-                    {campus}
+                    {campus.campus}
                   </CommandItem>
                 ))}
             </CommandGroup>

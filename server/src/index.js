@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 import User from "./models/User.js";
 
-import { verification } from "./middleware/auth.js";
+import { authorize, verification } from "./middleware/auth.js";
 
 import { sheets } from "./config/googleAPI.config.js";
 import { connectDB } from "./config/mongodb.config.js";
@@ -17,12 +17,12 @@ import emailRouter from "./routes/Email.routes.js";
 import campusRouter from "./routes/Campus.routes.js";
 import typesRouter from "./routes/TypesOfOffices.routes.js";
 import officeRouter from "./routes/Office.routes.js";
+import serviceRouter from "./routes/Service.routes.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 dotenv.config();
-// mongoose.set("sanitizeFilter", true);
 
 // Verify user token for all routes
 // app.use(verification);
@@ -35,8 +35,9 @@ app.use("/api/spreadsheet", spreadSheetRouter);
 app.use("/api/emails", verification, emailRouter);
 
 app.use("/api/campus", verification, campusRouter);
-app.use("/api/officetype", verification, typesRouter);
+app.use("/api/officetype", typesRouter);
 app.use("/api/offices", verification, officeRouter);
+app.use("/api/services", serviceRouter);
 
 app.post("/api/postcsmresponse", verification, async (req, res) => {
   const row = Object.values(req.body);
