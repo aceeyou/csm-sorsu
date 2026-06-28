@@ -14,6 +14,7 @@ export default defineConfig({
     vercelPreset(),
   ],
   server: {
+    cors: false,
     proxy: {
       // Change to 'csm-sorsu-server.vercel.app' before deployment
       "/api": {
