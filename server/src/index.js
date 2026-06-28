@@ -2,14 +2,22 @@ import express from "express";
 import { google } from "googleapis";
 import dotenv from "dotenv";
 import cors from "cors";
+import mongoose from "mongoose";
+
+import User from "./models/User.js";
+
+import { authorize, verification } from "./middleware/auth.js";
+
 import { sheets } from "./config/googleAPI.config.js";
 import { connectDB } from "./config/mongodb.config.js";
-import User from "./models/User.js";
 
 import spreadSheetRouter from "./routes/Spreadsheet.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import emailRouter from "./routes/Email.routes.js";
-import { verification } from "./middleware/auth.js";
+import campusRouter from "./routes/Campus.routes.js";
+import typesRouter from "./routes/TypesOfOffices.routes.js";
+import officeRouter from "./routes/Office.routes.js";
+import serviceRouter from "./routes/Service.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -17,15 +25,21 @@ app.use(cors());
 dotenv.config();
 
 // Verify user token for all routes
-app.use(verification);
+// app.use(verification);
 
 // Register, Login amd User Infor endpoints
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/spreadsheet", spreadSheetRouter);
 
 // Allowed email controller
-app.use("/emails", emailRouter);
+app.use("/api/emails", verification, emailRouter);
 
-app.post("/postcsmresponse", async (req, res) => {
+app.use("/api/campus", verification, campusRouter);
+app.use("/api/officetype", typesRouter);
+app.use("/api/offices", verification, officeRouter);
+app.use("/api/services", serviceRouter);
+
+app.post("/api/postcsmresponse", verification, async (req, res) => {
   const row = Object.values(req.body);
 
   try {
@@ -40,7 +54,7 @@ app.post("/postcsmresponse", async (req, res) => {
     console.log(error);
   }
 
-  res.json({ message: "Data recorded successfully!" });
+  res.json({ message: "Data recorded successfully! 🎉" });
 });
 
 // Spreadsheet | Campuses

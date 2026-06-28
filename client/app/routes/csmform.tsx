@@ -1,10 +1,11 @@
 import axios from "axios"
+import { Check } from "lucide-react"
 import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Form, useNavigate } from "react-router"
 import { toast } from "sonner"
+import CustomSidebar from "~/components/custom-sidebar"
 import { Button } from "~/components/ui/button"
-import { SidebarTrigger } from "~/components/ui/sidebar"
 import { Spinner } from "~/components/ui/spinner"
 import LeftPanel from "~/features/csmform/left-panel"
 import RightPanel from "~/features/csmform/right-panel"
@@ -12,6 +13,7 @@ import RightPanel from "~/features/csmform/right-panel"
 export default function CSMForm() {
   const methods = useForm()
   const [error, setError] = useState("")
+  // const [downloading, setDownloading] = useState(false)
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -22,14 +24,11 @@ export default function CSMForm() {
     const token = localStorage.getItem("token")
     const handleGetUserData = async () => {
       try {
-        const res = await axios.get("http://localhost:1337/auth/me", {
+        const res = await axios.get("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-
-        console.log(res)
-
         if (res.status === 200) {
           setUser({
             name: res.data.name,
@@ -46,6 +45,13 @@ export default function CSMForm() {
   }, [])
 
   useEffect(() => {
+    if (
+      methods.getValues("services") === undefined ||
+      methods.getValues("services").length === 0
+    ) {
+      return
+    }
+
     if (methods.formState.isSubmitSuccessful) {
       formStateResetter()
     }
@@ -70,8 +76,6 @@ export default function CSMForm() {
         ? methods.getValues("cc")
         : []
 
-    console.log("sqd toggle : ", methods.getValues("toggle-sqd-values"))
-    console.log(cc)
     // 2. reset all state from formcontext
     methods.reset(undefined, { keepDirty: true })
 
@@ -88,7 +92,7 @@ export default function CSMForm() {
     methods.setValue("toggle-cc-values", ccToggleValue)
   }
 
-  const onSubmit = async (data: any) => {
+  async function onSubmit(data: any) {
     // Checks if services is empty
     if (
       methods.getValues("services") === undefined ||
@@ -117,10 +121,13 @@ export default function CSMForm() {
         ? methods.getValues("otherOffice")
         : methods.getValues("office")
 
+    // Console log what is being sent to the database/spreadsheet
+    // console.log(methods.getValues())
+    // return
+
     // traverse through the service/s availed by the client
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
       try {
-        console.log("before cleanup -> ", data)
         await fetch("https://csm-sorsu-server.vercel.app/postcsmresponse", {
           method: "POST",
           headers: {
@@ -132,9 +139,10 @@ export default function CSMForm() {
             campus: methods.getValues("campus") || "",
             office: office || "",
             service: listOfServicesAvailed[index] || "",
-            date: new Date(
-              methods.getValues("dateCollected") || new Date()
-            ).toLocaleDateString(),
+            date:
+              new Date(
+                methods.getValues("dateCollected")
+              ).toLocaleDateString() || "",
             citizenType: methods.getValues("citizenType") || "",
             clientAge: methods.getValues("clientAge") || "",
             clientSex: methods.getValues("clientSex") || "",
@@ -153,8 +161,8 @@ export default function CSMForm() {
             dissastifactionReason:
               methods.getValues("dissatisfactionReason") || "",
             feedbackSuggestions: methods.getValues("feedbackSuggestions") || "",
-            // TODO: create a system that assigns document control number
-            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-0000`,
+            // TODO : Determine if the last three properties are necessary in recording the CSM Responses
+            controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-${Date.now()}${Math.random().toString(36).slice(2, 9)}`,
             secretariat: user.name,
             secretariatEmail: user.email,
           }),
@@ -169,29 +177,73 @@ export default function CSMForm() {
     }
   }
 
+  // const handleDownloadSpreadSheet = async () => {
+  //   setDownloading(true)
+  //   try {
+  //     const token = localStorage.getItem("token")
+  //     const res = await axios.get("/api/spreadsheet/download", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       responseType: "blob", // Important for handling binary data
+  //     })
+  //     if (res.status === 200) {
+  //       toast.success(
+  //         "Spreadsheet downloaded successfully. Check your downloads folder"
+  //       )
+  //     }
+  //     setDownloading(false)
+  //   } catch (error) {
+  //     console.log("download error: ", error)
+  //     toast.error("Failed to download spreadsheet. Please try again.")
+  //     setDownloading(false)
+  //   }
+  // }
+
   return (
     <div>
       <FormProvider {...methods}>
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
-              <SidebarTrigger size={"lg"} className="-mt-1" type="button" />
-              <h1 className="text:sm mt-2 mb-3 font-semibold md:text-xl md:font-bold">
+              <CustomSidebar />
+              <h1 className="text:sm mt-2 mb-3 font-semibold md:text-lg md:font-bold">
                 CSM Questionnaire Form
               </h1>
             </div>
-            <div>
+            <div className="hidden items-center gap-2 md:flex md:gap-3">
+              {/* ! SAVE FOR LATER ! */}
+
+              {/* DOWNLOAD SPREADSHEET BUTTON */}
+              {/* <Button
+                className="h-8 cursor-pointer text-xs md:h-10"
+                variant="outline"
+                disabled={downloading}
+                type="button"
+                onClick={handleDownloadSpreadSheet}
+              >
+                {downloading && <Spinner />}
+                Download Spreadsheet
+              </Button> */}
+              {/* <Link
+                to="https://docs.google.com/spreadsheets/d/1fmt8wFcMBGBEUH3AdFZeQ8XeJKmwPUS-esiWqPPPGes/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download Spreadsheet
+              </Link> */}
               <Button
                 disabled={methods.formState.isSubmitting}
                 type="submit"
-                className="h-8 w-20 cursor-pointer text-xs md:h-10 md:w-40 md:text-sm"
+                className="flex h-8 w-20 cursor-pointer gap-3 text-xs md:h-10 md:w-40 md:text-sm"
               >
                 {methods.formState.isSubmitting && <Spinner />}
                 SUBMIT
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-7">
+          <div className="grid grid-cols-1 md:mt-4 md:grid-cols-2 md:gap-7">
+            {/* ACTUAL FORM */}
             <LeftPanel />
             <RightPanel />
           </div>
@@ -204,7 +256,7 @@ export default function CSMForm() {
               className="mt-8 h-13 w-full cursor-pointer text-lg font-bold md:mt-5"
             >
               {methods.formState.isSubmitting && <Spinner />}
-              SUBMIT
+              SUBMIT CLIENT RESPONSE
             </Button>
           </div>
         </Form>

@@ -1,87 +1,78 @@
-import { useEffect, useState } from "react"
+import { LogOut } from "lucide-react"
 import { SidebarTrigger } from "~/components/ui/sidebar"
-import { useFetchUser } from "~/hooks/use-fetchUser"
-import axios from "axios"
+import AllowedEmailList from "~/features/settings/allowed-email-list"
+import UserInformation from "~/features/settings/user-information"
+import { useNavigate } from "react-router"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog"
+import { Button } from "~/components/ui/button"
+import { useState } from "react"
 
 function Settings() {
-  const { data, error } = useFetchUser()
-  const [listOfEmails, setListOfEmails] = useState([
-    { _id: "", email: "", allowed: false },
-  ])
-  const [newEmail, setNewEmail] = useState("")
-
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    const fetchAllowedEmails = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:1337/emails/allowedemail",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        console.log(res.data.emails)
-        setListOfEmails([...res?.data?.emails])
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    data.role === "admin" && fetchAllowedEmails()
-  }, [])
-
-  const handleSubmit = async () => {
-    const token = localStorage.getItem("token")
-    try {
-      const res = axios.post(
-        "http://localhost:1337/emails/addemail",
-        { email: newEmail },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-
-      console.log("post new email: ", res)
-    } catch (error) {
-      console.log(error)
-    }
+  const navigate = useNavigate()
+  const [showlogoutDialog, setShowLogoutDialog] = useState(false)
+  const handleLogOut = () => {
+    localStorage.removeItem("token")
+    navigate("/login")
   }
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <SidebarTrigger size={"lg"} type="button" />
+    <div className="h-full w-full">
+      <div className="mb-5 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger size={"lg"} type="button" />
+          <p className="text-sm font-medium">Settings</p>
+        </div>
+        <Dialog
+          open={showlogoutDialog}
+          onOpenChange={() => setShowLogoutDialog(!showlogoutDialog)}
+        >
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              type="button"
+              className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 hover:bg-gray-100"
+            >
+              <LogOut size={16} color="red" />
+              <span className="text-destructive">Log out</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent showCloseButton={false}>
+            <DialogHeader>
+              <DialogTitle className="font-semibold">
+                LOG OUT from Online SorSU CART?
+              </DialogTitle>
+              <DialogDescription className="">
+                Are you sure you want to log out?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-4">
+              <Button
+                onClick={() => setShowLogoutDialog(false)}
+                variant="outline"
+                className="h-10 w-20"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                className="h-10 w-30"
+                onClick={handleLogOut}
+              >
+                Log out
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-      <p>Settings here</p>
-
-      {data.role === "admin" && (
-        <>
-          <div className="mt-5">
-            <p>List of Allowed Email addresses</p>
-            {listOfEmails &&
-              listOfEmails.map((item) => <p key={item._id}>{item.email}</p>)}
-          </div>
-
-          <div className="mt-10">
-            <p>Add Email address to access the web app</p>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="newEmail">New Email address</label>
-              <input
-                type="email"
-                name="newEmail"
-                id="newEmail"
-                placeholder="Enter new email address..."
-                onChange={(e) => setNewEmail(e.target.value)}
-                value={newEmail}
-              />
-              <button>Submit</button>
-            </form>
-          </div>
-        </>
-      )}
+      <UserInformation />
+      <AllowedEmailList />
     </div>
   )
 }

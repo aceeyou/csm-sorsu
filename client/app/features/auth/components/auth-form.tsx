@@ -1,7 +1,7 @@
 import { AlertCircleIcon, Eye, EyeClosed } from "lucide-react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axios from "axios"
-import { Link, useNavigate } from "react-router"
+import { Link, useLocation, useNavigate } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
   FieldDescription,
@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/input-group"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Spinner } from "~/components/ui/spinner"
+import FieldRequired from "~/components/field-required"
 
 function AuthForm() {
   const [submitting, setSubmitting] = useState(false)
@@ -25,8 +26,20 @@ function AuthForm() {
     email: "",
     password: "",
   })
-  const [error, setError] = useState("")
+  const [error, setError] = useState({ title: "Login Failed", message: "" })
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setError({ title: "Login Failed", message: location.state.message })
+    }
+
+    location.state = null
+    return () => {
+      setError({ title: "", message: "" })
+    }
+  }, [location])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -41,15 +54,17 @@ function AuthForm() {
     setSubmitting(true)
 
     try {
-      const res = await axios.post("http://localhost:1337/auth/login", formData)
+      const res = await axios.post("/api/auth/login", formData)
       // console.log(res)
 
       if (res.status === 400) {
         console.log(res.data.message)
-        setError(
-          res.data.message ||
-            "An error occurred during login. Please try again."
-        )
+        setError({
+          title: "Login Failed",
+          message:
+            res.data.message ||
+            "An error occurred during login. Please try again.",
+        })
       }
 
       if (res.status === 200) {
@@ -59,10 +74,12 @@ function AuthForm() {
       }
     } catch (error: any) {
       setSubmitting(false)
-      setError(
-        error.response?.data?.message ||
-          "An error occurred during login. Please try again."
-      )
+      setError({
+        title: "Login Failed",
+        message:
+          error.response?.data?.message ||
+          "An error occurred during login. Please try again.",
+      })
     }
   }
 
@@ -71,22 +88,24 @@ function AuthForm() {
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet>
-            <FieldLabel className="mx-auto -mb-3 text-lg font-semibold">
-              CSM Tally Login
+            <FieldLabel className="-mb-3 text-lg font-semibold">
+              Online SorSU CART Login
             </FieldLabel>
-            <FieldDescription className="mx-auto">
+            <FieldDescription className="">
               Welcome back, CART Member! Please login
+              {error.message && (
+                <>
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertCircleIcon />
+                    <AlertTitle>{error.title}</AlertTitle>
+                    <AlertDescription>{error.message}</AlertDescription>
+                  </Alert>
+                </>
+              )}
             </FieldDescription>
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircleIcon />
-                <AlertTitle>Login Failed</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
             <FieldGroup className="">
               <FieldLabel htmlFor="email" className="-mb-2">
-                Email
+                Email <FieldRequired />
               </FieldLabel>
               <Input
                 id="email"
@@ -99,7 +118,7 @@ function AuthForm() {
             </FieldGroup>
             <FieldGroup>
               <FieldLabel htmlFor="password" className="-mb-2">
-                Password
+                Password <FieldRequired />
               </FieldLabel>
               <InputGroup>
                 <InputGroupInput

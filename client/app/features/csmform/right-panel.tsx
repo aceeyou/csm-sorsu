@@ -3,6 +3,7 @@ import SQDRatingsItem from "./components/sqd-ratings"
 import { useFormContext } from "react-hook-form"
 import { Switch } from "~/components/ui/switch"
 import { Label } from "~/components/ui/label"
+import { Button } from "~/components/ui/button"
 
 export default function RightPanel() {
   const {
@@ -27,11 +28,18 @@ export default function RightPanel() {
     setValue("toggle-sqd-values", switchSQDValues)
   }, [switchSQDValues])
 
+  const sqdLabels = ["SQD", "SD", "D", "NDA", "A", "SA", "N/A"]
+
+  const handleColumnClick = (index: number) => {
+    const newSQDArray = new Array(9).fill(sqdLabels[index])
+    setSQD(newSQDArray)
+  }
+
   return (
     <div>
       <div className="mt-4 h-min w-full rounded-lg border border-gray-200 p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-sm font-bold md:text-lg">
+          <h1 className="md:text-md text-sm font-semibold lg:text-[1.16rem]">
             Service Quality Dimensions
           </h1>
           <div className="flex items-center gap-2">
@@ -52,13 +60,19 @@ export default function RightPanel() {
         </div>
         <div className="mt-2 grid grid-cols-1 gap-2">
           <div className="grid grid-cols-7 gap-2 border-b border-gray-200 px-2 pb-1">
-            <p className="text-center text-xs text-gray-400">SQD</p>
-            <p className="text-center text-xs text-gray-400">SD</p>
-            <p className="text-center text-xs text-gray-400">D</p>
-            <p className="text-center text-xs text-gray-400">NDA</p>
-            <p className="text-center text-xs text-gray-400">A</p>
-            <p className="text-center text-xs text-gray-400">SA</p>
-            <p className="text-center text-xs text-gray-400">N/A</p>
+            {sqdLabels.map((sqdLabel, index) => (
+              <Button
+                key={sqdLabel}
+                onClick={() => {
+                  if (index !== 0) handleColumnClick(index)
+                }}
+                variant="ghost"
+                type="button"
+                className={`cursor-copy text-center text-xs text-gray-400 ${index === 0 && "cursor-default hover:bg-none"} `}
+              >
+                {sqdLabel}
+              </Button>
+            ))}
           </div>
           {Array.from({ length: 9 }, (_, index) => (
             <SQDRatingsItem

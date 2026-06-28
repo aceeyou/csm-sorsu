@@ -9,14 +9,6 @@ import {
 import { useEffect, useState } from "react"
 import { Button } from "~/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "~/components/ui/field"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
-import AvailedServices from "./components/availed-services"
 import Section from "./components/section"
 import RadioSelection from "./components/radio-selection"
 import RadioSex from "./components/radio-sex"
@@ -27,97 +19,12 @@ import { Separator } from "~/components/ui/separator"
 import CitizensCharter from "./components/citizens-charter"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Input } from "~/components/ui/input"
+import CSMOfficesSelect from "./components/csm-offices-select"
+import { Label } from "~/components/ui/label"
+import CSMServicesSelect from "./components/csm-services-select"
+import CSMCampusSelect from "./components/csm-campus-select"
 
-const campuses = [
-  { name: "Bulan Campus", code: "BC" },
-  { name: "Castilla Campus", code: "CC" },
-  { name: "Magallanes Campus", code: "MC" },
-  { name: "Sorsogon City Campus", code: "SC" },
-]
-
-// const ccOffices = [
-//   "Admission Services Unit",
-//   "Office of the University Registrar",
-//   "Scholarship and Financial Assistance Unit",
-//   "Guidance and Counceling",
-//   "Library Services Unit",
-//   "Health Services Unit",
-//   "Safety and Security Services Unit",
-//   "Student Council Affairs",
-//   "National Service Training Program Office",
-//   "Graduate School",
-//   "Accounting Office",
-//   "Budget Office",
-//   "Cashier's Office",
-//   "Human Resource Management and Development Office",
-//   "ICT / MIS Office",
-//   "Records Office",
-//   "Supply and Property Office",
-//   "Other",
-// ]
-
-// TODO maybe add an "origin office" property
-
-const officesWithOfficeCode = [
-  { name: "Other", code: "OTHER" },
-  { name: "Office of the President", code: "OP" },
-  { name: "Accounting Office", code: "ACCOUNTING" },
-  { name: "Admission Services Unit", code: "ADSU" },
-  { name: "Budget Office", code: "BUDGET" },
-  { name: "Business Affairs", code: "BUSINESS" },
-  { name: "Campus Director", code: "CD" },
-  { name: "Cashier's Office", code: "CASHIER" },
-  { name: "Dean's Office", code: "DEAN" },
-  { name: "Dean's Office - Agriculture", code: "DEAN-CA" },
-  { name: "Dean's Office - CBM", code: "DEAN-CBM" },
-  { name: "Dean's Office - CBME", code: "DEAN-CBME" },
-  { name: "Dean's Office - CICT", code: "DEAN-CICT" },
-  { name: "Dean's Office - COEA", code: "DEAN-COEA" },
-  { name: "Dean's Office - COHAS", code: "DEAN-COHAS" },
-  { name: "Dean's Office - COT", code: "DEAN-COT" },
-  { name: "Dean's Office - COTED", code: "DEAN-COTED" },
-  { name: "Department Head - Lab High", code: "LABHIGH" },
-  { name: "DRRM/CC", code: "DRRMCC" },
-  { name: "Fabrication Laboratory", code: "FABLAB" },
-  { name: "General Services and Maintenance", code: "GSM" },
-  { name: "Graduate School", code: "GS" },
-  { name: "Guidance and Counceling", code: "GUIDANCE" },
-  { name: "Health Services Unit", code: "HSU" },
-  { name: "Health Services Unit - Baribag", code: "HSU-BARIBAG" },
-  { name: "Housing and Food Services", code: "HFS" },
-  { name: "Human Resource Management and Development Office", code: "HRMDO" },
-  { name: "ICT / MIS Office", code: "ICTMIS" },
-  { name: "ILDO", code: "ILDO" },
-  { name: "Internal Relation Office", code: "IRO" },
-  { name: "Legal Office", code: "LEGAL" },
-  { name: "Library Services Unit", code: "LIB" },
-  { name: "Library Services Unit - Baribag", code: "LIB-BARIBAG" },
-  { name: "Motorpool Services", code: "MOTORPOOL" },
-  { name: "National Service Training Program Office", code: "NSTPO" },
-  { name: "Planning Management Office", code: "PLANNING" },
-  { name: "Project Management Office", code: "PMO" },
-  { name: "Public Information Office", code: "PIO" },
-  { name: "Quality Assurance Office", code: "QA" },
-  { name: "Research Centers", code: "RCENTER" },
-  { name: "University Registrar", code: "UNIREG" },
-  { name: "Registrar", code: "REG" },
-  { name: "Registrar - COTED", code: "REG-COTED" },
-  { name: "Registrar - CBM", code: "REG-CBM" },
-  { name: "Registrar - COT", code: "REG-COT" },
-  { name: "Registrar - COEA", code: "REG-COEA" },
-  { name: "Registrar - COHAS", code: "REG-COHAS" },
-  { name: "Records and Archives Office", code: "RECORDS" },
-  { name: "Safety and Security Services Unit", code: "SAFETY" },
-  { name: "Scholarship and Financial Assistance Unit", code: "SFASU" },
-  { name: "Sentro ng Wika at Kultura", code: "SWK" },
-  { name: "Sports, Culture and Arts", code: "SCA" },
-  { name: "Student Council Affairs", code: "STUDENTCOUNCIL" },
-  { name: "Student Development and Services Office", code: "SDS" },
-  { name: "Supply and Property Office", code: "SUPPLY" },
-  { name: "VP for Academic Affairs", code: "VPAA" },
-  { name: "VP for Administration and Finance", code: "VPAF" },
-  { name: "VP for Research, Extension and Training", code: "VPRET" },
-]
+// TODO MAYBE add an "origin office" property
 
 export default function LeftPanel() {
   const {
@@ -127,8 +34,13 @@ export default function LeftPanel() {
     formState: { isSubmitSuccessful },
   } = useFormContext()
 
-  const [campus, setCampus] = useState("")
-  const [office, setOffice] = useState("")
+  const [campus, setCampus] = useState({ campus: "", code: "" })
+  const [office, setOffice] = useState({
+    _id: "",
+    office: "",
+    alias: "",
+    type: "",
+  })
   const [citizenType, setCitizenType] = useState("")
   const [clientSex, setClientSex] = useState("")
   const [clientAge, setClientAge] = useState("")
@@ -144,23 +56,14 @@ export default function LeftPanel() {
   }, [isSubmitSuccessful, resetField])
 
   useEffect(() => {
-    setValue("campus", campus)
-    for (let index = 0; index < campuses.length; index++) {
-      if (campuses[index].name === campus)
-        setValue("campusCode", campuses[index].code)
-    }
+    setValue("campus", campus.campus)
+    setValue("campusCode", campus.code)
   }, [campus])
 
   useEffect(() => {
-    setValue("office", office)
+    setValue("office", office.office)
+    setValue("officeCode", office.alias)
     resetField("services")
-
-    //!!! OPTIMIZE
-    // finds the office code based on the selected office from the officesWithOfficeCode list
-    for (let index = 0; index < officesWithOfficeCode.length; index++) {
-      if (officesWithOfficeCode[index].name === office)
-        setValue("officeCode", officesWithOfficeCode[index].code)
-    }
   }, [office])
 
   useEffect(() => {
@@ -169,64 +72,32 @@ export default function LeftPanel() {
 
   return (
     <div className="">
-      {/* Insert form input here */}
-
       <div className="">
         <Section sectionName="Visit Details">
-          {/* row */}
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-5">
+          <div className="mg:gap-3 grid-cols-1 gap-2 md:grid-cols-2 lg:grid">
             {/* Campus */}
-            <div>
-              <label className="text-xs" htmlFor="campus">
+            <div className="md:mb-2">
+              <Label className="mt-2 pb-1 text-xs font-normal" htmlFor="campus">
                 Campus CSM Collected
-              </label>
-
-              <Select
-                onValueChange={(selectedCampus) => setCampus(selectedCampus)}
-              >
-                <SelectTrigger className="w-full py-4 text-lg font-medium">
-                  <SelectValue placeholder="Select campus..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {campuses.map((campus) => (
-                    <SelectItem
-                      key={campus.code}
-                      value={campus.name}
-                      className="w-full"
-                    >
-                      {campus.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              </Label>
+              <CSMCampusSelect campus={campus} setCampus={setCampus} />
             </div>
 
             {/* Office */}
             <div>
-              <label htmlFor="office" className="mb-1 text-xs">
+              <Label htmlFor="office" className="mt-2 mb-1 text-xs">
                 Office Visited
-              </label>
-              <Select onValueChange={(officeObj) => setOffice(officeObj)}>
-                <SelectTrigger className="w-full py-4 text-lg font-medium">
-                  <SelectValue placeholder="Select office..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {officesWithOfficeCode.map((officeItem) => (
-                    <SelectItem
-                      key={officeItem.code}
-                      value={officeItem.name}
-                      className="w-full"
-                    >
-                      {officeItem.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              </Label>
+              <CSMOfficesSelect
+                campus={campus.campus}
+                office={office}
+                setOffice={setOffice}
+              />
             </div>
           </div>
 
-          {/* other office */}
-          {office === "Other" && (
+          {/* Other Office Field */}
+          {office.office === "Other" && (
             <Card className="my-5">
               <CardHeader>
                 <CardTitle>Other Office...</CardTitle>
@@ -242,23 +113,33 @@ export default function LeftPanel() {
           )}
 
           {/* Availed Service/s from the visited office */}
-          <AvailedServices office={office} />
+          <div className="mt-2 mb-3">
+            <Label
+              htmlFor="servicesavailed"
+              className="mb-1 text-xs font-normal"
+            >
+              Services Availed
+            </Label>
+            <CSMServicesSelect office={office} />
+          </div>
 
           {/* Date Collected */}
-          <div className="w-50 md:w-full">
+          <div className="w-full">
             <label htmlFor="dateCollected" className="mb-1 text-xs">
-              Date Collected
+              Date Visited
             </label>
             <Input
               type="date"
               {...register("dateCollected")}
-              className="w-full py-5"
+              className="w-full cursor-pointer py-5"
             />
           </div>
         </Section>
+
+        {/* Demographic Information Section */}
         <Section sectionName="Demographic Information">
-          {/* row */}
           <div className="grid grid-cols-1 gap-1 md:grid-cols-[59fr_0.2fr_40fr] md:gap-5">
+            {/* Client Type Select */}
             <div>
               <label htmlFor="client_type" className="text-xs">
                 Client Type
@@ -285,6 +166,7 @@ export default function LeftPanel() {
               </div>
             </div>
             <Separator orientation="vertical" color="red" />
+            {/* Sex Field */}
             <div>
               <label htmlFor="sex" className="text-xs">
                 Sex
@@ -306,9 +188,7 @@ export default function LeftPanel() {
             </div>
           </div>
 
-          {/* row */}
-
-          {/* row */}
+          {/* Age Field */}
           <div className="my-2 md:my-4">
             <label htmlFor="age" className="text-xs">
               Age
@@ -342,39 +222,16 @@ export default function LeftPanel() {
             </div>
           </div>
         </Section>
+
         {/* Citizen's Charter */}
         <Section>
           <CitizensCharter cc={cc} setCC={setCC} />
         </Section>
+
+        {/* Feedback Fields */}
         <Section sectionName="Feedback and Suggestions">
+          {/* Feedback Field */}
           <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-            <FieldGroup className="rounded-lg border border-gray-200 p-4">
-              <Field>
-                <div className="flex items-center justify-between">
-                  <FieldLabel
-                    className="text-xs font-medium"
-                    htmlFor="dissatisfactionReason"
-                  >
-                    Reason/s of dissatisfaction
-                  </FieldLabel>
-                  <Button
-                    type="button"
-                    onClick={() => resetField("dissatisfactionReason")}
-                    variant={"outline"}
-                    size={"icon"}
-                    className=""
-                  >
-                    <Eraser size={16} />
-                  </Button>
-                </div>
-                <Textarea
-                  id="dissatisfactionReason"
-                  placeholder="Enter client input..."
-                  className="resize-zone"
-                  {...register("dissatisfactionReason")}
-                />
-              </Field>
-            </FieldGroup>
             <FieldGroup className="rounded-lg border border-gray-200 p-4">
               <Field>
                 <div className="flex items-center justify-between">
@@ -386,7 +243,7 @@ export default function LeftPanel() {
                   </FieldLabel>
                   <Button
                     type="button"
-                    onClick={() => resetField("feedbackSuggestions")}
+                    onClick={() => setValue("feedbackSuggestions", "")}
                     variant={"outline"}
                     size={"icon"}
                     className=""
@@ -402,41 +259,37 @@ export default function LeftPanel() {
                 />
               </Field>
             </FieldGroup>
+            {/* Reasons for Dissatisfaction Field */}
+            <FieldGroup className="rounded-lg border border-gray-200 p-4">
+              <Field>
+                <div className="flex items-center justify-between">
+                  <FieldLabel
+                    className="text-xs font-medium"
+                    htmlFor="dissatisfactionReason"
+                  >
+                    Reason/s of dissatisfaction
+                  </FieldLabel>
+                  <Button
+                    type="button"
+                    onClick={() => setValue("dissatisfactionReason", "")}
+                    variant={"outline"}
+                    size={"icon"}
+                    className=""
+                  >
+                    <Eraser size={16} />
+                  </Button>
+                </div>
+                <Textarea
+                  id="dissatisfactionReason"
+                  placeholder="Enter client input..."
+                  className="resize-zone"
+                  {...register("dissatisfactionReason")}
+                />
+              </Field>
+            </FieldGroup>
           </div>
         </Section>
       </div>
-
-      {/* <Section sectionName="Reason of Dissatisfaction">
-        <div>
-          <FieldGroup className="rounded-lg border border-gray-200 p-4">
-            <Field>
-              <div className="flex items-center justify-between">
-                <FieldLabel
-                  className="text-xs font-medium"
-                  htmlFor="dissatisfactionReason"
-                >
-                  Reason/s of dissatisfaction
-                </FieldLabel>
-                <Button
-                  type="button"
-                  onClick={() => resetField("dissatisfactionReason")}
-                  variant={"outline"}
-                  size={"icon"}
-                  className=""
-                >
-                  <Eraser size={16} />
-                </Button>
-              </div>
-              <Textarea
-                id="dissatisfactionReason"
-                placeholder="Enter client input..."
-                className="resize-zone"
-                {...register("dissatisfactionReason")}
-              />
-            </Field>
-          </FieldGroup>
-        </div>
-      </Section> */}
     </div>
   )
 }

@@ -13,6 +13,9 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "~/components/ui/input-group"
+import CSMServicesSelect from "./csm-services-select"
+import axios from "axios"
+import { Label } from "~/components/ui/label"
 
 const defaultServices = [
   "Enrollment",
@@ -125,114 +128,161 @@ const recordsOffice = [
 
 const supplyProperty = ["Procurement Process", "Preparation of Funding Request"]
 
-export default function AvailedServices({ office }: { office: string }) {
+type officeTypeProp = {
+  _id: string
+  office: string
+  alias: string
+  type: string
+}
+
+type serviceTypeProp = {
+  _id: string
+  typeID: string
+  services: string[]
+  isActive: boolean
+}
+
+interface CSMServicesProps {
+  servicesList: serviceTypeProp
+  office: officeTypeProp
+  setServicesList: React.Dispatch<React.SetStateAction<CSMServicesProps>>
+}
+export default function AvailedServices({
+  office,
+  setServicesList,
+}: CSMServicesProps) {
   const { setValue } = useFormContext()
-  const [services, setServices] = useState<string[]>([])
-  const [officeServices, setOfficeServices] = useState<string[]>([])
+  const [servicesSelected, setServicesSelected] = useState<string[]>([])
+  const [officeServices, setOfficeServices] = useState<serviceTypeProp>({
+    _id: "",
+    typeID: "",
+    services: [""],
+    isActive: false,
+  })
   const [currentInputValue, setCurrentInputValue] = useState("")
 
   useEffect(() => {
+    fetchServices()
+  }, [office])
+
+  useEffect(() => {
     // Empties the services list and user input whenever the user changes the office visited
-    setServices([])
+    setServicesSelected([])
     setCurrentInputValue("")
 
     // Changes the officeServices list/state based on the selected office
-    switch (office) {
-      case "Admission Services Unit":
-        setOfficeServices(adsuServices)
-        break
+    // switch (office.office) {
+    //   case "Admission Services Unit":
+    //     setOfficeServices(adsuServices)
+    //     break
 
-      case "University Registrar":
-        setOfficeServices(uniReg)
-        break
+    //   case "University Registrar":
+    //     setOfficeServices(uniReg)
+    //     break
 
-      case "Registrar":
-        setOfficeServices(uniReg)
-        break
+    //   case "Registrar":
+    //     setOfficeServices(uniReg)
+    //     break
 
-      case "Scholarship and Financial Assistance Unit":
-        setOfficeServices(sfasu)
-        break
+    //   case "Scholarship and Financial Assistance Unit":
+    //     setOfficeServices(sfasu)
+    //     break
 
-      case "Guidance and Counceling":
-        setOfficeServices(guidance)
-        break
+    //   case "Guidance and Counceling":
+    //     setOfficeServices(guidance)
+    //     break
 
-      case "Library Services Unit":
-        setOfficeServices(uniLibrary)
-        break
+    //   case "Library Services Unit":
+    //     setOfficeServices(uniLibrary)
+    //     break
 
-      case "Health Services Unit":
-        setOfficeServices(healthServices)
-        break
+    //   case "Health Services Unit":
+    //     setOfficeServices(healthServices)
+    //     break
 
-      case "Safety and Security Services Unit":
-        setOfficeServices(safety)
-        break
+    //   case "Safety and Security Services Unit":
+    //     setOfficeServices(safety)
+    //     break
 
-      case "Student Council Affairs":
-        setOfficeServices(studentCouncil)
-        break
+    //   case "Student Council Affairs":
+    //     setOfficeServices(studentCouncil)
+    //     break
 
-      case "National Service Training Program Office":
-        setOfficeServices(nstp)
-        break
+    //   case "National Service Training Program Office":
+    //     setOfficeServices(nstp)
+    //     break
 
-      case "Graduate School":
-        setOfficeServices(gradSchool)
-        break
+    //   case "Graduate School":
+    //     setOfficeServices(gradSchool)
+    //     break
 
-      case "Accounting Office":
-        setOfficeServices(accounting)
-        break
+    //   case "Accounting Office":
+    //     setOfficeServices(accounting)
+    //     break
 
-      case "Budget Office":
-        setOfficeServices(budgetOffice)
-        break
+    //   case "Budget Office":
+    //     setOfficeServices(budgetOffice)
+    //     break
 
-      case "Cashier's Office":
-        setOfficeServices(cashier)
-        break
+    //   case "Cashier's Office":
+    //     setOfficeServices(cashier)
+    //     break
 
-      case "Human Resource Management and Development Office":
-        setOfficeServices(hrmdo)
-        break
+    //   case "Human Resource Management and Development Office":
+    //     setOfficeServices(hrmdo)
+    //     break
 
-      case "ICT / MIS Office":
-        setOfficeServices(ict)
-        break
+    //   case "ICT / MIS Office":
+    //     setOfficeServices(ict)
+    //     break
 
-      case "Records and Archives Office":
-        setOfficeServices(recordsOffice)
-        break
+    //   case "Records and Archives Office":
+    //     setOfficeServices(recordsOffice)
+    //     break
 
-      case "Supply and Property Office":
-        setOfficeServices(supplyProperty)
-        break
+    //   case "Supply and Property Office":
+    //     setOfficeServices(supplyProperty)
+    //     break
 
-      default:
-        setOfficeServices(defaultServices)
-        break
-    }
+    //   default:
+    //     setOfficeServices(defaultServices)
+    //     break
+    // }
   }, [office])
 
   // Updates the services field in the form context whenever the services state changes
   useEffect(() => {
-    setValue("services", services)
+    setValue("services", servicesSelected)
     setCurrentInputValue("")
-  }, [services])
+  }, [servicesSelected])
 
   function onEnter(event: React.KeyboardEvent<HTMLInputElement>) {
     event.preventDefault()
     const newService = event.currentTarget?.value
-    setServices((old) => [...old, newService])
+    setServicesSelected((old) => [...old, newService])
+  }
+
+  async function fetchServices() {
+    const token = localStorage.getItem("token")
+    try {
+      const res = await axios.get(`/api/services/${office.type}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.status === 200) {
+        setOfficeServices({ ...res.data.services.services })
+      }
+      console.log(res)
+    } catch (error: any) {
+      // toast.error(error.response.data.message)
+      console.log(error)
+    }
   }
 
   return (
     <div className="my-2">
-      <label htmlFor="services" className="text-xs">
+      <Label htmlFor="services" className="text-xs">
         Services Availed
-      </label>
+      </Label>
       <InputGroup className="flex h-auto flex-wrap gap-2 border border-gray-200 px-2 py-1">
         <InputGroupInput
           id="services"
@@ -243,17 +293,19 @@ export default function AvailedServices({ office }: { office: string }) {
           onKeyDown={(e) => e.key === "Enter" && onEnter(e)}
           onChange={(e) => setCurrentInputValue(e.target.value)}
         />
-        {services.length > 0 && (
+        {servicesSelected.length > 0 && (
           <InputGroupAddon
             align={"inline-start"}
             className="flex w-full flex-wrap justify-start gap-2"
           >
-            {services?.map((service, index) => (
+            {servicesSelected?.map((service, index) => (
               <Button
                 type="button"
                 onClick={() => {
-                  setServices(
-                    services.filter((serviceItem) => serviceItem !== service)
+                  setServicesSelected(
+                    servicesSelected.filter(
+                      (serviceItem) => serviceItem !== service
+                    )
                   )
                 }}
                 key={index}
@@ -266,7 +318,12 @@ export default function AvailedServices({ office }: { office: string }) {
           </InputGroupAddon>
         )}
         <InputGroupAddon align={"inline-end"}>
-          <DropdownMenu
+          {/* <CSMServicesSelect
+            setOffice={}
+            setServicesSelected={setServicesSelected}
+            servicesList={officeServices}
+          /> */}
+          {/* <DropdownMenu
           // {...register("services")}
           >
             <DropdownMenuTrigger asChild>
@@ -284,7 +341,7 @@ export default function AvailedServices({ office }: { office: string }) {
                   <DropdownMenuItem
                     key={service}
                     onClick={() =>
-                      setServices((old) =>
+                      setServicesSelected((old) =>
                         old.includes(service) ? old : [...old, service]
                       )
                     }
@@ -293,7 +350,7 @@ export default function AvailedServices({ office }: { office: string }) {
                   </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </InputGroupAddon>
       </InputGroup>
     </div>

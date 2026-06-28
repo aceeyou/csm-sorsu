@@ -1,5 +1,3 @@
-import React from "react"
-
 function NotFound() {
   return (
     <div className="grid h-svh w-full place-items-center bg-slate-900 text-white">

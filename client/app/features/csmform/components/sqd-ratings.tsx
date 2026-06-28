@@ -7,6 +7,7 @@ import {
   Smile,
   type LucideIcon,
 } from "lucide-react"
+import { Button } from "~/components/ui/button"
 
 export default function SQDRatingsItem({
   label,
@@ -21,9 +22,9 @@ export default function SQDRatingsItem({
 }) {
   return (
     <div
-      className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2`}
+      className={`grid grid-cols-7 place-items-center gap-2 rounded-lg border border-gray-200 p-2 odd:bg-[#F9F9F9]`}
     >
-      <p className="text-xs md:text-sm">{label}</p>
+      <p className="text-xs md:text-xs">{label}</p>
       <SQDRating
         item={item}
         Icon={Angry}
@@ -97,11 +98,13 @@ function SQDRating({
   }
 
   return (
-    <div
+    <Button
+      type="button"
+      variant={"ghost"}
       onClick={handleClick}
-      className={`${isActive && "bg-slate-600"} w-full cursor-pointer place-items-center rounded-md border border-gray-200 p-1 py-2 md:p-3 items-center`}
+      className={`${isActive ? "bg-slate-600" : "hover:bg-gray-200"} ${isActive && "hover:bg-slate-500"} flex h-10 w-full cursor-pointer place-items-center items-center justify-center rounded-md border border-gray-200 py-2 md:p-3`}
     >
       <Icon size={18} color={isActive ? "white" : "black"} />
-    </div>
+    </Button>
   )
 }

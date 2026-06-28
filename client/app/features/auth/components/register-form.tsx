@@ -17,6 +17,8 @@ import {
 } from "~/components/ui/input-group"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Spinner } from "~/components/ui/spinner"
+import { toast } from "sonner"
+import FieldRequired from "~/components/field-required"
 
 function RegisterForm() {
   const [submitting, setSubmitting] = useState(false)
@@ -25,6 +27,7 @@ function RegisterForm() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   })
   const [error, setError] = useState("")
   const navigate = useNavigate()
@@ -41,33 +44,28 @@ function RegisterForm() {
     e.preventDefault()
     setSubmitting(true)
 
-    try {
-      const res = await axios.post(
-        "http://localhost:1337/auth/register",
-        formData
-      )
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match")
+      setSubmitting(false)
+      return
+    }
 
-      if (res.data.status === 400) {
+    try {
+      const res = await axios.post("/api/auth/register", formData)
+
+      if (res.status === 400) {
         setError(res.data.message)
-        // setFormData({
-        //   name: "",
-        //   email: "",
-        //   password: "",
-        // })
       }
 
-      if (res.data.status === 201) {
-        setSubmitting(false)
+      if (res.status === 201) {
         localStorage.setItem("token", res.data.token)
+        setSubmitting(false)
+        toast.success("Registration successful! Logging you in.")
         navigate("/")
       }
     } catch (error: any) {
       setSubmitting(false)
-      // setFormData({
-      //   name: "",
-      //   email: "",
-      //   password: "",
-      // })
+      toast.error("Registration failed. Please try again.")
       setError(
         error?.response?.data?.message ||
           "An error occurred during registration. Please try again."
@@ -81,7 +79,7 @@ function RegisterForm() {
         <FieldGroup>
           <FieldSet>
             <FieldLabel className="-mb-3 text-lg font-semibold">
-              CSM Tally Registration
+              Online SorSU CART Registration
             </FieldLabel>
             <FieldDescription>
               Welcome to the Online CART Dashboard!
@@ -90,17 +88,12 @@ function RegisterForm() {
               <Alert variant="destructive">
                 <AlertCircleIcon />
                 <AlertTitle>Registration Failed</AlertTitle>
-                <AlertDescription>
-                  {error}{" "}
-                  <Link to="/login" className="text-purple-500">
-                    Log in instead?
-                  </Link>
-                </AlertDescription>
+                <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             <FieldGroup className="">
               <FieldLabel htmlFor="name" className="-mb-2">
-                Name
+                Name <FieldRequired />
               </FieldLabel>
               <Input
                 id="name"
@@ -108,18 +101,20 @@ function RegisterForm() {
                 type="text"
                 placeholder="Juan Dela Cruz"
                 autoComplete="off"
+                required
                 value={formData.name}
                 onChange={handleInputChange}
               />
             </FieldGroup>
             <FieldGroup className="">
               <FieldLabel htmlFor="email" className="-mb-2">
-                Email
+                Email <FieldRequired />
               </FieldLabel>
               <Input
                 id="email"
                 name="email"
                 type="email"
+                required
                 placeholder="juan@email.com"
                 autoComplete="off"
                 value={formData.email}
@@ -128,12 +123,13 @@ function RegisterForm() {
             </FieldGroup>
             <FieldGroup>
               <FieldLabel htmlFor="password" className="-mb-2">
-                Password
+                Password <FieldRequired />
               </FieldLabel>
               <InputGroup>
                 <InputGroupInput
                   id="password"
                   name="password"
+                  required
                   type={showPassword ? "text" : "password"}
                   placeholder="*******"
                   value={formData.password}
@@ -152,19 +148,46 @@ function RegisterForm() {
               </InputGroup>
             </FieldGroup>
             <FieldGroup>
-              <div className="flex flex-wrap items-center justify-between">
-                <Link
-                  to="/login"
-                  className="text-xs duration-150 hover:text-purple-500 hover:underline"
-                >
-                  Already have an account? Login
-                </Link>
-              </div>
+              <FieldLabel htmlFor="confirmPassword" className="-mb-2">
+                Confirm Password <FieldRequired />
+              </FieldLabel>
+              <InputGroup>
+                <InputGroupInput
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="*******"
+                  value={formData.confirmPassword || ""}
+                  onChange={handleInputChange}
+                />
+
+                <InputGroupAddon align="inline-end">
+                  <Button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    variant="ghost"
+                    // size="icon-sm"
+                  >
+                    {showPassword ? <Eye /> : <EyeClosed />}
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+              {formData.confirmPassword === formData.password ? null : (
+                <p className="-mt-3.5 text-[0.7rem] text-destructive">
+                  Passwords do not match
+                </p>
+              )}
             </FieldGroup>
-            <Button type="submit" className="mt-2 w-full py-5 text-sm">
+            <Button type="submit" className="mt-4 w-full py-5 text-sm">
               {submitting && <Spinner className="mr-2" />}
               Register
             </Button>
+            <Link
+              to="/login"
+              className="text-center text-xs duration-150 hover:text-purple-500 hover:underline"
+            >
+              Already have an account? Login
+            </Link>
           </FieldSet>
         </FieldGroup>
       </form>

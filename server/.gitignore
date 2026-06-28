@@ -1,3 +1,4 @@
 /node_modules/
-credentials.json
+credentialsDrive.json
+credentialsSheets.json
 .env

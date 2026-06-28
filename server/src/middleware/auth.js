@@ -7,6 +7,8 @@ dotenv.config();
 export const verification = async (req, res, next) => {
   let token;
 
+  // console.log("verification triggered");
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -19,30 +21,39 @@ export const verification = async (req, res, next) => {
 
       req.user = await User.findById(decoded.id).select("-password");
 
-      return next();
+      // console.log("moving from verification");
+      next();
     } catch (error) {
-      console.log("Token error: ", error);
       res.status(401).json({ message: "User session expired. Please log in" });
     }
   }
 };
 
 export const authorize = (allowedRoles) => {
+  // console.log("authorize triggered");
+  // const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
   return (req, res, next) => {
     // 1. Ensure user is authenticated (req.user should exist)
+    // try {
     if (!req.user) {
+      console.log("authorize (user):", req.user);
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     // 2. Check if the user's role is in the allowed list
     if (!allowedRoles.includes(req.user.role)) {
+      // if (req.user.role !== "admin") {
       return res
         .status(403)
         .json({ message: "Forbidden: Insufficient permissions" });
     }
 
     // 3. Success: move to the next handler
-    next();
+    return next();
+    // } catch (error) {
+    //   next(error);
+    //   console.log(error);
+    // }
   };
 };
 

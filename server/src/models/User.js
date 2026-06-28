@@ -6,10 +6,10 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true, minLength: 8 },
-    active: { type: Boolean, required: true },
     role: { type: String, required: true },
+    active: { type: Boolean, required: true },
   },
-  { timestamps: true },
+  { timestamps: true, strict: true },
 );
 
 // hash the password before creating/updating a user
