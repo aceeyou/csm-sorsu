@@ -85,7 +85,7 @@ function AuthForm() {
 
   return (
     <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-      <form onSubmit={handleSubmit}>
+      <form method="POST" onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet>
             <FieldLabel className="-mb-3 text-lg font-semibold">
