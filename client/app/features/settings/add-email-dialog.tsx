@@ -68,7 +68,7 @@ function AddEmailDialog({
 
   return (
     <Dialog open={dialogToggle} onOpenChange={handleDialogClose}>
-      <form onSubmit={handleSubmit}>
+      <form method="POST" onSubmit={handleSubmit}>
         <DialogTrigger asChild>
           <Button variant="outline" className="cursor-pointer" type="button">
             <Plus /> Add an Email

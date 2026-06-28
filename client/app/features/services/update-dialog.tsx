@@ -211,70 +211,72 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="newEmail">
-                Office Type <FieldRequired />
-              </Label>
-              <Input
-                className="h-8"
-                id="officeType"
-                name="officeType"
-                value={newOfficeType}
-                required
-                placeholder="cashier"
-                onChange={(e) => {
-                  setTypeChanged(true)
-                  setNewOfficeType(e.target.value)
-                }}
-              />
-            </Field>
-          </FieldGroup>
-          <FieldGroup className="mt-2">
-            <Field>
-              <Label htmlFor="relatedServices">Related Services</Label>
-            </Field>
-            {fetchLoading ? (
-              <span>
-                <Spinner /> Loading...
-              </span>
-            ) : serviceList.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-1">
-                {serviceList.map((service) => (
+          <form method="POST">
+            <FieldGroup>
+              <Field>
+                <Label htmlFor="newEmail">
+                  Office Type <FieldRequired />
+                </Label>
+                <Input
+                  className="h-8"
+                  id="officeType"
+                  name="officeType"
+                  value={newOfficeType}
+                  required
+                  placeholder="cashier"
+                  onChange={(e) => {
+                    setTypeChanged(true)
+                    setNewOfficeType(e.target.value)
+                  }}
+                />
+              </Field>
+            </FieldGroup>
+            <FieldGroup className="mt-2">
+              <Field>
+                <Label htmlFor="relatedServices">Related Services</Label>
+              </Field>
+              {fetchLoading ? (
+                <span>
+                  <Spinner /> Loading...
+                </span>
+              ) : serviceList.length > 0 ? (
+                <div className="flex flex-wrap items-center gap-1">
+                  {serviceList.map((service) => (
+                    <Button
+                      key={service}
+                      onClick={() => handleRemoveServiceItemFromList(service)}
+                      className="max-w-80 rounded-lg px-3 py-1"
+                    >
+                      <span className="truncate text-left!">{service}</span>
+                    </Button>
+                  ))}
+                </div>
+              ) : (
+                <span className="flex justify-center text-gray-400">
+                  No services found.
+                </span>
+              )}
+              <InputGroup className="h-8">
+                <InputGroupInput
+                  value={newServiceItem}
+                  placeholder="Payment"
+                  onChange={(e) => setNewServiceItem(e.target.value)}
+                  onKeyDown={handleKeyDownNewServiceItem}
+                  className=""
+                />
+                <InputGroupAddon align={"inline-end"}>
                   <Button
-                    key={service}
-                    onClick={() => handleRemoveServiceItemFromList(service)}
-                    className="max-w-80 rounded-lg px-3 py-1"
+                    variant={"ghost"}
+                    className="bg-gray-200 hover:bg-gray-300"
+                    onClick={handleAddNewServiceItem}
                   >
-                    <span className="truncate text-left!">{service}</span>
+                    <Plus />
+                    Add
                   </Button>
-                ))}
-              </div>
-            ) : (
-              <span className="flex justify-center text-gray-400">
-                No services found.
-              </span>
-            )}
-            <InputGroup className="h-8">
-              <InputGroupInput
-                value={newServiceItem}
-                placeholder="Payment"
-                onChange={(e) => setNewServiceItem(e.target.value)}
-                onKeyDown={handleKeyDownNewServiceItem}
-                className=""
-              />
-              <InputGroupAddon align={"inline-end"}>
-                <Button
-                  variant={"ghost"}
-                  className="bg-gray-200 hover:bg-gray-300"
-                  onClick={handleAddNewServiceItem}
-                >
-                  <Plus />
-                  Add
-                </Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </FieldGroup>
+                </InputGroupAddon>
+              </InputGroup>
+            </FieldGroup>
+          </form>
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button

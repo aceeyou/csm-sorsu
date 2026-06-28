@@ -21,7 +21,7 @@ interface OfficeType {
 
 function OfficeForm({ office, fields, setFields }: OfficeType) {
   return (
-    <form>
+    <form method="POST">
       <FieldGroup className="">
         <Label htmlFor="officeName">
           Name of Office <FieldRequired />

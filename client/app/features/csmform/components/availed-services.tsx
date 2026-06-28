@@ -283,47 +283,48 @@ export default function AvailedServices({
       <Label htmlFor="services" className="text-xs">
         Services Availed
       </Label>
-      <InputGroup className="flex h-auto flex-wrap gap-2 border border-gray-200 px-2 py-1">
-        <InputGroupInput
-          id="services"
-          type="text"
-          value={currentInputValue}
-          placeholder="Enter service availed..."
-          className="rounded-md border border-gray-200"
-          onKeyDown={(e) => e.key === "Enter" && onEnter(e)}
-          onChange={(e) => setCurrentInputValue(e.target.value)}
-        />
-        {servicesSelected.length > 0 && (
-          <InputGroupAddon
-            align={"inline-start"}
-            className="flex w-full flex-wrap justify-start gap-2"
-          >
-            {servicesSelected?.map((service, index) => (
-              <Button
-                type="button"
-                onClick={() => {
-                  setServicesSelected(
-                    servicesSelected.filter(
-                      (serviceItem) => serviceItem !== service
+      <form>
+        <InputGroup className="flex h-auto flex-wrap gap-2 border border-gray-200 px-2 py-1">
+          <InputGroupInput
+            id="services"
+            type="text"
+            value={currentInputValue}
+            placeholder="Enter service availed..."
+            className="rounded-md border border-gray-200"
+            onKeyDown={(e) => e.key === "Enter" && onEnter(e)}
+            onChange={(e) => setCurrentInputValue(e.target.value)}
+          />
+          {servicesSelected.length > 0 && (
+            <InputGroupAddon
+              align={"inline-start"}
+              className="flex w-full flex-wrap justify-start gap-2"
+            >
+              {servicesSelected?.map((service, index) => (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setServicesSelected(
+                      servicesSelected.filter(
+                        (serviceItem) => serviceItem !== service
+                      )
                     )
-                  )
-                }}
-                key={index}
-                variant={"default"}
-                className="max-w-60 justify-start text-start"
-              >
-                {service}
-              </Button>
-            ))}
-          </InputGroupAddon>
-        )}
-        <InputGroupAddon align={"inline-end"}>
-          {/* <CSMServicesSelect
+                  }}
+                  key={index}
+                  variant={"default"}
+                  className="max-w-60 justify-start text-start"
+                >
+                  {service}
+                </Button>
+              ))}
+            </InputGroupAddon>
+          )}
+          <InputGroupAddon align={"inline-end"}>
+            {/* <CSMServicesSelect
             setOffice={}
             setServicesSelected={setServicesSelected}
             servicesList={officeServices}
           /> */}
-          {/* <DropdownMenu
+            {/* <DropdownMenu
           // {...register("services")}
           >
             <DropdownMenuTrigger asChild>
@@ -351,8 +352,9 @@ export default function AvailedServices({
                 ))}
             </DropdownMenuContent>
           </DropdownMenu> */}
-        </InputGroupAddon>
-      </InputGroup>
+          </InputGroupAddon>
+        </InputGroup>
+      </form>
     </div>
   )
 }

@@ -244,8 +244,10 @@ export default function CSMForm() {
           </div>
           <div className="grid grid-cols-1 md:mt-4 md:grid-cols-2 md:gap-7">
             {/* ACTUAL FORM */}
-            <LeftPanel />
-            <RightPanel />
+            <form method="POST">
+              <LeftPanel />
+              <RightPanel />
+            </form>
           </div>
 
           {/* Submit Button */}

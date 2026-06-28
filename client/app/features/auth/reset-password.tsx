@@ -77,6 +77,7 @@ function ResetPassword() {
             </Alert>
           )}
           <form
+            method="POST"
             onSubmit={(e) => {
               e.preventDefault()
               handleResetPassword()

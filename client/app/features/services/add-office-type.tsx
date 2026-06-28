@@ -127,7 +127,7 @@ function AddOfficeType({ fetchOfficeTypes }: AddOfficeProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <form onSubmit={handleSubmitOfficeType}>
+      <form method="POST" onSubmit={handleSubmitOfficeType}>
         <DialogTrigger asChild>
           <Button className="h-8" type="button">
             <Plus /> Add Office Type

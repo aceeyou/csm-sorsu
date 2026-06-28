@@ -1,18 +1,9 @@
 import axios from "axios"
-import { ChevronDown, Plus, Search, SquarePen, Trash2 } from "lucide-react"
+import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import CustomSidebar from "~/components/custom-sidebar"
-import FieldRequired from "~/components/field-required"
 import { Button } from "~/components/ui/button"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/components/ui/command"
 import {
   Dialog,
   DialogClose,
@@ -23,19 +14,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog"
-import { FieldGroup } from "~/components/ui/field"
-import { Input } from "~/components/ui/input"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "~/components/ui/input-group"
 import { Label } from "~/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover"
 import { Spinner } from "~/components/ui/spinner"
 import {
   Table,
@@ -51,8 +35,6 @@ import OfficeForm from "~/features/office/office-form"
 
 function Offices() {
   const [openAddOfficeDialog, setOpenAddOfficeDialog] = useState(false)
-  const [openTypeCombobox, setOpenTypeCombobox] = useState(false)
-  const [openCampusCombobox, setOpenCampusCombobox] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [query, setQuery] = useState("")
   const [listOfTypes, setListOfTypes] = useState([""])
