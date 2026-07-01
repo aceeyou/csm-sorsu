@@ -5,7 +5,7 @@
       "destination": "/app/root.tsx"
     },
     {
-      "source": "/api/:path*",
+      "source": "/api/(.*)",
       "destination": "https://csm-sorsu-server.vercel.app"
     }
   ]
