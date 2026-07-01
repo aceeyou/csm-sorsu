@@ -8,8 +8,11 @@ import {
   ResetPassword,
 } from "../controllers/Auth.controller.js";
 import { verification } from "../middleware/auth.js";
+import cors from "cors";
 
 const authRouter = express.Router();
+
+authRouter.use(cors());
 
 authRouter.post("/register", RegisterUser);
 authRouter.post("/login", LoginUser);
