@@ -33,13 +33,13 @@ const corsOptions = {
 };
 
 const app = express();
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.options("*", cors());
 app.use(express.json());
 dotenv.config();
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+  res.header("Access-Control-Allow-Origin",  res.header.origin || "*");
   res.header(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
