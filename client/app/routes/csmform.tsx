@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Form, useNavigate } from "react-router"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import CustomSidebar from "~/components/custom-sidebar"
 import { Button } from "~/components/ui/button"
 import { Spinner } from "~/components/ui/spinner"
@@ -24,7 +25,7 @@ export default function CSMForm() {
     const token = localStorage.getItem("token")
     const handleGetUserData = async () => {
       try {
-        const res = await axios.get("/api/auth/me", {
+        const res = await apiClient.get("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

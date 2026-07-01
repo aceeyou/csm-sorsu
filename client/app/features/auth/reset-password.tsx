@@ -22,9 +22,10 @@ import {
   InputGroupInput,
 } from "~/components/ui/input-group"
 import { Spinner } from "~/components/ui/spinner"
-import axios from "axios"
+// import axios from "axios"
 import { useLocation, useNavigate } from "react-router"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 
 function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false)
@@ -43,7 +44,7 @@ function ResetPassword() {
         return
       }
 
-      const res = await axios.post("/api/auth/reset-password", {
+      const res = await apiClient.post("/api/auth/reset-password", {
         email,
         newPassword,
       })

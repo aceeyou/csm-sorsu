@@ -16,6 +16,7 @@ import { toast } from "sonner"
 import TableRowComponent from "./components/table-row"
 import { Button } from "~/components/ui/button"
 import { RefreshCcw } from "lucide-react"
+import { apiClient } from "~/api/client"
 
 function AllowedEmailList() {
   const { data, error } = useFetchUser()
@@ -36,7 +37,7 @@ function AllowedEmailList() {
 
   async function fetchAllowedEmails() {
     try {
-      const res = await axios.get("/api/emails/allowedemail", {
+      const res = await apiClient.get("/api/emails/allowedemail", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,7 +61,7 @@ function AllowedEmailList() {
       }
 
       // const token = localStorage.getItem("token")
-      const res = await axios.post(
+      const res = await apiClient.post(
         "/api/emails/toggleemailprivelages",
         {
           id: emailID,
@@ -81,7 +82,7 @@ function AllowedEmailList() {
   async function handleUpdateEmailAddress(emailID: string, newEmail: string) {
     try {
       // const token = localStorage.getItem("token")
-      const res = await axios.post(
+      const res = await apiClient.post(
         "/api/emails/updateemailaddress",
         {
           id: emailID,

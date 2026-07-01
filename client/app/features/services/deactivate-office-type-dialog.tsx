@@ -2,6 +2,7 @@ import axios from "axios"
 import { Trash2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -34,7 +35,7 @@ function DeactivateOfficeTypeDialog({
   const handleFetchServicesOfType = async () => {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get(`/api/services/${officeType.type}`, {
+      const res = await apiClient.get(`/api/services/${officeType.type}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 
@@ -49,7 +50,7 @@ function DeactivateOfficeTypeDialog({
     const token = localStorage.getItem("token")
     setLoading(true)
     try {
-      const res = await axios.patch(
+      const res = await apiClient.patch(
         `/api/officetype/deactivate/${officeType._id}`,
         { type: officeType.type },
         {

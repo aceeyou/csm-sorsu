@@ -1,6 +1,3 @@
-import React from "react"
-import AuthForm from "./components/auth-form"
-import Showcase from "./components/showcase"
 import RegisterForm from "./components/register-form"
 
 function Register() {

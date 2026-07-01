@@ -2,6 +2,7 @@ import axios from "axios"
 import { AlertCircleIcon, Plus } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Button } from "~/components/ui/button"
@@ -34,7 +35,7 @@ function AddEmailDialog({
     setLoading(true)
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.post(
+      const res = await apiClient.post(
         "/api/emails/addemail",
         { email: newEmail },
         {

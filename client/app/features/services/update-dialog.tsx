@@ -2,6 +2,7 @@ import axios from "axios"
 import { AlertCircleIcon, Plus, SquarePen } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Button } from "~/components/ui/button"
@@ -61,7 +62,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
     const token = localStorage.getItem("token")
     setLoading(true)
     try {
-      const res = await axios.patch(
+      const res = await apiClient.patch(
         `/api/officetype/update/${officeType._id}`,
         { type: newOfficeType },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -88,7 +89,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
     try {
       // Creates a new list if the office type doesn't have an existing list of services
       if (!serviceID) {
-        const res = await axios.post(
+        const res = await apiClient.post(
           "/api/services/add",
           { typeID: officeType._id, services: serviceList },
           { headers: { Authorization: `Bearer ${token}` } }
@@ -99,7 +100,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
         }
       } else {
         // Updates the list connected to the office type
-        const res = await axios.patch(
+        const res = await apiClient.patch(
           `/api/services/update/${serviceID}`,
           {
             typeID: officeType._id,
@@ -127,7 +128,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
     const token = localStorage.getItem("token")
     setFetchLoading(true)
     try {
-      const res = await axios.get(`/api/services/${officeType.type}`, {
+      const res = await apiClient.get(`/api/services/${officeType.type}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 

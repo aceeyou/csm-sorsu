@@ -1,6 +1,7 @@
 import axios from "axios"
 import { SquarePen, ToggleLeft, ToggleRight } from "lucide-react"
 import { useEffect, useState } from "react"
+import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
 import { Button } from "~/components/ui/button"
 import {
@@ -48,7 +49,7 @@ function TableRowComponent({
     // Set a timer to trigger Axios after 500ms
     const delayDebounceFn = setTimeout(async () => {
       try {
-        const res = await axios.post(
+        const res = await apiClient.post(
           `/api/emails/emailavailability`,
           {
             email: newEmail,
