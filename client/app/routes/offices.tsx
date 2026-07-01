@@ -2,6 +2,7 @@ import axios from "axios"
 import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import CustomSidebar from "~/components/custom-sidebar"
 import { Button } from "~/components/ui/button"
 import {
@@ -78,7 +79,7 @@ function Offices() {
     // Delay 500ms
     const delayDebounceFn = setTimeout(async () => {
       try {
-        const res = await axios.post(
+        const res = await apiClient.post(
           `/api/offices/query`,
           {
             query: query,
@@ -111,7 +112,7 @@ function Offices() {
   async function fetchAllOffices() {
     const token = localStorage.getItem("token")
     try {
-      const offices = await axios.get("/api/offices/list", {
+      const offices = await apiClient.get("/api/offices/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -130,7 +131,7 @@ function Offices() {
   async function fetchTypes() {
     const token = localStorage.getItem("token")
     try {
-      const types = await axios.get("/api/officetype/list", {
+      const types = await apiClient.get("/api/officetype/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -144,7 +145,7 @@ function Offices() {
   async function fetchCampuses() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get("/api/campus/list", {
+      const res = await apiClient.get("/api/campus/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -161,7 +162,7 @@ function Offices() {
     setSubmitting(true)
     // console.log("client fields: ", fields)
     try {
-      const res = await axios.post(
+      const res = await apiClient.post(
         "/api/offices/addoffice",
         {
           office: fields.office,

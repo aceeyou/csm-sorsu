@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -24,7 +25,7 @@ function ForgotPassword() {
     if (emailToReset) {
       setShowOTPInput(true)
       try {
-        const res = await axios.post("/api/auth/send-otp", {
+        const res = await apiClient.post("/api/auth/send-otp", {
           email: emailToReset,
         })
         console.log("OTP sent successfully:", res.data)

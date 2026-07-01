@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { apiClient } from "~/api/client"
 import { Spinner } from "~/components/ui/spinner"
 
 function ServiceList({ officeType }: { officeType: string }) {
@@ -21,7 +22,7 @@ function ServiceList({ officeType }: { officeType: string }) {
   async function handleFetchServices() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get(`/api/services/${officeType}`, {
+      const res = await apiClient.get(`/api/services/${officeType}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,6 +1,7 @@
 import axios from "axios"
 import { ChevronDown } from "lucide-react"
 import React, { useEffect, useState } from "react"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -41,7 +42,7 @@ function CampusSelect({ campuses, setFields }: PropType) {
   async function fetchCampuses() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get("/api/campus/list", {
+      const res = await apiClient.get("/api/campus/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

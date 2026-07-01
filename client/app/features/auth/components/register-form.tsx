@@ -1,6 +1,6 @@
 import { AlertCircleIcon, Eye, EyeClosed } from "lucide-react"
 import React, { useState } from "react"
-import axios from "axios"
+// import axios from "axios"
 import { Link, useNavigate } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
@@ -19,6 +19,7 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Spinner } from "~/components/ui/spinner"
 import { toast } from "sonner"
 import FieldRequired from "~/components/field-required"
+import { apiClient } from "~/api/client"
 
 function RegisterForm() {
   const [submitting, setSubmitting] = useState(false)
@@ -51,7 +52,7 @@ function RegisterForm() {
     }
 
     try {
-      const res = await axios.post("/api/auth/register", formData)
+      const res = await apiClient.post("/api/auth/register", formData)
 
       if (res.status === 400) {
         setError(res.data.message)

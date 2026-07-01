@@ -1,6 +1,7 @@
 import axios from "axios"
 import { ChevronDown } from "lucide-react"
 import React, { useEffect, useState } from "react"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -39,7 +40,7 @@ function OfficeTypeSelect({ fields, setFields }: PropType) {
   async function fetchTypes() {
     const token = localStorage.getItem("token")
     try {
-      const types = await axios.get("/api/officetype/list", {
+      const types = await apiClient.get("/api/officetype/list", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

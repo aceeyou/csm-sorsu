@@ -2,6 +2,7 @@ import axios from "axios"
 import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
@@ -39,7 +40,7 @@ function DeleteOfficeDialog({
     const token = localStorage.getItem("token")
     setLoading(true)
     try {
-      const res = await axios.delete(`/api/offices/delete/${office._id}`, {
+      const res = await apiClient.delete(`/api/offices/delete/${office._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

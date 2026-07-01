@@ -15,6 +15,7 @@ import {
 } from "~/components/ui/dialog"
 import { Spinner } from "~/components/ui/spinner"
 import OfficeForm from "../office-form"
+import { apiClient } from "~/api/client"
 
 interface FieldsType {
   type: string
@@ -49,7 +50,7 @@ function EditOfficeDialog({ office, fetchAllOffices }: EditOfficeType) {
     setLoading(true)
 
     try {
-      const res = await axios.patch(
+      const res = await apiClient.patch(
         `/api/offices/update/${office._id}`,
         {
           office: editFields.office,

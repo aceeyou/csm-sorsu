@@ -22,6 +22,7 @@ import DeactivateOfficeTypeDialog from "~/features/services/deactivate-office-ty
 import ServiceList from "~/features/services/components/services-service-list"
 import UpdateOfficeType from "~/features/services/update-dialog"
 import { Spinner } from "~/components/ui/spinner"
+import { apiClient } from "~/api/client"
 
 function Services() {
   const [loading, setLoading] = useState(true)
@@ -36,7 +37,7 @@ function Services() {
   async function fetchOfficeTypes() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get("/api/officetype/list/all", {
+      const res = await apiClient.get("/api/officetype/list/all", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

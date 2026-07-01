@@ -1,6 +1,6 @@
 import { AlertCircleIcon, Eye, EyeClosed } from "lucide-react"
 import React, { useEffect, useState } from "react"
-import axios from "axios"
+// import axios from "axios"
 import { Link, useLocation, useNavigate } from "react-router"
 import { Button } from "~/components/ui/button"
 import {
@@ -18,6 +18,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Spinner } from "~/components/ui/spinner"
 import FieldRequired from "~/components/field-required"
+import { apiClient } from "~/api/client"
 
 function AuthForm() {
   const [submitting, setSubmitting] = useState(false)
@@ -54,7 +55,7 @@ function AuthForm() {
     setSubmitting(true)
 
     try {
-      const res = await axios.post("/api/auth/login", formData, {
+      const res = await apiClient.post("/api/auth/login", formData, {
         headers: {
           "Content-Type": "application/json",
         },

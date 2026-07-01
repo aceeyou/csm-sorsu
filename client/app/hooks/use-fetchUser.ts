@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
+import { apiClient } from "~/api/client"
 
 export function useFetchUser() {
   const [data, setData] = useState({
@@ -20,7 +21,7 @@ export function useFetchUser() {
       setError(null)
 
       try {
-        const res = await axios.get("/api/auth/me", {
+        const res = await apiClient.get("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
