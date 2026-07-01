@@ -87,7 +87,8 @@ app.post("/api/postcsmresponse", verification, async (req, res) => {
 // });
 
 connectDB();
-// app.listen(1337, (req, res) => {
-//   console.log("Listening on port 1337");
-// });
+app.listen(1337, (req, res) => {
+  console.log("Listening on port 1337");
+});
+
 module.exports = app;
