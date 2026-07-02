@@ -37,6 +37,9 @@ export const authorize = (allowedRoles) => {
   // console.log("authorize triggered");
   // const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
   return (req, res, next) => {
+    if (req.method === "OPTIONS") {
+      return next();
+    }
     // 1. Ensure user is authenticated (req.user should exist)
     // try {
     if (!req.user) {
