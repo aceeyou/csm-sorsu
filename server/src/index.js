@@ -28,24 +28,25 @@ const corsOptions = {
 
 const app = express();
 app.use(cors(corsOptions));
-// app.use((req, res, next) => {
-//   // 1. Set the standard CORS headers
-//   res.setHeader("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-//   );
+app.use((req, res, next) => {
+  // 1. Set the standard CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+  );
+  res.setHeader("HTTP/1.1 200 OK");
 
-//   // 2. Handle the Preflight OPTIONS request immediately with a 200 OK
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-//   next();
-// });
+  // 2. Handle the Preflight OPTIONS request immediately with a 200 OK
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 app.use(express.json());
 dotenv.config();
