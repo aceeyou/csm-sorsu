@@ -12,7 +12,7 @@ import cors from "cors";
 
 const authRouter = express.Router();
 
-authRouter.use(cors());
+// authRouter.use(cors());
 
 authRouter.post("/register", RegisterUser);
 authRouter.post("/login", LoginUser);
