@@ -6,7 +6,8 @@
     },
     {
       "source": "/api/(.*)",
-      "destination": "https://csm-sorsu-server.vercel.app"
+      "destination": "/server/src/index.js"
     }
   ]
 }
+// "destination": "https://csm-sorsu-server.vercel.app"
