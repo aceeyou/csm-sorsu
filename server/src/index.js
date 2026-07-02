@@ -36,29 +36,28 @@ const app = express();
 app.use(
   cors({
     origin: "https://csm-sorsu.vercel.app",
-    mthods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
 app.options("*", cors());
 app.use(express.json());
 dotenv.config();
 
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://csm-sorsu.vercel.app" || "*",
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-  );
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// app.use((req, res, next) => {
+//   res.header(
+//     "Access-Control-Allow-Origin",
+//     "https://csm-sorsu.vercel.app" || "*",
+//   );
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+//   );
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).json({});
-  }
-  next();
-});
+//   if (req.method === "OPTIONS") {
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
 
 // Verify user token for all routes
 // app.use(verification);
