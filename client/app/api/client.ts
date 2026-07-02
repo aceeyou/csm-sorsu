@@ -7,7 +7,7 @@ export const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
     // "Allow-Control-Allow-Origin": "http://127.0.0.1:3000", // Allow requests from any origin
-    // "Allow-Control-Allow-Origin": "https://csm-sorsu.vercel.app", // Allow requests only from the specified origin
+    "Access-Control-Allow-Origin": "https://csm-sorsu.vercel.app", // Allow requests only from the specified origin
   },
   //   withCredentials: true, // Include credentials (cookies) in requests
 })
