@@ -20,43 +20,42 @@ import officeRouter from "./routes/Office.routes.js";
 import serviceRouter from "./routes/Service.routes.js";
 
 const app = express();
-
-const corsOptions = {
-  origin: "https://csm-sorsu.vercel.app",
-  // Explicitly allow the methods your frontend will use
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  // Allow custom headers like Content-Type (JSON) or Authorization (JWT tokens)
-  allowedHeaders: ["Content-Type", "Authorization"],
-  // CRITICAL: Forces Express to respond to OPTIONS requests with a 200 OK status
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-// app.use((req, res, next) => {
-//   // 1. Set the standard CORS headers
-//   res.setHeader("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-//   );
-//   res.setHeader("HTTP/1.1 200 OK");
-
-//   // 2. Handle the Preflight OPTIONS request immediately with a 200 OK
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-//   next();
-// });
-
-app.use(express.json());
 dotenv.config();
 
-// Verify user token for all routes
-// app.use(verification);
+// const corsOptions = {
+//   origin: "https://csm-sorsu.vercel.app",
+//   // Explicitly allow the methods your frontend will use
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   // Allow custom headers like Content-Type (JSON) or Authorization (JWT tokens)
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   // CRITICAL: Forces Express to respond to OPTIONS requests with a 200 OK status
+//   optionsSuccessStatus: 200,
+// };
+
+// app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  // 1. Allow the origin making the request
+  res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+
+  // 2. Allow the headers your XHR request is sending
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  );
+
+  // 3. Allow the POST method
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  // 4. CRITICAL: If it's the preflight OPTIONS request, kill it here with a 200 OK!
+  if (req.method === "OPTIONS") {
+    return res.status(200).json({});
+  }
+
+  // 5. Pass normal requests (GET, POST) onwards
+  next();
+});
+
+app.use(express.json());
 
 // Register, Login amd User Infor endpoints
 app.use("/api/auth", authRouter);
