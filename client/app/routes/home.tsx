@@ -1,4 +1,4 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useFetchUser } from "~/hooks/use-fetchUser"
 import { Skeleton } from "~/components/ui/skeleton"
 import CustomSidebar from "~/components/custom-sidebar"
@@ -7,6 +7,11 @@ import { toast } from "sonner"
 
 export default function Home() {
   const { data, error } = useFetchUser()
+  const navigate = useNavigate()
+
+  if (!data) {
+    navigate("/login")
+  }
 
   if (error) toast.error(error)
 
