@@ -28,10 +28,6 @@ const corsOptions = {
 
 const app = express();
 app.use(cors(corsOptions));
-// app.options("*", cors());
-app.use(express.json());
-dotenv.config();
-
 app.use((req, res, next) => {
   // 1. Set the standard CORS headers
   res.setHeader("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
@@ -51,6 +47,9 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(express.json());
+dotenv.config();
 
 // Verify user token for all routes
 // app.use(verification);
