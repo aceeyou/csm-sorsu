@@ -23,22 +23,12 @@ const corsOptions = {
   origin: "https://csm-sorsu.vercel.app",
   optionsSuccessStatus: 200,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization",
-  ],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 const app = express();
-app.use(
-  cors({
-    origin: "https://csm-sorsu.vercel.app",
-  }),
-);
-app.options("*", cors());
+app.use(cors(corsOptions));
+// app.options("*", cors());
 app.use(express.json());
 dotenv.config();
 
