@@ -9,6 +9,10 @@ let otpStore = {};
 export async function RegisterUser(req, res) {
   const { name, email, password } = req.body;
 
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
   try {
     // Checks if all required fields are provided
     if (!name || !email || !password) {
@@ -66,6 +70,10 @@ export async function RegisterUser(req, res) {
 
 export async function LoginUser(req, res) {
   const { email, password } = req.body;
+
+  if (req.method === "OPTIONS") {
+    return next();
+  }
 
   try {
     // Checks if user provided email and password

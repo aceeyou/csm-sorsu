@@ -7,6 +7,10 @@ dotenv.config();
 export const verification = async (req, res, next) => {
   let token;
 
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
   // console.log("verification triggered");
 
   if (
