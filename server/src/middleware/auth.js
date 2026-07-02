@@ -44,15 +44,17 @@ export const authorize = (allowedRoles) => {
     // try {
     if (!req.user) {
       console.log("authorize (user):", req.user);
-      return res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: "Unauthorized" });
+      next();
+      return;
     }
 
     // 2. Check if the user's role is in the allowed list
     if (!allowedRoles.includes(req.user.role)) {
       // if (req.user.role !== "admin") {
-      return res
-        .status(403)
-        .json({ message: "Forbidden: Insufficient permissions" });
+      res.status(403).json({ message: "Forbidden: Insufficient permissions" });
+      next();
+      return;
     }
 
     // 3. Success: move to the next handler
