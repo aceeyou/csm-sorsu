@@ -42,22 +42,25 @@ app.options("*", cors());
 app.use(express.json());
 dotenv.config();
 
-// app.use((req, res, next) => {
-//   res.header(
-//     "Access-Control-Allow-Origin",
-//     "https://csm-sorsu.vercel.app" || "*",
-//   );
-//   res.header(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-//   );
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+app.use((req, res, next) => {
+  // 1. Set the standard CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+  );
 
-//   if (req.method === "OPTIONS") {
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
+  // 2. Handle the Preflight OPTIONS request immediately with a 200 OK
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+  next();
+});
 
 // Verify user token for all routes
 // app.use(verification);
