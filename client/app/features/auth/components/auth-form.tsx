@@ -60,7 +60,7 @@ function AuthForm() {
           "Content-Type": "application/json",
         },
       })
-      // console.log(res)
+      console.log("auth: ", res)
 
       if (res.status === 400) {
         console.log(res.data.message)

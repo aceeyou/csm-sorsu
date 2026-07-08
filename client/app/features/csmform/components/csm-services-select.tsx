@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover"
 import { Input } from "~/components/ui/input"
+import { apiClient } from "~/api/client"
 
 interface FieldsType {
   _id: string
@@ -58,7 +59,7 @@ function CSMServicesSelect({ office }: PropType) {
     const token = localStorage.getItem("token")
     try {
       if (office.type.length === 0) return
-      const res = await axios.get(`/api/services/${office.type}`, {
+      const res = await apiClient.get(`/api/services/${office.type}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 
