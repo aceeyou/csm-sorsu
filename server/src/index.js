@@ -35,16 +35,23 @@ dotenv.config();
 // app.use(cors(corsOptions));
 app.use((req, res, next) => {
   // 1. Allow the origin making the request
-  res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+  // res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.VITE_CLIENT_URL || "http://localhost:5173",
+  );
 
   // 2. Allow the headers your XHR request is sending
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Origin, Content-Type, Authorization",
   );
 
   // 3. Allow the POST method
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+  );
 
   // 4. CRITICAL: If it's the preflight OPTIONS request, kill it here with a 200 OK!
   if (req.method === "OPTIONS") {
