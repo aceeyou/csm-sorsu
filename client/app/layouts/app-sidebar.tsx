@@ -25,7 +25,7 @@ export default function AppSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(state === "collapsed")
   return (
     <>
-      <Sidebar collapsible="icon" className="bg-white p-2">
+      <Sidebar collapsible="icon" className="bg-white p-2 pt-4">
         <SidebarHeader className="-p-2 bg-white">
           <SidebarMenu className="">
             <SidebarMenuItem>
