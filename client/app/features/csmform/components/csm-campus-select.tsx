@@ -2,6 +2,7 @@ import axios from "axios"
 import { ChevronDown } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -30,17 +31,19 @@ function CSMCampusSelect({ campus, setCampus }: PropType) {
 
   useEffect(() => {
     fetchCampuses()
-  }, [])
+  }, [campus])
 
   async function fetchCampuses() {
     const token = localStorage.getItem("token")
 
     try {
-      const res = await axios.get("/api/campus/list", {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await apiClient.get("/api/campus/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
       if (res.status === 200) {
-        // console.log(res.data.listOfCampuses)
         setCampusList([...res.data.listOfCampuses])
       }
     } catch (error: any) {

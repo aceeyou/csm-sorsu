@@ -2,6 +2,7 @@ import axios from "axios"
 import { ChevronDown } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -51,7 +52,7 @@ function CSMOfficesSelect({ campus, office, setOffice }: PropType) {
   async function fetchOffices() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get(`/api/offices/list/${campus}`, {
+      const res = await apiClient.get(`/api/offices/list/${campus}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 

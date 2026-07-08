@@ -16,6 +16,7 @@ import {
 import CSMServicesSelect from "./csm-services-select"
 import axios from "axios"
 import { Label } from "~/components/ui/label"
+import { apiClient } from "~/api/client"
 
 const defaultServices = [
   "Enrollment",
@@ -265,7 +266,7 @@ export default function AvailedServices({
   async function fetchServices() {
     const token = localStorage.getItem("token")
     try {
-      const res = await axios.get(`/api/services/${office.type}`, {
+      const res = await apiClient.get(`/api/services/${office.type}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (res.status === 200) {
