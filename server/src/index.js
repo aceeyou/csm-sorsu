@@ -53,6 +53,8 @@ app.use((req, res, next) => {
     "GET, POST, PATCH, PUT, DELETE, OPTIONS",
   );
 
+  res.header("HTTP/1.1 200 OK");
+
   // 4. CRITICAL: If it's the preflight OPTIONS request, kill it here with a 200 OK!
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
