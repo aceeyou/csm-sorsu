@@ -22,17 +22,17 @@ import serviceRouter from "./routes/Service.routes.js";
 const app = express();
 dotenv.config();
 
-// const corsOptions = {
-//   origin: "https://csm-sorsu.vercel.app",
-//   // Explicitly allow the methods your frontend will use
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   // Allow custom headers like Content-Type (JSON) or Authorization (JWT tokens)
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   // CRITICAL: Forces Express to respond to OPTIONS requests with a 200 OK status
-//   optionsSuccessStatus: 200,
-// };
+const corsOptions = {
+  origin: process.env.VITE_CLIENT_URL || "http://localhost:5173",
+  // Explicitly allow the methods your frontend will use
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+  // Allow custom headers like Content-Type (JSON) or Authorization (JWT tokens)
+  allowedHeaders: ["Origin", "Content-Type", "Authorization"],
+  // CRITICAL: Forces Express to respond to OPTIONS requests with a 200 OK status
+  optionsSuccessStatus: 200,
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
   // 1. Allow the origin making the request
   // res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
