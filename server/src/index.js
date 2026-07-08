@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 
   // 4. CRITICAL: If it's the preflight OPTIONS request, kill it here with a 200 OK!
   if (req.method === "OPTIONS") {
-    return res.status(200).json({});
+    return res.sendStatus(200);
   }
 
   // 5. Pass normal requests (GET, POST) onwards
