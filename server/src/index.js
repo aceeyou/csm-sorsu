@@ -65,9 +65,9 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.use("/", (req, res) => {
-  res.send("CSMSorSU API is running! 🚀");
-});
+// app.use("/", (req, res) => {
+//   res.send("CSMSorSU API is running! 🚀");
+// });
 
 // Register, Login amd User Infor endpoints
 app.use("/api/auth", authRouter);
