@@ -32,7 +32,8 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Enable pre-flight for all routes
 app.use((req, res, next) => {
   // 1. Allow the origin making the request
   // res.header("Access-Control-Allow-Origin", "https://csm-sorsu.vercel.app");
