@@ -100,20 +100,41 @@ app.post("/api/postcsmresponse", verification, async (req, res) => {
 });
 
 // Spreadsheet | Campuses
-// app.use("/campuses", (req, res) => {
-//   try {
-//     const campuses = sheets.spreadsheets.values
-//       .get({
-//         spreadsheetId: process.env.SPREADSHEET_ID,
-//         range: "CAMPUSES!A2:A",
-//       })
-//       .then((response) => {
-//         console.log(response.data?.values);
-//       });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+app.use("/api/gettotalresponses", (req, res) => {
+  try {
+    const campuses = sheets.spreadsheets.values
+      .get({
+        spreadsheetId: process.env.SPREADSHEET_ID,
+        range: "SUMMARY!B57:B57",
+      })
+      .then((response) => {
+        // console.log(response.data?.values[0][0]);
+        return res
+          .status(200)
+          .json({ totalResponses: response.data?.values[0][0] });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.use("/api/overallratingsqd0", (req, res) => {
+  try {
+    const overallRatings = sheets.spreadsheets.values
+      .get({
+        spreadsheetId: process.env.SPREADSHEET_ID,
+        range: "SUMMARY!AS59:AS59",
+      })
+      .then((response) => {
+        // console.log(response.data?.values[0][0]);
+        return res
+          .status(200)
+          .json({ overallRatingSQD0: response.data?.values[0][0] });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 connectDB();
 app.listen(1337, (req, res) => {

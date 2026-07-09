@@ -1,5 +1,4 @@
-import axios from "axios"
-import { SquarePen, ToggleLeft, ToggleRight } from "lucide-react"
+import { SquarePen, ToggleLeft, ToggleRight, UserKey } from "lucide-react"
 import { useEffect, useState } from "react"
 import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
@@ -28,15 +27,23 @@ function TableRowComponent({
   listItem,
   handleToggleEmailPrivelages,
   handleUpdateEmailAddress,
+  handleUpdateUserRole,
   disabled,
 }: {
-  listItem: { email: string; authorized: boolean; _id: string }
+  listItem: {
+    email: string
+    authorized: boolean
+    _id: string
+    role: string
+  }
   handleToggleEmailPrivelages: (id: string, emailAddress: string) => void
   handleUpdateEmailAddress: (id: string, newEmail: string) => void
+  handleUpdateUserRole: (id: string, newRole: string) => void
   disabled: boolean
 }) {
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false)
   const [updateEmailOpen, setUpdateEmailOpen] = useState(false)
+  const [updateRoleOpen, setUpdateRoleOpen] = useState(false)
   const [newEmail, setNewEmail] = useState(listItem.email)
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null)
   const [checkingEmail, setCheckingEmail] = useState(false)
@@ -78,11 +85,18 @@ function TableRowComponent({
       <TableCell className={`${disabled ? "text-gray-400" : ""}`}>
         {listItem.email}
       </TableCell>
-      <TableCell className="">
+      <TableCell className="place-items-center">
         <p
-          className={`rounded-xl px-3 py-1 text-center font-medium text-white ${listItem.authorized ? "bg-green-500/80" : "bg-red-500/80"}`}
+          className={`w-15 rounded-md px-2 py-1 text-center font-medium ${listItem.authorized ? "" : "bg-red-800/80 text-white"}`}
         >
           {listItem.authorized ? "Yes" : "No"}
+        </p>
+      </TableCell>
+      <TableCell className={`place-items-center`}>
+        <p
+          className={`text-centerm w-min ${listItem.role === "admin" && "rounded-md bg-gray-200 px-3 py-1"}`}
+        >
+          {listItem.role === "admin" ? "ADMIN" : "USER"}
         </p>
       </TableCell>
       <TableCell className="flex justify-end gap-2">
@@ -100,7 +114,7 @@ function TableRowComponent({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{disabled ? "Own email" : "Update email permission"}</p>
+              <p>{disabled ? "Your email" : "Update email permission"}</p>
             </TooltipContent>
           </Tooltip>
           <DialogContent showCloseButton={false}>
@@ -126,6 +140,57 @@ function TableRowComponent({
                 onClick={() => {
                   handleToggleEmailPrivelages(listItem._id, listItem.email)
                   setUpdateDialogOpen(false)
+                }}
+              >
+                Confirm Changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={updateRoleOpen} onOpenChange={setUpdateRoleOpen}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon-lg"
+                onClick={() => setUpdateRoleOpen(true)}
+                disabled={disabled}
+                className={disabled ? "cursor-not-allowed" : ""}
+              >
+                <UserKey />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Switch User Role</p>
+            </TooltipContent>
+          </Tooltip>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="font-semibold">
+                Confirm User Role Change
+              </DialogTitle>
+              <DialogDescription>
+                Review and confirm the update to the user role settings.
+                <br /> This action will grant the user{" "}
+                <span className="font-semibold">
+                  {" "}
+                  "{listItem.role === "admin" ? "USER" : "ADMIN"}"{" "}
+                </span>
+                access to the <br /> Online SorSU CART web app.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-2">
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button
+                onClick={() => {
+                  handleUpdateUserRole(
+                    listItem._id,
+                    listItem.role === "admin" ? "user" : "admin"
+                  )
+                  setUpdateRoleOpen(false)
                 }}
               >
                 Confirm Changes

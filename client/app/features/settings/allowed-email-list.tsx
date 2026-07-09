@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import axios from "axios"
 import { Link } from "react-router"
 import { Separator } from "~/components/ui/separator"
 import { toast } from "sonner"
@@ -22,7 +21,7 @@ function AllowedEmailList() {
   const { data, error } = useFetchUser()
   const [token, setToken] = useState("")
   const [listOfEmails, setListOfEmails] = useState([
-    { _id: "", email: "", authorized: false },
+    { _id: "", email: "", authorized: false, role: "user" },
   ])
 
   useEffect(() => {
@@ -31,6 +30,10 @@ function AllowedEmailList() {
 
   useEffect(() => {
     if (data?.role === "admin") {
+      fetchAllowedEmails()
+    }
+
+    return () => {
       fetchAllowedEmails()
     }
   }, [data])
@@ -45,7 +48,7 @@ function AllowedEmailList() {
       // console.log(res.data)
       setListOfEmails([...res?.data?.emails])
     } catch (error) {
-      setListOfEmails([{ _id: "", email: "", authorized: false }])
+      setListOfEmails([{ _id: "", email: "", authorized: false, role: "user" }])
       console.log(error)
     }
   }
@@ -76,6 +79,8 @@ function AllowedEmailList() {
       toast.success(res.data.message)
     } catch (error) {
       toast.error("Error toggling email privileges")
+    } finally {
+      fetchAllowedEmails()
     }
   }
 
@@ -97,6 +102,33 @@ function AllowedEmailList() {
       toast.success(res.data.message)
     } catch (error) {
       toast.error("Error updating email address")
+    } finally {
+      fetchAllowedEmails()
+    }
+  }
+
+  async function handleUpdateUserRole(emailID: string, newRole: string) {
+    try {
+      console.log(`${emailID} ${newRole}`)
+      const token = localStorage.getItem("token")
+      const res = await apiClient.post(
+        "/api/emails/updateuserrole",
+        {
+          id: emailID,
+          role: newRole,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.error("Error updating user role")
+    } finally {
+      fetchAllowedEmails()
     }
   }
 
@@ -127,9 +159,12 @@ function AllowedEmailList() {
             <Table className="">
               <TableHeader>
                 <TableRow className="w-full text-[0.7rem] font-normal">
-                  <TableHead className="w-[70%]">Email</TableHead>
-                  <TableHead className="w-[10%]">Authorized</TableHead>
-                  <TableHead className="w-[20%] text-end">Actions</TableHead>
+                  <TableHead className="w-[50%]">Email</TableHead>
+                  <TableHead className="w-[20%] text-center">
+                    Authorized
+                  </TableHead>
+                  <TableHead className="w-[20%] text-center">Role</TableHead>
+                  <TableHead className="w-min text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -140,6 +175,7 @@ function AllowedEmailList() {
                       listItem={listItem}
                       handleToggleEmailPrivelages={handleToggleEmailPrivelages}
                       handleUpdateEmailAddress={handleUpdateEmailAddress}
+                      handleUpdateUserRole={handleUpdateUserRole}
                       disabled={listItem.email === data.email}
                     />
                   ))

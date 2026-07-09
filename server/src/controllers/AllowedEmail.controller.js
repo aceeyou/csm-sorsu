@@ -5,7 +5,7 @@ export async function GetAllowedEmail(req, res) {
   try {
     // Get the list of allowed email
     const listOfEmails = await AllowedEmail.find().select(
-      "_id email authorized",
+      "_id email authorized role",
     );
     return res.status(200).json({ emails: [...listOfEmails] });
   } catch (error) {
@@ -13,8 +13,50 @@ export async function GetAllowedEmail(req, res) {
   }
 }
 
+export async function UpdateUserRole(req, res) {
+  const { id, role } = req.body;
+  try {
+    if (!id || role === undefined)
+      return res.status(400).json({
+        message: "Please provide the email address and the new role",
+      });
+
+    const allowedEmail = await AllowedEmail.findOne({ _id: id });
+    if (!allowedEmail)
+      return res.status(400).json({
+        message: "Email does not exist the on system. Please try again",
+      });
+
+    const userInfo = await User.findOne({ email: allowedEmail.email });
+    if (!userInfo) {
+      // console.log("Can't find user with email ", allowedEmail.email);
+      return res.status(400).json({ message: "Account does not exist" });
+    }
+
+    await User.updateOne(
+      { email: allowedEmail.email },
+      {
+        $set: {
+          role: role,
+        },
+      },
+    );
+
+    await AllowedEmail.updateOne(
+      { _id: allowedEmail._id },
+      { $set: { role: role } },
+    );
+
+    return res.status(201).json({
+      message: `Successfully updated the role of ${allowedEmail.email} to ${role}`,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function AddAllowedEmail(req, res) {
-  const { email } = req.body;
+  const { email, addAsAdmin } = req.body;
 
   try {
     // Checks is the system sent the email address to be verified
@@ -40,8 +82,9 @@ export async function AddAllowedEmail(req, res) {
     const newAllowedEmail = await AllowedEmail.create({
       email,
       authorized: true,
+      role: addAsAdmin ? "admin" : "user",
     });
-    console.log("new allowed email: ", newAllowedEmail);
+    // console.log("new allowed email: ", newAllowedEmail);
     return res.status(201).json({
       id: newAllowedEmail._id,
       email: newAllowedEmail.email,
@@ -83,7 +126,7 @@ export async function ToggleEmailPrivelages(req, res) {
 
     const userInfo = await User.findOne({ email });
     if (!userInfo) {
-      console.log("Can't find user with email ", email);
+      // console.log("Can't find user with email ", email);
       return res.status(400).json({ message: "Account does not exist" });
     }
 

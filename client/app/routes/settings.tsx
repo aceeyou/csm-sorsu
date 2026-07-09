@@ -14,10 +14,17 @@ import {
 } from "~/components/ui/dialog"
 import { Button } from "~/components/ui/button"
 import { useState } from "react"
+import { useFetchUser } from "~/hooks/use-fetchUser"
 
 function Settings() {
+  const { data, error } = useFetchUser()
   const navigate = useNavigate()
   const [showlogoutDialog, setShowLogoutDialog] = useState(false)
+
+  if (!data) {
+    navigate("/login")
+  }
+
   const handleLogOut = () => {
     localStorage.removeItem("token")
     navigate("/login")

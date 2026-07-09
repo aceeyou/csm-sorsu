@@ -22,7 +22,6 @@ import {
 
 export default function AppSidebar() {
   const { state } = useSidebar()
-  const [isCollapsed, setIsCollapsed] = useState(state === "collapsed")
   return (
     <>
       <Sidebar collapsible="icon" className="bg-white p-2 pt-4">
@@ -48,6 +47,9 @@ export default function AppSidebar() {
                       className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                     >
                       <House
+                        strokeWidth={
+                          state === "collapsed" && isActive ? 2.5 : 2
+                        }
                         size={18}
                         color={
                           state === "collapsed" && isActive
@@ -77,6 +79,9 @@ export default function AppSidebar() {
                       className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                     >
                       <File
+                        strokeWidth={
+                          state === "collapsed" && isActive ? 2.5 : 2
+                        }
                         size={18}
                         color={
                           state === "collapsed" && isActive
@@ -110,6 +115,9 @@ export default function AppSidebar() {
                       className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                     >
                       <Building2
+                        strokeWidth={
+                          state === "collapsed" && isActive ? 2.5 : 2
+                        }
                         size={18}
                         color={
                           state === "collapsed" && isActive
@@ -143,6 +151,9 @@ export default function AppSidebar() {
                       className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                     >
                       <Briefcase
+                        strokeWidth={
+                          state === "collapsed" && isActive ? 2.5 : 2
+                        }
                         size={18}
                         color={
                           state === "collapsed" && isActive
@@ -179,6 +190,9 @@ export default function AppSidebar() {
                       className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                     >
                       <CogIcon
+                        strokeWidth={
+                          state === "collapsed" && isActive ? 2.5 : 2
+                        }
                         size={18}
                         color={
                           state === "collapsed" && isActive

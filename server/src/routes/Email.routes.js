@@ -5,6 +5,7 @@ import {
   ToggleEmailPrivelages,
   UpdateEmailAddress,
   EmailAvailability,
+  UpdateUserRole,
 } from "../controllers/AllowedEmail.controller.js";
 import { authorize, verification } from "../middleware/auth.js";
 
@@ -39,6 +40,12 @@ emailRouter.post(
   verification,
   authorize(["admin"]),
   EmailAvailability,
+);
+emailRouter.post(
+  "/updateuserrole",
+  verification,
+  authorize(["admin"]),
+  UpdateUserRole,
 );
 
 export default emailRouter;

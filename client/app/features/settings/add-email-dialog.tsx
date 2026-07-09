@@ -6,6 +6,7 @@ import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -30,6 +31,7 @@ function AddEmailDialog({
   const [dialogToggle, setDialogToggle] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [addAsAdmin, setAddAsAdmin] = useState(false)
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -37,7 +39,7 @@ function AddEmailDialog({
     try {
       const res = await apiClient.post(
         "/api/emails/addemail",
-        { email: newEmail },
+        { email: newEmail, addAsAdmin },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -108,6 +110,17 @@ function AddEmailDialog({
                 placeholder="juan@email.com"
                 onChange={(e) => setNewEmail(e.target.value)}
               />
+            </Field>
+            <Field orientation="horizontal">
+              <Checkbox
+                checked={addAsAdmin}
+                id="addAsAdmin"
+                name="addAsAdmin"
+                onCheckedChange={(checked) => setAddAsAdmin(!!checked)}
+              />
+              <Label htmlFor="addAsAdmin" className="font-normal">
+                Add as Admin
+              </Label>
             </Field>
           </FieldGroup>
           <DialogFooter className="mt-4">

@@ -23,12 +23,20 @@ import ServiceList from "~/features/services/components/services-service-list"
 import UpdateOfficeType from "~/features/services/update-dialog"
 import { Spinner } from "~/components/ui/spinner"
 import { apiClient } from "~/api/client"
+import { useFetchUser } from "~/hooks/use-fetchUser"
+import { useNavigate } from "react-router"
 
 function Services() {
+  const { data, error } = useFetchUser()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [officeTypes, setOfficeTypes] = useState([
     { _id: "", type: "", isActive: false },
   ])
+
+  if (!data) {
+    navigate("/login")
+  }
 
   useEffect(() => {
     fetchOfficeTypes()
