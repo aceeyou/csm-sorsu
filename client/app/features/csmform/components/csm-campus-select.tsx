@@ -67,7 +67,7 @@ function CSMCampusSelect({ campus, setCampus }: PropType) {
             {campus.campus ? (
               <span className="truncate">{campus.campus}</span>
             ) : (
-              "Select Office Visited..."
+              "Select Campus..."
             )}
             <ChevronDown size={18} />
           </Button>

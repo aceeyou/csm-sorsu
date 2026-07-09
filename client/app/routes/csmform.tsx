@@ -10,16 +10,22 @@ import { Button } from "~/components/ui/button"
 import { Spinner } from "~/components/ui/spinner"
 import LeftPanel from "~/features/csmform/left-panel"
 import RightPanel from "~/features/csmform/right-panel"
+import { useFetchUser } from "~/hooks/use-fetchUser"
 
 export default function CSMForm() {
   const methods = useForm()
-  const [error, setError] = useState("")
+  const [errorState, setError] = useState("")
+  const { data, error } = useFetchUser()
   // const [downloading, setDownloading] = useState(false)
   const [user, setUser] = useState({
     name: "",
     email: "",
   })
   const navigate = useNavigate()
+
+  if (!data) {
+    navigate("/login")
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token")

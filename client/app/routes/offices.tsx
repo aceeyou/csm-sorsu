@@ -1,6 +1,7 @@
 import axios from "axios"
 import { Plus, Search } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { apiClient } from "~/api/client"
 import CustomSidebar from "~/components/custom-sidebar"
@@ -33,8 +34,11 @@ import {
 import DeleteOfficeDialog from "~/features/office/components/delete-office-dialog"
 import EditOfficeDialog from "~/features/office/components/edit-office-dialog"
 import OfficeForm from "~/features/office/office-form"
+import { useFetchUser } from "~/hooks/use-fetchUser"
 
 function Offices() {
+  const { data, error } = useFetchUser()
+  const navigate = useNavigate()
   const [openAddOfficeDialog, setOpenAddOfficeDialog] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [query, setQuery] = useState("")
@@ -60,6 +64,10 @@ function Offices() {
       type: "",
     },
   ])
+
+  if (!data) {
+    navigate("/login")
+  }
 
   useEffect(() => {
     // const token = localStorage.getItem("token")
@@ -212,7 +220,7 @@ function Offices() {
             onOpenChange={setOpenAddOfficeDialog}
           >
             <DialogTrigger asChild>
-              <Button onClick={handleFetchListsToAddOffice}>
+              <Button className="h-8" onClick={handleFetchListsToAddOffice}>
                 <Plus />
                 Add Office
               </Button>

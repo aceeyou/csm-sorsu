@@ -51,7 +51,7 @@ export async function RegisterUser(req, res) {
       name,
       email,
       password,
-      role: "user",
+      role: isEmailAllowed.role || "user",
       active: true,
     });
     const token = await generateToken(user._id);

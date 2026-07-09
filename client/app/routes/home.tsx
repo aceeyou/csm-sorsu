@@ -3,17 +3,49 @@ import { useFetchUser } from "~/hooks/use-fetchUser"
 import { Skeleton } from "~/components/ui/skeleton"
 import CustomSidebar from "~/components/custom-sidebar"
 import { toast } from "sonner"
+import { apiClient } from "~/api/client"
+import { useEffect, useState } from "react"
+import { HeartPulse, SquareLibrary } from "lucide-react"
 // import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 
 export default function Home() {
   const { data, error } = useFetchUser()
+  const [totalResponses, setTotalResponses] = useState<number | null>(null)
+  const [overallRatingSQD0, setOverallRatingSQD0] = useState<number | null>(
+    null
+  )
   const navigate = useNavigate()
+
+  useEffect(() => {
+    GetTotalCSMResponses()
+    GetOverallRatingSQD0()
+  }, [])
 
   if (!data) {
     navigate("/login")
   }
 
   if (error) toast.error(error)
+
+  async function GetTotalCSMResponses() {
+    try {
+      const res = await apiClient.get("/api/gettotalresponses")
+      // console.log(res.data.totalResponses)
+      setTotalResponses(res.data.totalResponses)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function GetOverallRatingSQD0() {
+    try {
+      const res = await apiClient.get("/api/overallratingsqd0")
+      // console.log(res.data.overallRatingSQD0)
+      setOverallRatingSQD0(res.data.overallRatingSQD0)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -53,8 +85,42 @@ export default function Home() {
                 </p>
               </CardContent>
             </Card> */}
-            <Skeleton className="rounded-md bg-gray-200" />
-            <Skeleton className="rounded-md bg-gray-200" />
+            <div className="flex h-30 flex-col justify-between rounded-xl border px-4 py-3">
+              <h2 className="flex items-center justify-between text-[0.7rem] text-gray-900">
+                Total CSM Responses for {new Date().getFullYear()}
+                <span>
+                  <SquareLibrary size={18} />
+                </span>
+              </h2>
+              <div>
+                <p
+                  className="font-['Bowlby One'] -mb-0.5 text-4xl text-gray-900"
+                  style={{ fontFamily: "'Bowlby One', sans-serif" }}
+                >
+                  {(Number(totalResponses) || 0).toLocaleString()}
+                </p>
+                <p className="leading-0.2 truncate text-[0.65rem] text-gray-400">
+                  vs 0000 collected responses during the previous year
+                </p>
+              </div>
+            </div>
+            <div className="flex h-30 flex-col justify-between rounded-xl border px-4 py-3">
+              <h2 className="flex items-center justify-between text-[0.7rem] text-gray-900">
+                Overall Rating (SQD0) for {new Date().getFullYear()}
+                <HeartPulse size={18} />
+              </h2>
+              <div>
+                <p
+                  className="font-['Bowlby One'] -mb-0.5 text-4xl text-gray-900"
+                  style={{ fontFamily: "'Bowlby One', sans-serif" }}
+                >
+                  {(Number(overallRatingSQD0) || 0).toLocaleString()} %
+                </p>
+                <p className="leading-0.2 truncate text-[0.65rem] text-gray-400">
+                  vs 00.00 % collected responses during the previous year
+                </p>
+              </div>
+            </div>
             <Skeleton className="rounded-md bg-gray-200" />
           </div>
           <div className="mt-5 grid w-full grid-cols-2 gap-4">
