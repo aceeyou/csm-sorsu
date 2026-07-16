@@ -18,6 +18,7 @@ import campusRouter from "./routes/Campus.routes.js";
 import typesRouter from "./routes/TypesOfOffices.routes.js";
 import officeRouter from "./routes/Office.routes.js";
 import serviceRouter from "./routes/Service.routes.js";
+import tallyRouter from "./routes/Tally.routes.js";
 
 const app = express();
 dotenv.config();
@@ -78,6 +79,7 @@ app.use("/api/emails", verification, emailRouter);
 
 app.use("/api/campus", verification, campusRouter);
 app.use("/api/officetype", typesRouter);
+app.use("/api/tally", verification, tallyRouter);
 app.use("/api/offices", verification, officeRouter);
 app.use("/api/services", serviceRouter);
 

@@ -137,11 +137,53 @@ export default function CSMForm() {
     // Console log what is being sent to the database/spreadsheet
     // console.log(methods.getValues())
     // return
+    const token = localStorage.getItem("token")
 
     // traverse through the service/s availed by the client
     for (let index = 0; index < listOfServicesAvailed.length; index++) {
       try {
-        await fetch("https://csm-sorsu-server.vercel.app/postcsmresponse", {
+        // await apiClient.post(
+        //   "/api/tally/post",
+        //   {
+        //     tallyData: {
+        //       // timestamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+        //       campus: methods.getValues("campus") || "",
+        //       office: office || "",
+        //       service: listOfServicesAvailed[index] || "",
+        //       date:
+        //         new Date(
+        //           methods.getValues("dateCollected")
+        //         ).toLocaleDateString() || "",
+        //       citizenType: methods.getValues("citizenType") || "",
+        //       clientAge: methods.getValues("clientAge") || "",
+        //       clientSex: methods.getValues("clientSex") || "",
+        //       cc1: cc[0] || "",
+        //       cc2: cc[1] || "",
+        //       cc3: cc[2] || "",
+        //       sqd0: sqd[0] || "",
+        //       sqd1: sqd[1] || "",
+        //       sqd2: sqd[2] || "",
+        //       sqd3: sqd[3] || "",
+        //       sqd4: sqd[4] || "",
+        //       sqd5: sqd[5] || "",
+        //       sqd6: sqd[6] || "",
+        //       sqd7: sqd[7] || "",
+        //       sqd8: sqd[8] || "",
+        //       dissastifactionReason:
+        //         methods.getValues("dissatisfactionReason") || "",
+        //       feedbackSuggestions:
+        //         methods.getValues("feedbackSuggestions") || "",
+        //       // TODO : Determine if the last three properties are necessary in recording the CSM Responses
+        //       // controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-${Date.now()}${Math.random().toString(36).slice(2, 9)}`,
+        //     },
+        //   },
+        //   {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //     },
+        //   }
+        // )
+        await fetch("https://api-csm-sorsu.onrender.com/postcsmresponse", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

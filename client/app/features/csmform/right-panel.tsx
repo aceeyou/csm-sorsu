@@ -12,7 +12,7 @@ export default function RightPanel() {
   } = useFormContext()
   const [sqd, setSQD] = useState<(string | boolean)[]>([])
   const [switchSQDValues, setSwitchSQDValues] = useState<"on" | "off">("off")
-  const [columnSelected, setColumnSelected] = useState<number>(-1 || null)
+  const [columnSelected, setColumnSelected] = useState<number>(-1)
 
   useEffect(() => {
     if (isSubmitSuccessful && switchSQDValues === "off") {
