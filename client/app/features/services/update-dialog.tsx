@@ -25,6 +25,7 @@ import {
 } from "~/components/ui/input-group"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
+import { useFetchUser } from "~/hooks/use-fetchUser"
 
 type AddOfficeProps = {
   officeType: {
@@ -45,6 +46,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
   const [error, setError] = useState("")
   const [typeChanged, setTypeChanged] = useState(false)
   const [servicesChanged, setServicesChanged] = useState(false)
+  const { data } = useFetchUser()
 
   useEffect(() => {
     setServicesChanged(false)
@@ -55,6 +57,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
   }, [setNewServiceItem])
 
   async function handleUpdateOfficeType() {
+    if (data.role !== "admin") return toast.error("Not Authorized")
     if (!typeChanged) {
       handleUpdateServiceRelatedToOfficeType()
       return
@@ -84,7 +87,10 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
   }
 
   async function handleUpdateServiceRelatedToOfficeType() {
+    if (data.role !== "admin") return toast.error("Not Authorized")
+
     const token = localStorage.getItem("token")
+
     // setLoading(true)
     try {
       // Creates a new list if the office type doesn't have an existing list of services
@@ -169,7 +175,7 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
 
   const handleAddNewServiceItem = () => {
     if (newServiceItem === "") return
-    setServiceList((cur) => [...cur, newServiceItem])
+    setServiceList((currentServices) => [...currentServices, newServiceItem])
     setNewServiceItem("")
     setServicesChanged(true)
   }
@@ -183,123 +189,119 @@ function UpdateOfficeType({ officeType, fetchOfficeTypes }: AddOfficeProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <form onSubmit={handleUpdateOfficeType}>
-        <DialogTrigger asChild>
-          <Button
-            onClick={fetchOfficeTypeServices}
-            variant={"outline"}
-            className="h-8"
-            type="button"
-          >
-            <SquarePen />
-          </Button>
-        </DialogTrigger>
-        <DialogContent showCloseButton={false} className="">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              <SquarePen size={16} />
-              Edit Office Type
-            </DialogTitle>
-            <DialogDescription>
-              Update the office type details. Avoid using
-              <em>"/"</em> in renaming the office type to prevent system errors
-            </DialogDescription>
-          </DialogHeader>
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>Failed to update office type</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
+      <DialogTrigger asChild>
+        <Button
+          onClick={fetchOfficeTypeServices}
+          variant={"outline"}
+          className="h-8"
+          type="button"
+        >
+          <SquarePen />
+        </Button>
+      </DialogTrigger>
+      <DialogContent showCloseButton={false} className="">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-lg">
+            <SquarePen size={16} />
+            Edit Office Type
+          </DialogTitle>
+          <DialogDescription>
+            Update the office type details. Avoid using
+            <em>"/"</em> in renaming the office type to prevent system errors
+          </DialogDescription>
+        </DialogHeader>
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>Failed to update office type</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        <FieldGroup>
+          <Field>
+            <Label htmlFor="newEmail">
+              Office Type <FieldRequired />
+            </Label>
+            <Input
+              className="h-8"
+              id="officeType"
+              name="officeType"
+              value={newOfficeType}
+              required
+              placeholder="cashier"
+              onChange={(e) => {
+                setTypeChanged(true)
+                setNewOfficeType(e.target.value)
+              }}
+            />
+          </Field>
+        </FieldGroup>
+        <FieldGroup className="mt-2">
+          <Field>
+            <Label htmlFor="relatedServices">Related Services</Label>
+          </Field>
+          {fetchLoading ? (
+            <span>
+              <Spinner /> Loading...
+            </span>
+          ) : serviceList.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-1">
+              {serviceList.map((service) => (
+                <Button
+                  key={service}
+                  onClick={() => handleRemoveServiceItemFromList(service)}
+                  className="max-w-80 rounded-lg px-3 py-1"
+                >
+                  <span className="truncate text-left!">{service}</span>
+                </Button>
+              ))}
+            </div>
+          ) : (
+            <span className="flex justify-center text-gray-400">
+              No services found.
+            </span>
           )}
-          <form method="POST">
-            <FieldGroup>
-              <Field>
-                <Label htmlFor="newEmail">
-                  Office Type <FieldRequired />
-                </Label>
-                <Input
-                  className="h-8"
-                  id="officeType"
-                  name="officeType"
-                  value={newOfficeType}
-                  required
-                  placeholder="cashier"
-                  onChange={(e) => {
-                    setTypeChanged(true)
-                    setNewOfficeType(e.target.value)
-                  }}
-                />
-              </Field>
-            </FieldGroup>
-            <FieldGroup className="mt-2">
-              <Field>
-                <Label htmlFor="relatedServices">Related Services</Label>
-              </Field>
-              {fetchLoading ? (
-                <span>
-                  <Spinner /> Loading...
-                </span>
-              ) : serviceList.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-1">
-                  {serviceList.map((service) => (
-                    <Button
-                      key={service}
-                      onClick={() => handleRemoveServiceItemFromList(service)}
-                      className="max-w-80 rounded-lg px-3 py-1"
-                    >
-                      <span className="truncate text-left!">{service}</span>
-                    </Button>
-                  ))}
-                </div>
-              ) : (
-                <span className="flex justify-center text-gray-400">
-                  No services found.
-                </span>
-              )}
-              <InputGroup className="h-8">
-                <InputGroupInput
-                  value={newServiceItem}
-                  placeholder="Payment"
-                  onChange={(e) => setNewServiceItem(e.target.value)}
-                  onKeyDown={handleKeyDownNewServiceItem}
-                  className=""
-                />
-                <InputGroupAddon align={"inline-end"}>
-                  <Button
-                    variant={"ghost"}
-                    className="bg-gray-200 hover:bg-gray-300"
-                    onClick={handleAddNewServiceItem}
-                  >
-                    <Plus />
-                    Add
-                  </Button>
-                </InputGroupAddon>
-              </InputGroup>
-            </FieldGroup>
-          </form>
-          <DialogFooter className="mt-4">
-            <DialogClose asChild>
+          <InputGroup className="h-8">
+            <InputGroupInput
+              value={newServiceItem}
+              placeholder="Payment"
+              onChange={(e) => setNewServiceItem(e.target.value)}
+              onKeyDown={handleKeyDownNewServiceItem}
+              className=""
+            />
+            <InputGroupAddon align={"inline-end"}>
               <Button
-                onClick={() => handleDialogClose()}
-                className="h-8"
-                type="button"
-                variant="outline"
+                variant={"ghost"}
+                className="bg-gray-200 hover:bg-gray-300"
+                onClick={handleAddNewServiceItem}
               >
-                Cancel
+                <Plus />
+                Add
               </Button>
-            </DialogClose>
+            </InputGroupAddon>
+          </InputGroup>
+        </FieldGroup>
+        <DialogFooter className="mt-4">
+          <DialogClose asChild>
             <Button
-              type="submit"
-              className="h-8 px-3"
-              onClick={handleUpdateOfficeType}
+              onClick={() => handleDialogClose()}
+              className="h-8"
+              type="button"
+              variant="outline"
             >
-              {loading ? <Spinner /> : null}
-              Update Office Type
+              Cancel
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button
+            type="submit"
+            className="h-8 px-3"
+            onClick={handleUpdateOfficeType}
+          >
+            {loading ? <Spinner /> : null}
+            Update Office Type
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }

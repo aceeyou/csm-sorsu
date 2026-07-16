@@ -63,7 +63,6 @@ function AuthForm() {
       // console.log("auth: ", res)
 
       if (res.status === 400) {
-        console.log(res.data.message)
         setError({
           title: "Login Failed",
           message:
@@ -98,17 +97,17 @@ function AuthForm() {
             </FieldLabel>
             <FieldDescription className="">
               Welcome back, CART Member! Please login
+            </FieldDescription>
+            <FieldGroup className="">
               {error.message && (
                 <>
-                  <Alert variant="destructive" className="mt-4">
+                  <Alert variant="destructive" className="mt-2">
                     <AlertCircleIcon />
                     <AlertTitle>{error.title}</AlertTitle>
                     <AlertDescription>{error.message}</AlertDescription>
                   </Alert>
                 </>
               )}
-            </FieldDescription>
-            <FieldGroup className="">
               <FieldLabel htmlFor="email" className="-mb-2">
                 Email <FieldRequired />
               </FieldLabel>

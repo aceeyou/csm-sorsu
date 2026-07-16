@@ -23,8 +23,14 @@ export default function CSMForm() {
   })
   const navigate = useNavigate()
 
-  if (!data) {
+  if (error) toast.error(error)
+
+  if (!data || error) {
     navigate("/login")
+  }
+
+  if (data.role === "member") {
+    navigate("/")
   }
 
   useEffect(() => {

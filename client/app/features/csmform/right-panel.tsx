@@ -12,6 +12,7 @@ export default function RightPanel() {
   } = useFormContext()
   const [sqd, setSQD] = useState<(string | boolean)[]>([])
   const [switchSQDValues, setSwitchSQDValues] = useState<"on" | "off">("off")
+  const [columnSelected, setColumnSelected] = useState<number>(-1 || null)
 
   useEffect(() => {
     if (isSubmitSuccessful && switchSQDValues === "off") {
@@ -31,7 +32,15 @@ export default function RightPanel() {
   const sqdLabels = ["SQD", "SD", "D", "NDA", "A", "SA", "N/A"]
 
   const handleColumnClick = (index: number) => {
-    const newSQDArray = new Array(9).fill(sqdLabels[index])
+    let newSQDArray
+    setColumnSelected(index)
+
+    // handles deselection of column
+    if (columnSelected === index) {
+      newSQDArray = new Array(9).fill("")
+      setColumnSelected(-1)
+    } else newSQDArray = new Array(9).fill(sqdLabels[index])
+
     setSQD(newSQDArray)
   }
 

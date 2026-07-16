@@ -120,7 +120,7 @@ export async function UpdateOffice(req, res) {
 
     return res.status(200).json({ message: "Successfully updated ", office });
   } catch (error) {
-    console.log(erro);
+    console.log(error);
   }
 }
 
