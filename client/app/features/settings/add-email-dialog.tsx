@@ -1,4 +1,3 @@
-import axios from "axios"
 import { AlertCircleIcon, Plus } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -6,7 +5,6 @@ import { apiClient } from "~/api/client"
 import FieldRequired from "~/components/field-required"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Button } from "~/components/ui/button"
-import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -20,7 +18,9 @@ import {
 import { Field, FieldGroup } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Spinner } from "~/components/ui/spinner"
+import UserRoleRadio from "./components/user-role-radio"
 
 function AddEmailDialog({
   setListOfEmails,
@@ -31,7 +31,7 @@ function AddEmailDialog({
   const [dialogToggle, setDialogToggle] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [addAsAdmin, setAddAsAdmin] = useState(false)
+  const [role, setRole] = useState("member")
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -39,14 +39,13 @@ function AddEmailDialog({
     try {
       const res = await apiClient.post(
         "/api/emails/addemail",
-        { email: newEmail, addAsAdmin },
+        { email: newEmail, role: role },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       )
-      console.log(res.data)
       setLoading(false)
       setDialogToggle(false)
       setListOfEmails((prev) => [...prev, res.data])
@@ -71,75 +70,67 @@ function AddEmailDialog({
 
   return (
     <Dialog open={dialogToggle} onOpenChange={handleDialogClose}>
-      <form method="POST" onSubmit={handleSubmit}>
-        <DialogTrigger asChild>
-          <Button variant="outline" className="cursor-pointer" type="button">
-            <Plus /> Add an Email
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-lg">Add Email to the List</DialogTitle>
-            <DialogDescription>
-              Submit the new CART member's email address to add them to the
-              access list of the Online CSM Tally Application. This will allow
-              them to log in, submit the clients' responses, and access the
-              dashboard. Adding the email will automatically set the role to
-              "user". Only users with the "admin" role can add new emails to the
-              list.
-            </DialogDescription>
-          </DialogHeader>
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>Failed to add email</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="newEmail">
-                Email <FieldRequired />
-              </Label>
-              <Input
-                className="h-8"
-                id="newEmail"
-                name="newEmail"
-                value={newEmail}
-                required
-                placeholder="juan@email.com"
-                onChange={(e) => setNewEmail(e.target.value)}
-              />
-            </Field>
-            <Field orientation="horizontal">
-              <Checkbox
-                checked={addAsAdmin}
-                id="addAsAdmin"
-                name="addAsAdmin"
-                onCheckedChange={(checked) => setAddAsAdmin(!!checked)}
-              />
-              <Label htmlFor="addAsAdmin" className="font-normal">
-                Add as Admin
-              </Label>
-            </Field>
-          </FieldGroup>
-          <DialogFooter className="mt-4">
-            <DialogClose asChild>
-              <Button
-                onClick={() => setNewEmail("")}
-                type="button"
-                variant="outline"
-              >
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button type="submit" onClick={handleSubmit}>
-              {loading ? <Spinner /> : null}
-              Add Email
+      <DialogTrigger asChild>
+        <Button variant="outline" className="cursor-pointer" type="button">
+          <Plus /> Add an Email
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-lg">Add Email to the List</DialogTitle>
+          <DialogDescription>
+            Submit the new CART member's email address to add them to the access
+            list of the Online CSM Tally Application. This will allow them to
+            log in, submit the clients' responses, and access the dashboard.
+            Adding the email will automatically set the role to "user". Only
+            users with the "admin" role can add new emails to the list.
+          </DialogDescription>
+        </DialogHeader>
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>Failed to add email</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        <FieldGroup>
+          <Field>
+            <Label htmlFor="newEmail">
+              Email <FieldRequired />
+            </Label>
+            <Input
+              className="h-8"
+              id="newEmail"
+              name="newEmail"
+              value={newEmail}
+              required
+              placeholder="juan@email.com"
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="role">
+              Role <FieldRequired />
+            </Label>
+            <UserRoleRadio setRole={setRole} />
+          </Field>
+        </FieldGroup>
+        <DialogFooter className="mt-4">
+          <DialogClose asChild>
+            <Button
+              onClick={() => setNewEmail("")}
+              type="button"
+              variant="outline"
+            >
+              Cancel
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button type="submit" onClick={handleSubmit}>
+            {loading ? <Spinner /> : null}
+            Add Email
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }

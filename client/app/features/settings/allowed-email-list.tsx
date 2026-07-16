@@ -45,11 +45,9 @@ function AllowedEmailList() {
           Authorization: `Bearer ${token}`,
         },
       })
-      // console.log(res.data)
       setListOfEmails([...res?.data?.emails])
     } catch (error) {
       setListOfEmails([{ _id: "", email: "", authorized: false, role: "user" }])
-      console.log(error)
     }
   }
 
@@ -109,9 +107,10 @@ function AllowedEmailList() {
 
   async function handleUpdateUserRole(emailID: string, newRole: string) {
     try {
-      console.log(`${emailID} ${newRole}`)
+      console.log(emailID)
+      console.log(newRole)
       const token = localStorage.getItem("token")
-      const res = await apiClient.post(
+      const res = await apiClient.patch(
         "/api/emails/updateuserrole",
         {
           id: emailID,
@@ -125,8 +124,8 @@ function AllowedEmailList() {
       )
 
       toast.success(res.data.message)
-    } catch (error) {
-      toast.error("Error updating user role")
+    } catch (error: any) {
+      toast.error(error.response?.data.message)
     } finally {
       fetchAllowedEmails()
     }

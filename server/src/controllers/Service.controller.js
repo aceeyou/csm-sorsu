@@ -28,6 +28,7 @@ export async function GetServicesList(req, res) {
   }
 }
 
+
 export async function FetchServicesOfType(req, res) {
   const { officetype } = req.params;
   try {

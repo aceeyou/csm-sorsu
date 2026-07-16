@@ -15,6 +15,7 @@ import {
 import { Field, FieldGroup } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
+import { RadioGroup } from "~/components/ui/radio-group"
 import { Spinner } from "~/components/ui/spinner"
 import { TableCell, TableRow } from "~/components/ui/table"
 import {
@@ -22,6 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip"
+import UserRoleRadio from "./user-role-radio"
 
 function TableRowComponent({
   listItem,
@@ -47,6 +49,7 @@ function TableRowComponent({
   const [newEmail, setNewEmail] = useState(listItem.email)
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null)
   const [checkingEmail, setCheckingEmail] = useState(false)
+  const [role, setRole] = useState(listItem.role)
 
   useEffect(() => {
     // Skip the initial render or empty strings
@@ -96,7 +99,7 @@ function TableRowComponent({
         <p
           className={`text-centerm w-min ${listItem.role === "admin" && "rounded-md bg-gray-200 px-3 py-1"}`}
         >
-          {listItem.role === "admin" ? "ADMIN" : "USER"}
+          {listItem?.role.toLocaleUpperCase()}
         </p>
       </TableCell>
       <TableCell className="flex justify-end gap-2">
@@ -168,28 +171,33 @@ function TableRowComponent({
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="font-semibold">
-                Confirm User Role Change
+                Update User Role for {listItem.email}
               </DialogTitle>
               <DialogDescription>
                 Review and confirm the update to the user role settings.
                 <br /> This action will grant the user{" "}
-                <span className="font-semibold">
-                  {" "}
-                  "{listItem.role === "admin" ? "USER" : "ADMIN"}"{" "}
-                </span>
+                <span className="font-semibold"> {role} </span>
                 access to the <br /> Online SorSU CART web app.
               </DialogDescription>
             </DialogHeader>
+            <div>
+              <UserRoleRadio currentRole={role} setRole={setRole} />
+            </div>
             <DialogFooter className="mt-2">
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setRole(listItem.role)
+                    setUpdateRoleOpen(false)
+                  }}
+                >
+                  Cancel
+                </Button>
               </DialogClose>
               <Button
                 onClick={() => {
-                  handleUpdateUserRole(
-                    listItem._id,
-                    listItem.role === "admin" ? "user" : "admin"
-                  )
+                  handleUpdateUserRole(listItem._id, role)
                   setUpdateRoleOpen(false)
                 }}
               >
@@ -199,7 +207,7 @@ function TableRowComponent({
           </DialogContent>
         </Dialog>
 
-        <Dialog open={updateEmailOpen} onOpenChange={setUpdateEmailOpen}>
+        {/* <Dialog open={updateEmailOpen} onOpenChange={setUpdateEmailOpen}>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -238,7 +246,6 @@ function TableRowComponent({
                   className="h-10 py-2"
                   onChange={(e) => setNewEmail(e.target.value)}
                 />
-                {/* Implement email availability check */}
                 {checkingEmail && (
                   <p className="-mt-1 flex items-center gap-1 text-gray-400">
                     <Spinner className="size-3" /> Checking availability...
@@ -271,7 +278,7 @@ function TableRowComponent({
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </TableCell>
     </TableRow>
   )

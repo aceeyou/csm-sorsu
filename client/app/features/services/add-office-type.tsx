@@ -128,105 +128,104 @@ function AddOfficeType({ fetchOfficeTypes }: AddOfficeProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <form method="POST" onSubmit={handleSubmitOfficeType}>
-        <DialogTrigger asChild>
-          <Button className="h-8" type="button">
-            <Plus /> Add Office Type
-          </Button>
-        </DialogTrigger>
-        <DialogContent showCloseButton={false} className="">
-          <DialogHeader>
-            <DialogTitle className="text-lg">Add Office Type</DialogTitle>
-            <DialogDescription>
-              Create a new office type. This will serve as a placeholder for the
-              list of services provided of an office. The created 'office types'
-              will appear as options from the new office submission. Avoid using
-              <em>"/"</em> in naming the new office type to prevent system
-              errors
-            </DialogDescription>
-          </DialogHeader>
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>Failed to add office type</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <FieldGroup>
-            <Field>
-              <Label htmlFor="newEmail">
-                New Office Type <FieldRequired />
-              </Label>
-              <Input
-                className="h-8"
-                id="officeType"
-                name="officeType"
-                value={officeType}
-                required
-                placeholder="cashier"
-                onChange={(e) => setOfficeType(e.target.value)}
-              />
-            </Field>
-          </FieldGroup>
-          <FieldGroup className="mt-2">
-            <Field>
-              <Label htmlFor="relatedServices">Related Services</Label>
-            </Field>
-            {serviceList.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1">
-                {serviceList.map((service) => (
-                  <Button
-                    key={service}
-                    onClick={() => handleRemoveServiceItemFromList(service)}
-                    className="max-w-80 rounded-lg px-3 py-1"
-                  >
-                    <span className="truncate text-left!">{service}</span>
-                  </Button>
-                ))}
-              </div>
-            )}
-            <InputGroup className="h-8">
-              <InputGroupInput
-                value={newServiceItem}
-                placeholder="Payment"
-                onChange={(e) => setNewServiceItem(e.target.value)}
-                onKeyDown={handleKeyDownNewServiceItem}
-                className=""
-              />
-              <InputGroupAddon align={"inline-end"}>
+      <DialogTrigger asChild>
+        <Button className="h-8" type="button">
+          <Plus /> Add Office Type
+        </Button>
+      </DialogTrigger>
+      <DialogContent showCloseButton={false} className="">
+        <DialogHeader>
+          <DialogTitle className="text-lg">Add Office Type</DialogTitle>
+          <DialogDescription>
+            Create a new office type. This will serve as a placeholder for the
+            list of services provided of an office. The created 'office types'
+            will appear as options from the new office submission. Avoid using
+            <em>"/"</em> in naming the new office type to prevent system errors
+          </DialogDescription>
+        </DialogHeader>
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircleIcon />
+            <AlertTitle>Failed to add office type</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        <FieldGroup>
+          <Field>
+            <Label htmlFor="newEmail">
+              New Office Type <FieldRequired />
+            </Label>
+            <Input
+              className="h-8"
+              id="officeType"
+              name="officeType"
+              value={officeType}
+              required
+              placeholder="cashier"
+              onChange={(e) => setOfficeType(e.target.value)}
+            />
+          </Field>
+        </FieldGroup>
+        <FieldGroup className="mt-2">
+          <Field>
+            <Label htmlFor="relatedServices">Related Services</Label>
+          </Field>
+          {serviceList.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1">
+              {serviceList.map((service) => (
                 <Button
-                  variant={"ghost"}
-                  className="bg-gray-200 hover:bg-gray-300"
-                  onClick={handleAddNewServiceItem}
+                  key={service}
+                  onClick={() => handleRemoveServiceItemFromList(service)}
+                  className="max-w-80 rounded-lg px-3 py-1"
                 >
-                  <Plus />
-                  Add
+                  <span className="truncate text-left!">{service}</span>
                 </Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </FieldGroup>
-          <DialogFooter className="mt-4">
-            <DialogClose asChild>
+              ))}
+            </div>
+          )}
+          <InputGroup className="h-8">
+            <InputGroupInput
+              value={newServiceItem}
+              placeholder="Payment"
+              onChange={(e) => setNewServiceItem(e.target.value)}
+              onKeyDown={handleKeyDownNewServiceItem}
+              className=""
+            />
+            <InputGroupAddon align={"inline-end"}>
               <Button
-                onClick={() => handleDialogClose()}
-                className="h-8"
+                role="button"
                 type="button"
-                variant="outline"
+                variant={"ghost"}
+                className="bg-gray-200 hover:bg-gray-300"
+                onClick={handleAddNewServiceItem}
               >
-                Cancel
+                <Plus />
+                Add
               </Button>
-            </DialogClose>
+            </InputGroupAddon>
+          </InputGroup>
+        </FieldGroup>
+        <DialogFooter className="mt-4">
+          <DialogClose asChild>
             <Button
-              type="submit"
-              className="h-8 px-3"
-              onClick={handleSubmitOfficeType}
+              onClick={() => handleDialogClose()}
+              className="h-8"
+              type="button"
+              variant="outline"
             >
-              {loading ? <Spinner /> : null}
-              Add Office Type
+              Cancel
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </form>
+          </DialogClose>
+          <Button
+            type="submit"
+            className="h-8 px-3"
+            onClick={handleSubmitOfficeType}
+          >
+            {loading ? <Spinner /> : null}
+            Add Office Type
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   )
 }

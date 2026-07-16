@@ -4,7 +4,7 @@ const allowedEmailSchema = new mongoose.Schema(
   {
     email: { type: String, unique: true, required: true },
     authorized: { type: Boolean, required: true },
-    role: { type: String, required: true, default: "user" },
+    role: { type: String, required: true, default: "member" },
   },
   { timestamps: true, strict: true },
 );

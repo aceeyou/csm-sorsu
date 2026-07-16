@@ -64,9 +64,15 @@ function Offices() {
       type: "",
     },
   ])
+  if (error) toast.error(error)
+
 
   if (!data) {
     navigate("/login")
+  }
+
+  if (data.role === "member") {
+    navigate("/")
   }
 
   useEffect(() => {
@@ -214,53 +220,55 @@ function Offices() {
           <p className="text-sm font-medium">Offices</p>
         </div>
         {/* Add office button and form in dialog modal */}
-        <div>
-          <Dialog
-            open={openAddOfficeDialog}
-            onOpenChange={setOpenAddOfficeDialog}
-          >
-            <DialogTrigger asChild>
-              <Button className="h-8" onClick={handleFetchListsToAddOffice}>
-                <Plus />
-                Add Office
-              </Button>
-            </DialogTrigger>
-            <DialogContent showCloseButton={false}>
-              <DialogHeader>
-                <DialogTitle className="text-lg font-semibold">
-                  Add an Office to the database
-                </DialogTitle>
-                <DialogDescription>
-                  Enter the details for the newly added office for it to be on
-                  the list of offices from the Online SorSU CART.
-                </DialogDescription>
-              </DialogHeader>
-
-              {/* Form for new office submission */}
-              <OfficeForm
-                office={fields}
-                fields={fields}
-                setFields={setFields}
-              />
-
-              <DialogFooter className="mt-3">
-                <DialogClose asChild>
-                  <Button variant={"outline"} className="h-8 w-15">
-                    Close
-                  </Button>
-                </DialogClose>
-                <Button
-                  type="submit"
-                  onClick={handleSubmitNewOffice}
-                  className="h-8 w-30"
-                >
-                  {submitting && <Spinner />}
-                  Submit
+        {data.role === "admin" && (
+          <div>
+            <Dialog
+              open={openAddOfficeDialog}
+              onOpenChange={setOpenAddOfficeDialog}
+            >
+              <DialogTrigger asChild>
+                <Button className="h-8" onClick={handleFetchListsToAddOffice}>
+                  <Plus />
+                  Add Office
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
+              </DialogTrigger>
+              <DialogContent showCloseButton={false}>
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold">
+                    Add an Office to the database
+                  </DialogTitle>
+                  <DialogDescription>
+                    Enter the details for the newly added office for it to be on
+                    the list of offices from the Online SorSU CART.
+                  </DialogDescription>
+                </DialogHeader>
+
+                {/* Form for new office submission */}
+                <OfficeForm
+                  office={fields}
+                  fields={fields}
+                  setFields={setFields}
+                />
+
+                <DialogFooter className="mt-3">
+                  <DialogClose asChild>
+                    <Button variant={"outline"} className="h-8 w-15">
+                      Close
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    type="submit"
+                    onClick={handleSubmitNewOffice}
+                    className="h-8 w-30"
+                  >
+                    {submitting && <Spinner />}
+                    Submit
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
       </div>
 
       {/* Table Title and Description */}
@@ -300,7 +308,9 @@ function Offices() {
               <TableHead className="w-20">Alias</TableHead>
               <TableHead className="w-40">Campus Located</TableHead>
               <TableHead className="w-20">Type of Office</TableHead>
-              <TableHead className="w-30">Actions</TableHead>
+              {data.role === "admin" && (
+                <TableHead className="w-30">Actions</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -335,17 +345,19 @@ function Offices() {
                     )}
                   </TableCell>
                   <TableCell className="align-top">{office.type}</TableCell>
-                  <TableCell className="flex gap-1 align-top">
-                    <EditOfficeDialog
-                      office={office}
-                      fetchAllOffices={fetchAllOffices}
-                    />
-                    <DeleteOfficeDialog
-                      office={office}
-                      numCampuses={listOfCampuses.length}
-                      fetchAllOffices={fetchAllOffices}
-                    />
-                  </TableCell>
+                  {data.role === "admin" && (
+                    <TableCell className="flex gap-1 align-top">
+                      <EditOfficeDialog
+                        office={office}
+                        fetchAllOffices={fetchAllOffices}
+                      />
+                      <DeleteOfficeDialog
+                        office={office}
+                        numCampuses={listOfCampuses.length}
+                        fetchAllOffices={fetchAllOffices}
+                      />
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
           </TableBody>

@@ -10,6 +10,10 @@ export async function GetAllowedEmail(req, res) {
     return res.status(200).json({ emails: [...listOfEmails] });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message:
+        "An error occurred while fetching the list of allowed emails. Please try again.",
+    });
   }
 }
 
@@ -28,19 +32,16 @@ export async function UpdateUserRole(req, res) {
       });
 
     const userInfo = await User.findOne({ email: allowedEmail.email });
-    if (!userInfo) {
-      // console.log("Can't find user with email ", allowedEmail.email);
-      return res.status(400).json({ message: "Account does not exist" });
-    }
-
-    await User.updateOne(
-      { email: allowedEmail.email },
-      {
-        $set: {
-          role: role,
+    if (userInfo) {
+      await User.updateOne(
+        { email: allowedEmail.email },
+        {
+          $set: {
+            role: role,
+          },
         },
-      },
-    );
+      );
+    }
 
     await AllowedEmail.updateOne(
       { _id: allowedEmail._id },
@@ -51,12 +52,14 @@ export async function UpdateUserRole(req, res) {
       message: `Successfully updated the role of ${allowedEmail.email} to ${role}`,
     });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while updating the role. Please try again.",
+    });
   }
 }
 
 export async function AddAllowedEmail(req, res) {
-  const { email, addAsAdmin } = req.body;
+  const { email, role } = req.body;
 
   try {
     // Checks is the system sent the email address to be verified
@@ -82,7 +85,7 @@ export async function AddAllowedEmail(req, res) {
     const newAllowedEmail = await AllowedEmail.create({
       email,
       authorized: true,
-      role: addAsAdmin ? "admin" : "user",
+      role: role || "member",
     });
     // console.log("new allowed email: ", newAllowedEmail);
     return res.status(201).json({
@@ -91,7 +94,9 @@ export async function AddAllowedEmail(req, res) {
       authorized: newAllowedEmail.authorized,
     });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while adding the email. Please try again.",
+    });
   }
 }
 
@@ -124,32 +129,20 @@ export async function ToggleEmailPrivelages(req, res) {
       { $set: { authorized: !currentPrivelages } },
     );
 
-    const userInfo = await User.findOne({ email });
-    if (!userInfo) {
-      // console.log("Can't find user with email ", email);
-      return res.status(400).json({ message: "Account does not exist" });
-    }
-
     // Once the allowed status is updated, the role of the user associated with the email address is also updated.
     // If the email is updated to be not allowed, then the role of
-    // the user will lose the "admin" privilage and become a "user"
+    // the user will lose the "admin" privilage and become a "member"
     // userInfo.active = !currentPrivelages;
     // userInfo.save();
-    await User.updateOne(
-      { email },
-      {
-        $set: {
-          role: !currentPrivelages ? "user" : req.user.role,
-          active: !currentPrivelages,
-        },
-      },
-    );
 
     return res.status(201).json({
       message: `Successfully updated the privelages of ${allowedEmail.email}`,
     });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({
+      message:
+        "An error occurred while toggling email privileges. Please try again.",
+    });
   }
 }
 
@@ -173,11 +166,27 @@ export async function UpdateEmailAddress(req, res) {
       { $set: { email: newEmail } },
     );
 
+    // updates the email address of the user associated with the allowed email address if the account exists
+    const userInfo = await User.findOne({ email: allowedEmail.email });
+    if (userInfo) {
+      await User.updateOne(
+        { email: allowedEmail.email },
+        {
+          $set: {
+            email: newEmail,
+          },
+        },
+      );
+    }
+
     return res.status(201).json({
       message: `Successfully updated the email address of ${oldEmail} to ${newEmail}`,
     });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({
+      message:
+        "An error occurred while updating the email address. Please try again.",
+    });
   }
 }
 
@@ -193,7 +202,6 @@ export async function EmailAvailability(req, res) {
     const isAvailable = await AllowedEmail.findOne({ email });
     return res.status(200).json({ available: !isAvailable });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: "Internal server error: " + error.message,
     });

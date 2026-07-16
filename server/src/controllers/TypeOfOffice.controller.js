@@ -26,6 +26,20 @@ export async function fetchTypesList(req, res) {
   }
 }
 
+export async function searchType(req, res) {
+  const { query } = req.body;
+
+  try {
+    const find = await TypeOfOffice.find({
+      type: { $regex: query, $options: "i" },
+    });
+    // console.log("query result: ", find);
+    res.status(200).json({ query: find });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function fetchTypes(req, res) {
   try {
     const typesOffices = await TypeOfOffice.find({ isActive: true })
@@ -53,12 +67,10 @@ export async function UpdateType(req, res) {
         { type },
       );
       if (toUpdate) {
-        return res
-          .status(200)
-          .json({
-            message: "Succesfully updated office type.",
-            officeType: toUpdate,
-          });
+        return res.status(200).json({
+          message: "Succesfully updated office type.",
+          officeType: toUpdate,
+        });
       }
     }
 
@@ -73,12 +85,10 @@ export async function UpdateType(req, res) {
         { type },
       );
       if (toUpdate) {
-        return res
-          .status(200)
-          .json({
-            message: "Succesfully updated office type.",
-            officeType: toUpdate,
-          });
+        return res.status(200).json({
+          message: "Succesfully updated office type.",
+          officeType: toUpdate,
+        });
       }
     }
 

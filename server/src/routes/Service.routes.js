@@ -14,7 +14,7 @@ const adminOnly = ["admin"];
 
 serviceRouter.get("/", verification, GetServicesList);
 serviceRouter.get("/:officetype", verification, FetchServicesOfType);
-serviceRouter.post("/add", verification, AddServices);
+serviceRouter.post("/add", verification, authorize(["admin"]), AddServices);
 serviceRouter.patch(
   "/update/:id",
   verification,

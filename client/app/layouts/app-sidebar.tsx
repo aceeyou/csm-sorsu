@@ -19,9 +19,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar"
+import { useFetchUser } from "~/hooks/use-fetchUser"
 
 export default function AppSidebar() {
   const { state } = useSidebar()
+  const { data } = useFetchUser()
   return (
     <>
       <Sidebar collapsible="icon" className="bg-white p-2 pt-4">
@@ -69,110 +71,122 @@ export default function AppSidebar() {
                 </NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem
-              className={`flex flex-row items-center rounded-md hover:bg-gray-200`}
-            >
-              <SidebarMenuButton asChild className="p-0">
-                <NavLink to="/csmform" end>
-                  {({ isActive }) => (
-                    <div
-                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
-                    >
-                      <File
-                        strokeWidth={
-                          state === "collapsed" && isActive ? 2.5 : 2
-                        }
-                        size={18}
-                        color={
-                          state === "collapsed" && isActive
-                            ? "maroon"
-                            : isActive
-                              ? "white"
-                              : "gray"
-                        }
-                      />
-                      <span
-                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+
+            {/* CSM Form */}
+            {(data.role === "secretariat" || data.role === "admin") && (
+              <SidebarMenuItem
+                className={`flex flex-row items-center rounded-md hover:bg-gray-200`}
+              >
+                <SidebarMenuButton asChild className="p-0">
+                  <NavLink to="/csmform" end>
+                    {({ isActive }) => (
+                      <div
+                        className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                       >
-                        CSM Form
-                      </span>
-                    </div>
-                  )}
-                </NavLink>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
-              <SidebarMenuButton asChild className="p-0">
-                <NavLink
-                  to="/offices"
-                  end
-                  className={({ isActive }) =>
-                    `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
-                  }
-                >
-                  {({ isActive }) => (
-                    <div
-                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
-                    >
-                      <Building2
-                        strokeWidth={
-                          state === "collapsed" && isActive ? 2.5 : 2
-                        }
-                        size={18}
-                        color={
-                          state === "collapsed" && isActive
-                            ? "maroon"
-                            : isActive
-                              ? "white"
-                              : "gray"
-                        }
-                      />
-                      <span
-                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                        <File
+                          strokeWidth={
+                            state === "collapsed" && isActive ? 2.5 : 2
+                          }
+                          size={18}
+                          color={
+                            state === "collapsed" && isActive
+                              ? "maroon"
+                              : isActive
+                                ? "white"
+                                : "gray"
+                          }
+                        />
+                        <span
+                          className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                        >
+                          CSM Form
+                        </span>
+                      </div>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
+
+            {/* Offices */}
+            {(data.role === "secretariat" || data.role === "admin") && (
+              <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
+                <SidebarMenuButton asChild className="p-0">
+                  <NavLink
+                    to="/offices"
+                    end
+                    className={({ isActive }) =>
+                      `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <div
+                        className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                       >
-                        Offices
-                      </span>
-                    </div>
-                  )}
-                </NavLink>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
-              <SidebarMenuButton asChild className="p-0">
-                <NavLink
-                  to="/services"
-                  end
-                  className={({ isActive }) =>
-                    `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
-                  }
-                >
-                  {({ isActive }) => (
-                    <div
-                      className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
-                    >
-                      <Briefcase
-                        strokeWidth={
-                          state === "collapsed" && isActive ? 2.5 : 2
-                        }
-                        size={18}
-                        color={
-                          state === "collapsed" && isActive
-                            ? "maroon"
-                            : isActive
-                              ? "white"
-                              : "gray"
-                        }
-                      />
-                      <span
-                        className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                        <Building2
+                          strokeWidth={
+                            state === "collapsed" && isActive ? 2.5 : 2
+                          }
+                          size={18}
+                          color={
+                            state === "collapsed" && isActive
+                              ? "maroon"
+                              : isActive
+                                ? "white"
+                                : "gray"
+                          }
+                        />
+                        <span
+                          className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                        >
+                          Offices
+                        </span>
+                      </div>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
+
+            {/* Services */}
+            {(data.role === "secretariat" || data.role === "admin") && (
+              <SidebarMenuItem className="flex flex-row items-center rounded-md hover:bg-gray-200">
+                <SidebarMenuButton asChild className="p-0">
+                  <NavLink
+                    to="/services"
+                    end
+                    className={({ isActive }) =>
+                      `${state === "collapsed" && isActive ? "bg-red-800" : "bg-transparent"}`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <div
+                        className={`flex w-full flex-row items-center gap-2 p-2 group-data-[state=collapsed]:p-0 ${isActive && state === "expanded" ? "bg-red-800" : ""}`}
                       >
-                        Services
-                      </span>
-                    </div>
-                  )}
-                </NavLink>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+                        <Briefcase
+                          strokeWidth={
+                            state === "collapsed" && isActive ? 2.5 : 2
+                          }
+                          size={18}
+                          color={
+                            state === "collapsed" && isActive
+                              ? "maroon"
+                              : isActive
+                                ? "white"
+                                : "gray"
+                          }
+                        />
+                        <span
+                          className={`ml-2 text-sm ${isActive ? "text-white" : "text-black"}`}
+                        >
+                          Services
+                        </span>
+                      </div>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="-p-2 bg-white pb-4">

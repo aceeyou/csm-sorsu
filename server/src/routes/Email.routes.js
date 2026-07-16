@@ -41,7 +41,7 @@ emailRouter.post(
   authorize(["admin"]),
   EmailAvailability,
 );
-emailRouter.post(
+emailRouter.patch(
   "/updateuserrole",
   verification,
   authorize(["admin"]),

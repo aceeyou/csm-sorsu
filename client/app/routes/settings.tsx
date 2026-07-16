@@ -15,13 +15,16 @@ import {
 import { Button } from "~/components/ui/button"
 import { useState } from "react"
 import { useFetchUser } from "~/hooks/use-fetchUser"
+import { toast } from "sonner"
 
 function Settings() {
   const { data, error } = useFetchUser()
   const navigate = useNavigate()
   const [showlogoutDialog, setShowLogoutDialog] = useState(false)
 
-  if (!data) {
+  if (error) toast.error(error)
+
+  if (!data || error) {
     navigate("/login")
   }
 
@@ -44,10 +47,10 @@ function Settings() {
             <Button
               variant="outline"
               type="button"
-              className="flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-medium transition duration-200 hover:bg-gray-100"
+              className="flex cursor-pointer items-center gap-2 rounded-md border border-red-500 px-3 py-1.5 text-xs font-medium transition duration-200 hover:bg-gray-100"
             >
-              <LogOut size={16} color="red" />
-              <span className="text-destructive">Log out</span>
+              <LogOut size={16} color="red" strokeWidth={3} />
+              <span className="font-semibold text-destructive">Log out</span>
             </Button>
           </DialogTrigger>
           <DialogContent showCloseButton={false}>

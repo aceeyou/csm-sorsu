@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { apiClient } from "~/api/client"
@@ -36,12 +35,10 @@ export function useFetchUser() {
         }
       } catch (error: any) {
         setError(error.response?.data?.message)
-        if (error.response?.status === 401) {
-          localStorage.removeItem("token")
-          navigate("/login", {
-            state: { message: "Session expired. Please log in again." },
-          })
-        }
+        localStorage.removeItem("token")
+        navigate("/login", {
+          state: { message: "Session expired. Please log in again." },
+        })
       } finally {
         setLoading(false)
       }
