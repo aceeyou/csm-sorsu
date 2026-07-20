@@ -183,7 +183,7 @@ export default function CSMForm() {
         //     },
         //   }
         // )
-        await fetch("https://api-csm-sorsu.onrender.com/postcsmresponse", {
+        await fetch("https://api-csm-sorsu.onrender.com/api/postcsmresponse", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
