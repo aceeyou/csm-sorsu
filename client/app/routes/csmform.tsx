@@ -183,9 +183,7 @@ export default function CSMForm() {
         //     },
         //   }
         // )
-        await apiClient.post("/api/postcsmresponse",
-        
-          
+        const res = await apiClient.post("/api/postcsmresponse",
           {
             //!!! DO N0T MOVE. IT IS IN EXACT ORDER
             timestamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -223,10 +221,8 @@ export default function CSMForm() {
             Authorization: `Bearer ${token}`,
           }},
         )
-          .then((res) => res.json())
-          .then((res) => {
-            toast.success(res.message)
-          })
+
+        if(res.status === 200) toast.success(res.data.message)
       } catch (error) {
         toast.error("Form failed to submit. Please try again")
       }
