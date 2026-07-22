@@ -183,12 +183,10 @@ export default function CSMForm() {
         //     },
         //   }
         // )
-        await fetch("https://api-csm-sorsu.onrender.com/api/postcsmresponse", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await apiClient.post("/api/postcsmresponse",
+        
+          
+          {
             //!!! DO N0T MOVE. IT IS IN EXACT ORDER
             timestamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
             campus: methods.getValues("campus") || "",
@@ -220,8 +218,11 @@ export default function CSMForm() {
             controlNumber: `${methods.getValues("officeCode")}-${methods.getValues("campusCode")}-${Date.now()}${Math.random().toString(36).slice(2, 9)}`,
             secretariat: user.name,
             secretariatEmail: user.email,
-          }),
-        })
+          },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }},
+        )
           .then((res) => res.json())
           .then((res) => {
             toast.success(res.message)
